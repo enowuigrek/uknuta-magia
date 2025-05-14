@@ -1,18 +1,13 @@
 :root {
-  font-family: 'Instrument-Serif', Georgia, 'Times New Roman', serif;
-}
-
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+  font-family: "Instrument Serif", serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 body {
-  background: linear-gradient(90deg, #13192E 0%, #152869 100%);  margin: 0;
+  background: linear-gradient(90deg, #13192E 0%, #152869 100%);
+  overscroll-behavior: none;
+  margin: 0;
   display: flex;
   place-items: center;
   min-width: 320px;
@@ -21,44 +16,41 @@ body {
 
 h1 {
   color: #E2C275;
-  font-size: 76px;
+  font-size: 64px; //chyba ze zmienie font
 }
 
 p {
   color: #ffffff;
   font-size: 24px;
 }
+
+a {
+  font-weight: 500;
+  font-size: 24px;
+  color: #E2C275;
+  text-decoration: inherit;
+  margin: 0 36px;
+}
+a:hover {
+  text-decoration: underline;
+}
+
 button {
   border-radius: 8px;
   border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
+  padding: 6px 24px;
+  font-size: 24px;
   font-weight: 500;
   font-family: inherit;
   background-color: #E2C275;
   color: black;
   cursor: pointer;
+  text-wrap: nowrap; //do przemyslenia
   transition: all 0.25s;
+  z-index: 1;
 }
 button:hover {
   border-color: #E2C275;
   background-color: transparent;
   color: #E2C275;
-}
-/*button:focus,*/
-/*button:focus-visible {*/
-/*  outline: 4px auto -webkit-focus-ring-color;*/
-/*}*/
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
