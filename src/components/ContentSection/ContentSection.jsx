@@ -1,13 +1,13 @@
-import bookCover from '../../assets/book-cover.svg'
 import {SectionHeader} from "../SectionHeader/SectionHeader.jsx";
-import {bookDescription} from "../../content/book.js";
 import styles from './ContentSection.module.scss'
 
-export function ContentSection() {
-  return (
+export function ContentSection({isPhotoLeft, img, alt, header, text}) {
+
+    return (
     <div className={styles.content_section}>
-      <img className={styles.section_image} src={bookCover} alt="book cover" />
-        <SectionHeader header={bookDescription.title} text={bookDescription.description}/>
+        {isPhotoLeft && <img className={styles.section_image} src={img} alt={alt}/>}
+        <SectionHeader header={header} text={text}/>
+        {!isPhotoLeft && <img className={styles.section_image} src={img} alt={alt}/>}
     </div>
   )
 }

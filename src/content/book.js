@@ -5,10 +5,7 @@ export const bookDescription = {
 
 export const author = {
     title: "O autorze",
-    description: 'Adrian Knut, bla bla bla Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus efficitur, turpis vitae sollicitudin vestibulum, enim felis condimentum lorem, vel viverra nunc ante ac est. Praesent et semper nisl. Sed at magna sed sapien ultrices eleifend. Phasellus suscipit enim eu nisi pretium, at molestie nibh accumsan. Cras et eleifend velit. Nam sed egestas arcu. Nulla laoreet pharetra elit sed pretium. Sed sit amet massa vel massa aliquam dictum vitae vitae ipsum. Morbi tincidunt risus tellus, sed dapibus massa posuere vel. In malesuada lectus non sem efficitur egestas. Suspendisse auctor dui risus, ac placerat ligula semper ultricies. Morbi ut pulvinar ipsum. Etiam at mi dapibus, consectetur nisi vitae, finibus turpis. Lorem ipsum dolor sit amet, consectetur adipiscing elit.\n' +
-        '\n' + 'Ut dui tortor, vestibulum porta metus eget, ultricies ornare quam. Pellentesque cursus luctus lacus,' +
-        ' a tempus orci feugiat at. Donec in viverra tortor. Nulla facilisi. Suspendisse nec consequat sapien, et' +
-        ' faucibus dolor. In euismod mollis ullamcorper. Integer nisi nunc, ornare quis fringilla ac,tincidunt id' +
-        ' ante. Vivamus hendrerit feugiat eros at pulvinar. Duis magna orci, tristique vel consequat cursus,' +
-        ' volutpat vel diam. In et nibh quis tellus maximus sagittis.'
+    description: 'Adrian Knut, bla bla bla Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus' +
+        ' efficitur, turpis vitae sollicitudin vestibulum, enim felis condimentum lorem, vel viverra nunc ante ac' +
+        ' est. Praesent et semper nisl. Sed at magna sed sapien ultrices eleifend. Phasellus suscipit enim eu nisi pretium, at molestie nibh accumsan. Cras et eleifend velit. Nam sed egestas arcu. Nulla laoreet pharetra elit sed pretium. Sed sit amet massa vel massa aliquam dictum vitae vitae ipsum. Morbi tincidunt risus tellus, sed dapibus massa posuere vel',
 };
