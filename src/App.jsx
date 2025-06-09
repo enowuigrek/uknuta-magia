@@ -4,8 +4,9 @@ import bookCover from './assets/book-cover.svg';
 import authorPhoto from './assets/author-photo.jpg';
 import {CursorGlow} from './components/CursorGlow/CursorGlow.jsx'
 import {Header} from './components/Header/Header.jsx'
-import {Footer} from "./components/Footer/Footer.jsx";
 import {ContentSection} from "./components/ContentSection/ContentSection.jsx";
+import {Footer} from "./components/Footer/Footer.jsx";
+import {TeaserContent} from "./components/TeaserContent/TeaserContent.jsx";
 
 function App() {
 
@@ -25,7 +26,9 @@ function App() {
             header={author.title}
             text={author.description}
             alt={'zdjęcie autora'}/>
-        <Footer/>
+        <TeaserContent />
+        <Footer />
+
     </>
   )
 }

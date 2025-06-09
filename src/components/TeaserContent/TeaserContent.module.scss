@@ -1,0 +1,19 @@
+.teaser_content {
+    height: 80vh;
+    background-color: #222222;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 2;
+    position: relative;
+    p, a{
+        font-size: 36px;
+        margin: 0;
+        padding: 0 6em;
+
+    }
+
+    a {
+        padding: 0;
+    }
+}

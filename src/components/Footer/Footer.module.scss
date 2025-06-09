@@ -1,10 +1,58 @@
-.footer {
-    background: black;
-    //position: sticky;
+.site_footer {
+    position: sticky;
+    display: flex;
+    justify-content: space-between;
+    z-index: 1;
+    //flex-wrap: wrap;
+    padding: 2rem;
+    background-color: black;
     bottom: 0;
+    p {
+        margin: 0;
+    }
 
-}
+    a {
+        margin: 0;
+        //text-decoration-line: underline;
+        //color: #fff;
+        &:hover {
+            text-decoration: underline;
+        }
 
-h1 {
-    margin: 0; // to do wywalenia chyba jak bedzie tresc
+    }
+
+    .footer_left,
+    .footer_center,
+    .footer_right {
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        margin: 0;
+        gap: 0.25rem;
+    }
+
+    .footer_center {
+        flex-direction: row;
+        align-items: end;
+
+        a {
+            padding: 0 8px;
+            border-left: 1px solid #ccc;
+
+            &:first-child {
+                border-left: none;
+                padding-left: 0;
+            }
+
+            &:last-child {
+                padding-right: 0;
+            }
+
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+    }
 }
