@@ -3,7 +3,6 @@
     display: flex;
     justify-content: space-between;
     z-index: 1;
-    //flex-wrap: wrap;
     padding: 2rem;
     background-color: black;
     bottom: 0;
@@ -13,8 +12,6 @@
 
     a {
         margin: 0;
-        //text-decoration-line: underline;
-        //color: #fff;
         &:hover {
             text-decoration: underline;
         }
@@ -37,7 +34,7 @@
 
         a {
             padding: 0 8px;
-            border-left: 1px solid #ccc;
+            border-left: 1px solid #E2C275;
 
             &:first-child {
                 border-left: none;

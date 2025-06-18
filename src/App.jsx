@@ -27,7 +27,7 @@ function App() {
             text={author.description}
             alt={'zdjęcie autora'}/>
         <TeaserContent />
-        <Footer />
+        {/*<Footer />*/}
 
     </>
   )
