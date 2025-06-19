@@ -1,5 +1,4 @@
 .teaser_content {
-    height: 80vh;
     background-color: #222222;
     display: flex;
     flex-direction: column;
@@ -9,11 +8,17 @@
     p, a{
         font-size: 36px;
         margin: 0;
-        padding: 0 6em;
+        //padding: 0 2em;
 
     }
 
     a {
         padding: 0;
+    }
+
+    @media (max-width: 1060px) {
+        height: 100vh;
+        max-width: 100vw;
+        padding: 0 2em;
     }
 }

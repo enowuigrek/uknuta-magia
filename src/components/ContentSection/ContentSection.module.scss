@@ -1,33 +1,32 @@
 .content_section {
-    margin-top: 4rem;
+    //background: rgb(14, 15, 20); //tymczasowe abym widzial wielkosc
+    margin-bottom: 4rem;
     display: flex;
     justify-content: center;
-    align-items: stretch;
+    align-items: center;
     padding: 0 4em;
-    //align-content: center;
-    height: 80vh;
     z-index: 1;
     @media (max-width: 1060px) {
-        height: 160vh;
-        max-width: 100vw;
-        padding: 0;
+        //max-width: 100vw; // działa, ale może być zbędne
+        padding: 0 2em;
         flex-direction: column;
         justify-content: center;
         align-items: center;
     }
 }
 
+//TODO: Pobawic sie szerokoscia 50% na desktopie gdy obok siebie i 100% z odpowiednimi marginami na mobile
+
 .section_image {
-    top: 0;
-    margin: 2rem;
-    //padding: 0 4em;
-    height: 70%;
-    width: auto;
+    padding: 2rem;
+    box-sizing: border-box;
+    height: auto;
+    width: 50%;
     object-fit: cover;
     z-index: 1;
     @media (max-width: 1060px) {
-        height: 30%;
-        margin-top: 130px;
+        height: auto;
+        width: 100%;
     }
 }
 

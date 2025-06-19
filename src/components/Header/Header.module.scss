@@ -1,49 +1,240 @@
 .header {
     position: sticky;
     top: 0;
+    left: 0;
+    right: 0;
     flex-wrap: nowrap;
-    z-index: 3;
-    background: rgb(14, 15, 20);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.45);
+    z-index: 2;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 2em 4em;
+
+    // Dodaj transition dla płynnych animacji
+    transition: all 0.3s ease-in-out;
+
     h1 {
         margin: 0;
+        transition: color 0.3s ease; // płynna zmiana koloru
     }
-    @media (max-width: 1060px) {
-        //flex-direction: column;
-        align-items: center;
-        max-width: 100vw;
-        padding: 2em 0;
-        nav {
-            display: none; /* ukryj menu */
-        }
 
-        .hamburger {
-            display: block; /* pokaż ikonę */
-        }
+    button {
+        transition: all 0.3s ease; // płynna zmiana przyciska
+    }
+
+    @media (max-width: 1060px) {
+        align-items: center;
+        padding: 2em;
 
         h1 {
+            font-size: 1.7em;
             padding: 3px;
         }
     }
 }
 
-
-.shadow{
-    position: absolute;
-    width: 225px;
-    height: 120px;
-    left: 824px;
-    top: 0;
-    background: black;
-    filter: blur(65px);
-    z-index: 0;
+// Stan przezroczysty (na początku strony)
+.transparent {
+    background: transparent;
+    box-shadow: none;
 }
-nav {
+
+// Stan po przewinięciu
+.scrolled {
+    background: rgb(14, 15, 20);
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.45);
+    padding: 1.5em 4em; // mniejszy padding po scroll
+
+    @media (max-width: 1060px) {
+        padding: 1.5em 2em; // mniejszy padding na mobile
+    }
+}
+
+// Desktop navigation
+.desktopNav {
     display: flex;
     justify-content: space-between;
     z-index: 1;
+    gap: 2rem;
+
+    button, a {
+        background: none;
+        border: none;
+        color: #E2C275;
+        text-decoration: none;
+        //font-weight: 500;
+        position: relative;
+        cursor: pointer;
+        &:hover {
+            opacity: 0.8;
+        }
+
+        &::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: currentColor;
+            transition: width 0.3s ease;
+        }
+
+        &:hover::after {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 1060px) {
+        display: none;
+    }
+}
+
+// Desktop order button
+.orderButton {
+    background: rgba(255, 255, 255, 0.1);
+    color: #E2C275;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 0.8em 1.5em;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.2);
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: 1060px) {
+        display: none;
+    }
+}
+
+// Hamburger menu button
+.hamburger {
+    display: none;
+    flex-direction: column;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 18px;
+    justify-content: space-between;
+    z-index: 3;
+
+    span {
+        display: block;
+        height: 2px;
+        width: 100%;
+        background-color: white;
+        transition: all 0.3s ease;
+        transform-origin: center;
+    }
+
+    @media (max-width: 1060px) {
+        display: flex;
+    }
+}
+
+// Hamburger animation when open
+.hamburgerOpen {
+    span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    span:nth-child(2) {
+        opacity: 0;
+    }
+
+    span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+    }
+}
+
+// Mobile menu
+.mobileMenu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: rgb(14, 15, 20);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 2rem;
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+    z-index: 2;
+
+    button, a {
+        background: none;
+        border: none;
+        color: white;
+        text-decoration: none;
+        font-weight: 500;
+        cursor: pointer;
+        font-size: inherit;
+        font-family: inherit;
+        padding: 1rem 0;
+        text-align: left;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &:hover {
+            opacity: 0.8;
+            padding-left: 0.5rem;
+        }
+    }
+
+    @media (min-width: 1061px) {
+        display: none;
+    }
+}
+
+// Mobile menu when open
+.mobileMenuOpen {
+    transform: translateY(0);
+    opacity: 1;
+    visibility: visible;
+}
+
+// Floating order button for mobile
+.floatingOrderButton {
+    position: fixed;
+    bottom: 36px;
+    right: 2px;
+    //transform: translateX(-50%);
+    z-index: 1000;
+
+    background: rgb(14, 15, 20);
+    //color: white;
+    text-decoration: none;
+    padding: 1rem 2rem;
+    border-radius: 6px;
+    //font-weight: 600;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    transition: all 0.3s ease;
+    //border: 2px solid rgba(255, 255, 255, 0.2);
+
+    &:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+        text-decoration: none;
+        background: rgb(20, 22, 28);
+    }
+
+    //&:active {
+    //    transform: translateX(-50%) translateY(0);
+    //}
+
+    // Pokaż tylko na mobile
+    @media (min-width: 1061px) {
+        display: none;
+    }
 }
