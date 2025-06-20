@@ -2,13 +2,13 @@
     position: fixed;
     top: 0;
     left: 0;
+    z-index: 1;
     width: 1000px;
     height: 1000px;
-    pointer-events: none;
+    background: radial-gradient(circle, rgb(50 151 196 / 100%), transparent 70%);
     border-radius: 50%;
-    background: radial-gradient(circle, rgba(50,151,196,1), transparent 70%);
-    mix-blend-mode: screen;
-    transform: translate(-50%, -50%);
-    z-index: 1;
     transition: opacity 0.2s ease;
+    transform: translate(-50%, -50%);
+    mix-blend-mode: screen;
+    pointer-events: none;
 }

@@ -1,11 +1,11 @@
 .section_header {
     display: flex;
     flex-direction: column;
-    margin: 2rem;
-    width: 50%;
     justify-content: center;
+    width: 50%;
+    margin: 2rem;
 
-    @media (max-width: 1060px) {
+    @media (width <= 1060px) {
         width: 100%;
         margin: 2rem;
     }

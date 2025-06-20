@@ -2,6 +2,7 @@ module.exports = {
   extends: ['stylelint-config-standard-scss'],
   plugins: ['stylelint-order'],
   rules: {
+    'selector-class-pattern': '^[a-z][a-zA-Z0-9]+$', // <- akceptuje camelCase
     'order/properties-order': [
       [
         // 1. Positioning

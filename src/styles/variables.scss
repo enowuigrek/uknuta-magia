@@ -2,8 +2,15 @@
 $gold: #E2C275;
 $dark-blue: #13192E;
 $blue: #152869;
-$text-light: #ffffff;
-$text-dark: #000000;
+$text-light: #fff;
+$text-dark: #000;
+$bg-dark: rgb(14 15 20);
+$bg-dark-hover: rgb(20 22 28);
+$border-light: rgb(255 255 255 / 10%);
+$border-lighter: rgb(255 255 255 / 30%);
+$shadow-dark: 0 10px 15px rgb(0 0 0 / 45%);
+$shadow-button: 0 4px 20px rgb(0 0 0 / 30%);
+$shadow-button-hover: 0 6px 25px rgb(0 0 0 / 40%);
 
 // === FONTS ===
 $font-main: "Instrument Serif", serif;
@@ -19,3 +26,7 @@ $spacing-lg: 4rem;          // 64px
 // === BREAKPOINTS ===
 $breakpoint-md: 768px;
 $breakpoint-lg: 1060px;
+
+// === Z-INDEX ===
+$z-header: 100;
+$z-floating: 999;

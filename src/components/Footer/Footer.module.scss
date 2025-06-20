@@ -1,17 +1,19 @@
 .site_footer {
     position: sticky;
+    bottom: 0;
+    z-index: 1;
     display: flex;
     justify-content: space-between;
-    z-index: 1;
     padding: 2rem;
     background-color: black;
-    bottom: 0;
+
     p {
         margin: 0;
     }
 
     a {
         margin: 0;
+
         &:hover {
             text-decoration: underline;
         }
@@ -24,8 +26,8 @@
         display: flex;
         flex-direction: column;
         justify-content: end;
-        margin: 0;
         gap: 0.25rem;
+        margin: 0;
     }
 
     .footer_center {
@@ -34,18 +36,17 @@
 
         a {
             padding: 0 8px;
+            text-decoration: none;
             border-left: 1px solid #E2C275;
 
             &:first-child {
-                border-left: none;
                 padding-left: 0;
+                border-left: none;
             }
 
             &:last-child {
                 padding-right: 0;
             }
-
-            text-decoration: none;
 
             &:hover {
                 text-decoration: underline;

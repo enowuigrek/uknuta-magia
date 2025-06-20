@@ -1,83 +1,78 @@
 .header {
     position: sticky;
     top: 0;
-    left: 0;
     right: 0;
-    flex-wrap: nowrap;
-    z-index: 2;
+    left: 0;
+    z-index: $z-header;
     display: flex;
+    flex-wrap: nowrap;
     justify-content: space-between;
     align-items: center;
     padding: 2em 4em;
-
-    // Dodaj transition dla płynnych animacji
     transition: all 0.3s ease-in-out;
 
     h1 {
         margin: 0;
-        transition: color 0.3s ease; // płynna zmiana koloru
+        transition: color 0.3s ease;
     }
 
     button {
-        transition: all 0.3s ease; // płynna zmiana przyciska
+        transition: all 0.3s ease;
     }
 
-    @media (max-width: 1060px) {
-        align-items: center;
+    @media (max-width: $breakpoint-lg) {
         padding: 2em;
 
         h1 {
-            font-size: 1.7em;
             padding: 3px;
+            font-size: 1.7em;
         }
     }
 }
 
-// Stan przezroczysty (na początku strony)
 .transparent {
     background: transparent;
     box-shadow: none;
 }
 
-// Stan po przewinięciu
 .scrolled {
-    background: rgb(14, 15, 20);
-    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.45);
-    padding: 1.5em 4em; // mniejszy padding po scroll
+    padding: 1.5em 4em;
+    background: $bg-dark;
+    box-shadow: $shadow-dark;
 
-    @media (max-width: 1060px) {
-        padding: 1.5em 2em; // mniejszy padding na mobile
+    @media (max-width: $breakpoint-lg) {
+        padding: 1.5em 2em;
     }
 }
 
-// Desktop navigation
 .desktopNav {
+    z-index: $z-header;
     display: flex;
     justify-content: space-between;
-    z-index: 1;
     gap: 2rem;
 
-    button, a {
+    button,
+    a {
+        position: relative;
+        text-decoration: none;
+        color: $gold;
         background: none;
         border: none;
-        color: #E2C275;
-        text-decoration: none;
-        //font-weight: 500;
-        position: relative;
         cursor: pointer;
+
         &:hover {
             opacity: 0.8;
         }
 
         &::after {
-            content: '';
             position: absolute;
             bottom: -5px;
             left: 0;
             width: 0;
             height: 2px;
-            background: currentColor;
+            background: currentcolor;
             transition: width 0.3s ease;
+            content: '';
         }
 
         &:hover::after {
@@ -85,59 +80,56 @@
         }
     }
 
-    @media (max-width: 1060px) {
+    @media (max-width: $breakpoint-lg) {
         display: none;
     }
 }
 
-// Desktop order button
 .orderButton {
-    background: rgba(255, 255, 255, 0.1);
-    color: #E2C275;
-    border: 1px solid rgba(255, 255, 255, 0.3);
     padding: 0.8em 1.5em;
-    border-radius: 6px;
     font-weight: 600;
+    color: $gold;
+    background: rgb(255 255 255 / 10%);
+    border: 1px solid $border-lighter;
+    border-radius: 6px;
     cursor: pointer;
 
     &:hover {
-        background: rgba(255, 255, 255, 0.2);
+        background: rgb(255 255 255 / 20%);
         transform: translateY(-1px);
     }
 
-    @media (max-width: 1060px) {
+    @media (max-width: $breakpoint-lg) {
         display: none;
     }
 }
 
-// Hamburger menu button
 .hamburger {
+    z-index: $z-header + 1;
     display: none;
     flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 18px;
+    padding: 0;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0;
-    width: 24px;
-    height: 18px;
-    justify-content: space-between;
-    z-index: 3;
 
     span {
         display: block;
-        height: 2px;
         width: 100%;
-        background-color: white;
+        height: 2px;
+        background-color: $text-light;
         transition: all 0.3s ease;
         transform-origin: center;
     }
 
-    @media (max-width: 1060px) {
+    @media (max-width: $breakpoint-lg) {
         display: flex;
     }
 }
 
-// Hamburger animation when open
 .hamburgerOpen {
     span:nth-child(1) {
         transform: rotate(45deg) translate(5px, 5px);
@@ -152,89 +144,76 @@
     }
 }
 
-// Mobile menu
 .mobileMenu {
     position: absolute;
     top: 100%;
-    left: 0;
     right: 0;
-    background: rgb(14, 15, 20);
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    left: 0;
+    z-index: $z-header;
     display: flex;
     flex-direction: column;
     padding: 1rem 2rem;
-    transform: translateY(-100%);
+    background: $bg-dark;
     opacity: 0;
-    visibility: hidden;
     transition: all 0.3s ease;
-    z-index: 2;
+    transform: translateY(-100%);
+    visibility: hidden;
+    border-top: 1px solid $border-light;
 
-    button, a {
+    button,
+    a {
+        padding: 1rem 0;
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: 500;
+        text-align: left;
+        color: $text-light;
         background: none;
         border: none;
-        color: white;
-        text-decoration: none;
-        font-weight: 500;
         cursor: pointer;
-        font-size: inherit;
-        font-family: inherit;
-        padding: 1rem 0;
-        text-align: left;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        border-bottom: 1px solid $border-light;
 
         &:last-child {
             border-bottom: none;
         }
 
         &:hover {
-            opacity: 0.8;
             padding-left: 0.5rem;
+            opacity: 0.8;
         }
     }
 
-    @media (min-width: 1061px) {
+    @media (min-width: $breakpoint-lg + 1) {
         display: none;
     }
 }
 
-// Mobile menu when open
 .mobileMenuOpen {
-    transform: translateY(0);
     opacity: 1;
+    transform: translateY(0);
     visibility: visible;
 }
 
-// Floating order button for mobile
 .floatingOrderButton {
     position: fixed;
-    bottom: 36px;
     right: 2px;
-    //transform: translateX(-50%);
-    z-index: 1000;
-
-    background: rgb(14, 15, 20);
-    //color: white;
-    text-decoration: none;
+    bottom: 36px;
+    z-index: $z-floating;
     padding: 1rem 2rem;
+    text-decoration: none;
+    color: $text-light;
+    background: $bg-dark;
     border-radius: 6px;
-    //font-weight: 600;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: $shadow-button;
     transition: all 0.3s ease;
-    //border: 2px solid rgba(255, 255, 255, 0.2);
 
     &:hover {
+        background: $bg-dark-hover;
+        box-shadow: $shadow-button-hover;
         transform: translateY(-2px);
-        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
-        text-decoration: none;
-        background: rgb(20, 22, 28);
     }
 
-    //&:active {
-    //    transform: translateX(-50%) translateY(0);
-    //}
-
-    // Pokaż tylko na mobile
-    @media (min-width: 1061px) {
+    @media (min-width: $breakpoint-lg + 1) {
         display: none;
     }
 }

@@ -1,14 +1,16 @@
 .teaser_content {
-    background-color: #222222;
+    position: relative;
+    z-index: 2;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    z-index: 2;
-    position: relative;
+    background-color: #222;
+
     p, a{
-        font-size: 36px;
         margin: 0;
-        //padding: 0 2em;
+        font-size: 36px;
+
+        // padding: 0 2em;
 
     }
 
@@ -16,9 +18,9 @@
         padding: 0;
     }
 
-    @media (max-width: 1060px) {
-        height: 100vh;
+    @media (width <= 1060px) {
         max-width: 100vw;
+        height: 100vh;
         padding: 0 2em;
     }
 }

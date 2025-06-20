@@ -1,12 +1,11 @@
 .content_section {
     position: relative;
     z-index: 1;
-
-    margin-bottom: 4rem;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 0 4em;
+    margin-bottom: 4rem;
 
     & h1 {
         font-size: 48px;
@@ -20,15 +19,14 @@
 .section_image {
     position: relative;
     z-index: 1;
-
+    width: 50%;
+    height: auto;
     padding: 2rem;
     box-sizing: border-box;
-    height: auto;
-    width: 50%;
     object-fit: cover;
 }
 
-@media (max-width: 1060px) {
+@media (width <= 1060px) {
     .content_section {
         flex-direction: column;
         padding: 0 2em;
