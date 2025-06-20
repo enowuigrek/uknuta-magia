@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import styles from './Header.module.scss'
 
 export function Header() {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+    const headerRef = useRef(null);
 
     useEffect(() => {
         const handleScroll = () => {
@@ -20,13 +22,13 @@ export function Header() {
     // Smooth scroll function
     const scrollToSection = (sectionId) => {
         const element = document.getElementById(sectionId);
+        const offset = headerRef.current?.offsetHeight || 0;
+
         if (element) {
-            element.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
+            const y = element.getBoundingClientRect().top + window.scrollY - offset;
+            window.scrollTo({ top: y, behavior: 'smooth' });
         }
-        // Zamknij menu mobile po kliknięciu
+
         setIsMobileMenuOpen(false);
     };
 
@@ -44,7 +46,7 @@ export function Header() {
 
     return (
         <>
-            <div className={`${styles.header} ${(isScrolled || isMobileMenuOpen) ? styles.scrolled : styles.transparent}`}>  <h1>Uknuta Magia</h1>
+            <header ref={headerRef} className={`${styles.header} ${(isScrolled || isMobileMenuOpen) ? styles.scrolled : styles.transparent}`}>  <h1>Uknuta Magia</h1>
                 {/* Desktop nav */}
                 <nav className={styles.desktopNav}>
                     <button onClick={() => scrollToSection('book')}>O książce</button>
@@ -62,7 +64,6 @@ export function Header() {
                     className={`${styles.hamburger} ${isMobileMenuOpen ? styles.hamburgerOpen : ''}`}
                     onClick={() => {
                         setIsMobileMenuOpen(prev => !prev);
-                        // setIsScrolled(true); do wywalenia
                     }}
                     aria-label="Menu"
                 >
@@ -77,7 +78,7 @@ export function Header() {
                     <button onClick={() => scrollToSection('author')}>O autorze</button>
                     {/*<a href="mailto:kontakt@example.com">Kontakt</a>*/}
                 </div>
-            </div>
+            </header>
 
             {/* Floating order button for mobile */}
             <a
