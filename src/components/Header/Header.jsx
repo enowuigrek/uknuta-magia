@@ -24,6 +24,8 @@ export function Header() {
         const element = document.getElementById(sectionId);
         const offset = headerRef.current?.offsetHeight || 0;
 
+        console.log(element)
+
         if (element) {
             const y = element.getBoundingClientRect().top + window.scrollY - offset;
             window.scrollTo({ top: y, behavior: 'smooth' });

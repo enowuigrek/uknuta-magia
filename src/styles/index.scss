@@ -1,0 +1,65 @@
+/* === GLOBAL STYLES === */
+
+body {
+  font-family: $font-main;
+  font-weight: 400;
+  font-style: normal;
+
+  background: linear-gradient(90deg, $dark-blue 0%, $blue 100%);
+  overscroll-behavior: none;
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+h1 {
+  color: $gold;
+  font-size: $font-size-xl;
+  margin: 0;
+}
+
+p {
+  color: $text-light;
+  font-size: $font-size-lg;
+  margin: 0;
+}
+
+a {
+  font-weight: 500;
+  font-size: $font-size-lg;
+  color: $gold;
+  text-decoration: none;
+  margin: 0 2.25rem; // 36px
+  transition: text-decoration 0.2s ease;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  border-radius: 0.5rem;
+  border: 1px solid transparent;
+  font-size: $font-size-lg;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: $gold;
+  color: $text-dark;
+  cursor: pointer;
+  text-wrap: nowrap;
+  transition: all 0.25s ease;
+  z-index: 1;
+}
+
+button:hover {
+  border-color: $gold;
+  background-color: transparent;
+  color: $gold;
+}
+
+#root {
+  max-width: 80rem; // czyli 1280px
+  margin: 0 auto;
+}

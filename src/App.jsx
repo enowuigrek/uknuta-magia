@@ -1,4 +1,3 @@
-import './App.css'
 import {author, bookDescription} from "./content/book.js";
 import bookCover from './assets/book-cover.svg';
 import authorPhoto from './assets/author-photo.jpg';
@@ -14,32 +13,27 @@ function App() {
         <>
             <CursorGlow/>
             <Header/>
-
             {/* Sekcja o książce */}
-            <section id="book">
-                <ContentSection
-                    isPhotoLeft
-                    img={bookCover}
-                    header={bookDescription.title}
-                    text={bookDescription.description}
-                    alt={'okładka'}
-                />
-            </section>
-
+            <ContentSection
+                id="book"
+                isPhotoLeft
+                img={bookCover}
+                header={bookDescription.title}
+                text={bookDescription.description}
+                alt={'okładka'}
+            />
             {/* Sekcja o autorze */}
-            <section id="author">
-                <ContentSection
-                    img={authorPhoto}
-                    header={author.title}
-                    text={author.description}
-                    alt={'zdjęcie autora'}/>
-            </section>
-
+            <ContentSection
+                id="author"
+                img={authorPhoto}
+                header={author.title}
+                text={author.description}
+                alt={'zdjęcie autora'}
+            />
             {/*<TeaserContent />*/}
             {/*<Footer />*/}
 
         </>
     )
 }
-
 export default App
