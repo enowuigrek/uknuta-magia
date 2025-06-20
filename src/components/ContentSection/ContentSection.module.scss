@@ -15,8 +15,6 @@
     }
 }
 
-//TODO: Pobawic sie szerokoscia 50% na desktopie gdy obok siebie i 100% z odpowiednimi marginami na mobile
-
 .section_image {
     padding: 2rem;
     box-sizing: border-box;
@@ -27,6 +25,7 @@
     @media (max-width: 1060px) {
         height: auto;
         width: 100%;
+        padding: 0;
     }
 }
 

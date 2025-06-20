@@ -8,7 +8,7 @@ export function Header() {
     useEffect(() => {
         const handleScroll = () => {
             const scrollTop = window.scrollY;
-            setIsScrolled(scrollTop > 50);
+            setIsScrolled(scrollTop > 0);
         };
 
         window.addEventListener('scroll', handleScroll);
@@ -44,8 +44,7 @@ export function Header() {
 
     return (
         <>
-            <div className={`${styles.header} ${isScrolled ? styles.scrolled : styles.transparent}`}>
-                <h1>Uknuta Magia</h1>
+            <div className={`${styles.header} ${(isScrolled || isMobileMenuOpen) ? styles.scrolled : styles.transparent}`}>  <h1>Uknuta Magia</h1>
                 {/* Desktop nav */}
                 <nav className={styles.desktopNav}>
                     <button onClick={() => scrollToSection('book')}>O książce</button>
@@ -61,7 +60,10 @@ export function Header() {
                 {/* Hamburger button */}
                 <button
                     className={`${styles.hamburger} ${isMobileMenuOpen ? styles.hamburgerOpen : ''}`}
-                    onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                    onClick={() => {
+                        setIsMobileMenuOpen(prev => !prev);
+                        // setIsScrolled(true); do wywalenia
+                    }}
                     aria-label="Menu"
                 >
                     <span></span>
