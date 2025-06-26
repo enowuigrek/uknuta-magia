@@ -5,8 +5,45 @@
     width: 50%;
     margin: 2rem;
 
-    @media (width <= 1060px) {
+    h1 {
+        position: relative;
+        font-size: 48px;
+        font-family: $font-main;
+        color: $gold;
+        margin-bottom: 1rem;
+
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: $gold;
+            border-radius: 2px;
+            transition: width 0.6s ease-in-out;
+        }
+    }
+
+    &.visible h1::before {
+        width: 75%;
+    }
+
+    p {
+        margin-top: 1rem;
+        font-size: 28px;
+        color: $text-light;
+    }
+
+    @media (width <= $breakpoint-lg) {
         width: 100%;
-        margin: 2rem;
+
+        h1 {
+            font-size: 36px;
+        }
+
+        p {
+            font-size: 24px;
+        }
     }
 }

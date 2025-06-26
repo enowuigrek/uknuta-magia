@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { FaInstagram, FaFacebookF } from 'react-icons/fa';
 import styles from './Footer.module.scss';
 
 export function Footer() {
@@ -25,6 +26,14 @@ export function Footer() {
         <div className={`${styles.footerWrapper} ${isVisible ? styles.footerVisible : styles.footerHidden}`}>
             <footer className={styles.footer}>
                 <div className={styles.footerLeft}>
+                    <div className={styles.socialIcons}>
+                        <a href="https://www.instagram.com/uknuta_magia/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                            <FaInstagram />
+                        </a>
+                        <a href="https://www.facebook.com/profile.php?id=61575505817796" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                            <FaFacebookF />
+                        </a>
+                    </div>
                     <a href="mailto:kontakt@uknutamagia.pl">kontakt@uknutamagia.pl</a>
                     <p>© 2025 Uknuta Magia</p>
 
@@ -35,7 +44,6 @@ export function Footer() {
                     <a href="/cookies">Cookies</a>
                 </div>
                 <div className={styles.footerRight}>
-                    <p>Tu beda sociale</p>
                     <p>
                         Projekt i wykonanie: <a href="https://enowuigrek.dev" target="_blank" rel="noopener noreferrer">enowuigrek</a>
                     </p>

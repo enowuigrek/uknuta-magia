@@ -53,21 +53,6 @@ a {
     &:hover {
         opacity: 0.8;
     }
-
-    &::after {
-        position: absolute;
-        bottom: -5px;
-        left: 0;
-        width: 0;
-        height: 2px;
-        background: currentcolor;
-        transition: width 0.3s ease;
-        content: '';
-    }
-
-    &:hover::after {
-        width: 100%;
-    }
 }
 
 .desktopNav {
@@ -75,6 +60,30 @@ a {
     display: flex;
     justify-content: space-between;
     gap: 2rem;
+
+    a {
+        position: relative;
+        text-decoration: none;
+        color: $gold;
+        background: none;
+        border: none;
+        cursor: pointer;
+
+        &::after {
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: currentcolor;
+            transition: width 0.3s ease;
+            content: '';
+        }
+
+        &:hover::after {
+            width: 100%;
+        }
+    }
 
     @media (max-width: $breakpoint-lg) {
         display: none;

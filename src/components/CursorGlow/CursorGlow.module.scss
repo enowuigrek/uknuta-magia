@@ -3,19 +3,19 @@
     top: 0;
     left: 0;
     z-index: 1;
-    width: 1000px;
-    height: 1000px;
+    width: $cursor-size;
+    height: $cursor-size;
     box-sizing: border-box;
-    background: radial-gradient(circle, rgb(50 151 196 / 100%), transparent 70%);
+    background: radial-gradient(circle, rgba($cursor-color, $cursor-opacity), transparent 70%);
     border-radius: 50%;
-    transition: opacity 0.2s ease;
+    transition: opacity $cursor-fade-duration ease;
     transform: translate(-50%, -50%);
     mix-blend-mode: screen;
     pointer-events: none;
 }
 
 @media (pointer: coarse) {
-  .cursorGlow {
-    display: none;
-  }
+    .cursorGlow {
+        display: none;
+    }
 }

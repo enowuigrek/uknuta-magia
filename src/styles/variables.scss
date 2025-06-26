@@ -11,6 +11,8 @@ $border-lighter: rgb(255 255 255 / 30%);
 $shadow-dark: 0 10px 15px rgb(0 0 0 / 45%);
 $shadow-button: 0 4px 20px rgb(0 0 0 / 30%);
 $shadow-button-hover: 0 6px 25px rgb(0 0 0 / 40%);
+$magic-glow: rgb(50 151 196);
+$cursor-color: $magic-glow; // ← dodane
 
 // === FONTS ===
 $font-main: "Instrument Serif", serif;
@@ -22,6 +24,11 @@ $font-size-xl: 4rem;        // 64px
 $spacing-sm: 1rem;          // 16px
 $spacing-md: 2rem;          // 32px
 $spacing-lg: 4rem;          // 64px
+
+// === CURSOR EFFECT ===
+$cursor-size: 1000px;
+$cursor-opacity: 100%;
+$cursor-fade-duration: 0.2s;
 
 // === BREAKPOINTS ===
 $breakpoint-md: 768px;
