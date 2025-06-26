@@ -21,7 +21,7 @@ export function CursorGlow() {
 
     return (
         <div
-            className={styles.cursor_glow}
+            className={styles.cursorGlow}
             ref={glowRef}
         />
     );

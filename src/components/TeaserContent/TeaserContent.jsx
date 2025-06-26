@@ -2,7 +2,7 @@ import styles from './TeaserContent.module.scss'
 
 export function TeaserContent() {
     return (
-        <div className={styles.teaser_content}>
+        <div className={styles.teaserContent}>
             <p>
                 Niech pierwsze słowa otworzą drzwi do świata magii.
             </p>

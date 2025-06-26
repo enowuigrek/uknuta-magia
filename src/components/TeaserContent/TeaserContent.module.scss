@@ -1,4 +1,4 @@
-.teaser_content {
+.teaserContent {
     position: relative;
     z-index: 2;
     display: flex;
@@ -6,12 +6,10 @@
     justify-content: center;
     background-color: #222;
 
-    p, a{
+    p,
+    a {
         margin: 0;
         font-size: 36px;
-
-        // padding: 0 2em;
-
     }
 
     a {

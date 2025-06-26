@@ -5,7 +5,8 @@ import {CursorGlow} from './components/CursorGlow/CursorGlow.jsx'
 import {Header} from './components/Header/Header.jsx'
 import {ContentSection} from "./components/ContentSection/ContentSection.jsx";
 import {Footer} from "./components/Footer/Footer.jsx";
-import {TeaserContent} from "./components/TeaserContent/TeaserContent.jsx";
+// import {TeaserContent} from "./components/TeaserContent/TeaserContent.jsx";
+// import BookCharacterChat from "@/components/Chat/BookCharacterChat.jsx";
 
 function App() {
 
@@ -30,8 +31,9 @@ function App() {
                 text={author.description}
                 alt={'zdjęcie autora'}
             />
+            {/*<BookCharacterChat/>*/}
             {/*<TeaserContent />*/}
-            {/*<Footer />*/}
+            <Footer />
 
         </>
     )

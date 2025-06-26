@@ -1,4 +1,4 @@
-.content_section {
+.contentSection {
     position: relative;
     z-index: 1;
     display: flex;
@@ -7,16 +7,16 @@
     padding: 0 4em;
     margin-bottom: 4rem;
 
-    & h1 {
+    h1 {
         font-size: 48px;
     }
 
-    & p {
+    p {
         font-size: 28px;
     }
 }
 
-.section_image {
+.sectionImage {
     position: relative;
     z-index: 1;
     width: 50%;
@@ -27,7 +27,7 @@
 }
 
 @media (width <= 1060px) {
-    .content_section {
+    .contentSection {
         flex-direction: column;
         padding: 0 2em;
 
@@ -40,7 +40,7 @@
         }
     }
 
-    .section_image {
+    .sectionImage {
         width: 100%;
         padding: 0;
     }
