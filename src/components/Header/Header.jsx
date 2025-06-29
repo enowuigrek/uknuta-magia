@@ -1,10 +1,9 @@
 import { useState, useEffect, useRef } from 'react';
 import styles from './Header.module.scss'
 
-export function Header() {
+export function Header({ onOrderClick }) {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
     const headerRef = useRef(null);
 
     useEffect(() => {
@@ -19,12 +18,17 @@ export function Header() {
         };
     }, []);
 
-    // Smooth scroll function
+    // Load Payhip script once
+    useEffect(() => {
+        const script = document.createElement('script');
+        script.src = 'https://payhip.com/payhip.js';
+        script.async = true;
+        document.body.appendChild(script);
+    }, []);
+
     const scrollToSection = (sectionId) => {
         const element = document.getElementById(sectionId);
         const offset = headerRef.current?.offsetHeight || 0;
-
-        console.log(element)
 
         if (element) {
             const y = element.getBoundingClientRect().top + window.scrollY - offset;
@@ -34,7 +38,6 @@ export function Header() {
         setIsMobileMenuOpen(false);
     };
 
-    // Zamknij menu przy kliknięciu poza nim
     useEffect(() => {
         const handleClickOutside = (event) => {
             if (isMobileMenuOpen && !event.target.closest(`.${styles.header}`)) {
@@ -48,25 +51,23 @@ export function Header() {
 
     return (
         <>
-            <header ref={headerRef} className={`${styles.header} ${(isScrolled || isMobileMenuOpen) ? styles.scrolled : styles.transparent}`}>  <h1>Uknuta Magia</h1>
-                {/* Desktop nav */}
+            <header ref={headerRef} className={`${styles.header} ${(isScrolled || isMobileMenuOpen) ? styles.scrolled : styles.transparent}`}>
+                <h1>Uknuta Magia</h1>
+
                 <nav className={styles.desktopNav}>
                     <button onClick={() => scrollToSection('book')}>O książce</button>
                     <button onClick={() => scrollToSection('author')}>O autorze</button>
-                    {/*<button><a href="mailto:kontakt@example.com">Kontakt</a></button>*/}
+                    <button
+                        onClick={onOrderClick}
+                        className={styles.orderButton}
+                    >
+                        Zamów książkę
+                    </button>
                 </nav>
 
-                {/* Desktop order button */}
-                <button className={styles.orderButton}>
-                    Zamów książkę
-                </button>
-
-                {/* Hamburger button */}
                 <button
                     className={`${styles.hamburger} ${isMobileMenuOpen ? styles.hamburgerOpen : ''}`}
-                    onClick={() => {
-                        setIsMobileMenuOpen(prev => !prev);
-                    }}
+                    onClick={() => setIsMobileMenuOpen(prev => !prev)}
                     aria-label="Menu"
                 >
                     <span></span>
@@ -74,23 +75,18 @@ export function Header() {
                     <span></span>
                 </button>
 
-                {/* Mobile menu */}
                 <div className={`${styles.mobileMenu} ${isMobileMenuOpen ? styles.mobileMenuOpen : ''}`}>
                     <button onClick={() => scrollToSection('book')}>O książce</button>
                     <button onClick={() => scrollToSection('author')}>O autorze</button>
-                    {/*<a href="mailto:kontakt@example.com">Kontakt</a>*/}
                 </div>
             </header>
 
-            {/* Floating order button for mobile */}
-            <a
-                href="https://payhip.com/"
+            <button
+                onClick={onOrderClick}
                 className={styles.floatingOrderButton}
-                target="_blank"
-                rel="noopener noreferrer"
             >
                 Zamów książkę
-            </a>
+            </button>
         </>
-    )
+    );
 }

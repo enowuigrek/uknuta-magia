@@ -1,0 +1,372 @@
+.formContainer {
+    max-width: 500px;
+    margin: 0 auto;
+    background: $bg-dark;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+
+    h1 {
+        font-size: 1.875rem;
+        font-weight: 700;
+        color: $gold;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputRow {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1rem;
+
+    @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $text-light;
+    margin-bottom: 0.25rem;
+}
+
+.input {
+    width: 100%;
+    padding: 0.7rem;
+    margin: 0px;
+    border: 1px solid $dark-blue;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.2s ease;
+
+    &:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    &::placeholder {
+        color: $border-light;
+    }
+}
+
+// Paczkomat input wrapper
+.parcelLockerWrapper {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.parcelLockerInput {
+    flex: 1;
+    cursor: pointer;
+    background-color: #f9fafb;
+}
+
+.parcelLockerButton {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background-color: $gold;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: $dark-blue;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+
+    &:hover {
+        background-color: #e5e7eb;
+        border-color: #9ca3af;
+    }
+
+    &:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+}
+
+.packageIcon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.parcelDetails {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin-top: 0.5rem;
+    padding: 0.75rem;
+    background-color: #eff6ff;
+    border: 1px solid #bfdbfe;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    color: $blue;
+
+    span {
+        flex: 1;
+    }
+
+    strong {
+        font-weight: 600;
+    }
+}
+
+.locationIcon {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    margin-top: 0.125rem;
+}
+
+// Checkbox styling
+.checkboxGroup {
+    margin: 0.5rem 0;
+}
+
+.checkboxLabel {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    font-size: 0.875rem;
+    color: $text-light;
+    cursor: pointer;
+    line-height: 1.5;
+}
+
+.checkbox {
+    display: none;
+
+    &:checked + .checkboxCustom {
+        background-color: $blue;
+        border-color: $blue;
+
+        &::after {
+            opacity: 1;
+            transform: scale(1);
+        }
+    }
+}
+
+.checkboxCustom {
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid #d1d5db;
+    border-radius: 4px;
+    background-color: white;
+    position: relative;
+    flex-shrink: 0;
+    transition: all 0.2s ease;
+
+    &::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 6px;
+        width: 6px;
+        height: 10px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg) scale(0);
+        transition: all 0.2s ease;
+        opacity: 0;
+    }
+}
+
+// Submit button
+.submitButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 1rem;
+    background-color: $blue;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-top: 0.5rem;
+
+    &:hover:not(:disabled) {
+        background-color: #2563eb;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        color: $text-light;
+    }
+
+    &:active:not(:disabled) {
+        transform: translateY(0);
+    }
+
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+        transform: none;
+    }
+}
+
+.creditCardIcon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// Success state
+.successContainer {
+    max-width: 400px;
+    margin: 0 auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    text-align: center;
+
+    h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin: 1rem 0 0.5rem 0;
+    }
+
+    p {
+        color: #6b7280;
+        line-height: 1.6;
+    }
+}
+
+.successIcon {
+    width: 4rem;
+    height: 4rem;
+    background-color: #dcfce7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+}
+
+.checkmark {
+    width: 2rem;
+    height: 2rem;
+    color: #16a34a;
+}
+
+// Responsive design
+@media (max-width: 640px) {
+    .formContainer {
+        margin: 1rem;
+        padding: 1.5rem;
+    }
+
+    .inputRow {
+        grid-template-columns: 1fr;
+    }
+
+    .parcelLockerWrapper {
+        flex-direction: column;
+    }
+
+    .parcelLockerButton {
+        justify-content: center;
+    }
+}
+
+// InPost GeoWidget Popup
+.parcelPopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 1rem;
+}
+
+.parcelPopupContent {
+    background: white;
+    border-radius: 12px;
+    max-width: 900px;
+    width: 100%;
+    max-height: 90vh;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+}
+
+.parcelPopupHeader {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem;
+    border-bottom: 1px solid #e5e7eb;
+
+    h3 {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #111827;
+        margin: 0;
+    }
+}
+
+.closeButton {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #6b7280;
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+
+    &:hover {
+        background-color: #f3f4f6;
+        color: #374151;
+    }
+}
+
+.geowidgetContainer {
+    height: 500px;
+
+    inpost-geowidget {
+        width: 100%;
+        height: 100%;
+        display: block;
+    }
+}
