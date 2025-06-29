@@ -17,22 +17,52 @@
             position: absolute;
             bottom: -0.5rem;
             left: 0;
-            width: 0;
-            height: 2px;
+            width: 80%;
+            height: 1px;
             background-color: $gold;
             border-radius: 2px;
             transition: width 0.6s ease-in-out;
+
+            animation: testt 2s;
+            animation-timeline: view();
+
         }
     }
 
-    &.visible h1::before {
-        width: 75%;
+
+    @keyframes testt {
+        0% {
+            width: 0;
+
+        }
+        100% {
+            width: 80%;
+        }
     }
 
     p {
         margin-top: 1rem;
         font-size: 28px;
         color: $text-light;
+        animation: test 2s;
+        animation-timeline: view();
+    }
+
+    @keyframes test {
+        0% {
+            opacity: 0;
+            transform: translateX(-350px);
+
+        }
+
+        30% {
+            opacity: 0;
+            transform: translateX(-250px);
+        }
+        40% {
+            opacity: 1;
+            transform: translateX(0);
+        }
     }
 
     @media (width <= $breakpoint-lg) {

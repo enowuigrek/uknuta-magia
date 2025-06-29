@@ -1,29 +1,10 @@
-import { useEffect, useState } from 'react';
 import { FaInstagram, FaFacebookF } from 'react-icons/fa';
 import styles from './Footer.module.scss';
 
 export function Footer() {
-    const [isVisible, setIsVisible] = useState(false);
-
-    useEffect(() => {
-        const handleScroll = () => {
-            const scrollTop = window.scrollY;
-            const windowHeight = window.innerHeight;
-            const fullHeight = document.body.scrollHeight;
-
-            if (scrollTop + windowHeight >= fullHeight - 10) {
-                setIsVisible(true);
-            } else {
-                setIsVisible(false);
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
 
     return (
-        <div className={`${styles.footerWrapper} ${isVisible ? styles.footerVisible : styles.footerHidden}`}>
+
             <footer className={styles.footer}>
                 <div className={styles.footerLeft}>
                     <div className={styles.socialIcons}>
@@ -49,6 +30,5 @@ export function Footer() {
                     </p>
                 </div>
             </footer>
-        </div>
     )
 }
