@@ -21,6 +21,11 @@ export default defineConfig({
       }
     }
   },
+  build: {
+    rollupOptions: {
+      external: ['emailjs-com'],
+    }
+  },
   resolve: {
     alias: {
       '@': path.resolve(__dirname, 'src'),
