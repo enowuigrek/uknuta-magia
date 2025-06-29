@@ -47,11 +47,14 @@
 .input {
     width: 100%;
     padding: 0.7rem;
-    margin: 0px;
+    margin: 0;
     border: 1px solid $dark-blue;
     border-radius: 6px;
     font-size: 1rem;
     transition: all 0.2s ease;
+    background-color: white;
+    color: #1f2937;
+    box-sizing: border-box; // To jest kluczowe!
 
     &:focus {
         outline: none;
@@ -68,20 +71,24 @@
 .parcelLockerWrapper {
     display: flex;
     gap: 0.5rem;
+    align-items: stretch; // Wyrównanie wysokości
 }
 
 .parcelLockerInput {
     flex: 1;
     cursor: pointer;
     background-color: #f9fafb;
+    min-width: 0; // Pozwala na zmniejszenie się
 }
 
 .parcelLockerButton {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 0.5rem;
-    padding: 0.75rem;
+    padding: 0.75rem 1rem;
     background-color: $gold;
+    border: none;
     border-radius: 6px;
     font-size: 0.875rem;
     font-weight: 500;
@@ -89,16 +96,16 @@
     cursor: pointer;
     transition: all 0.2s ease;
     white-space: nowrap;
+    flex-shrink: 0; // Zapobiega zmniejszaniu się
 
     &:hover {
-        background-color: #e5e7eb;
-        border-color: #9ca3af;
+        background-color: #d97706;
+        transform: translateY(-1px);
     }
 
     &:focus {
         outline: none;
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.3);
     }
 }
 
@@ -211,7 +218,6 @@
         background-color: #2563eb;
         transform: translateY(-1px);
         box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
-        color: $text-light;
     }
 
     &:active:not(:disabled) {
@@ -298,6 +304,7 @@
 
     .parcelLockerWrapper {
         flex-direction: column;
+        gap: 0.75rem;
     }
 
     .parcelLockerButton {
@@ -363,6 +370,7 @@
 
 .geowidgetContainer {
     height: 500px;
+    width: 100%;
 
     inpost-geowidget {
         width: 100%;
