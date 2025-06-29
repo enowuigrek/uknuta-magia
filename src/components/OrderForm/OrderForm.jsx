@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import emailjs from 'emailjs-com';
+import emailjs from '@emailjs/browser';
 import styles from './OrderForm.module.scss';
 
 export function OrderForm() {
@@ -21,7 +21,7 @@ export function OrderForm() {
     // Inicjalizacja EmailJS
     useEffect(() => {
         // WKLEJ TUTAJ SWÓJ PUBLIC KEY Z EMAILJS
-        emailjs.init("w0-FyWEi8oTpeSaly");
+        emailjs.init("WTc0uBQgaiID5YGr-");
     }, []);
 
     /*
