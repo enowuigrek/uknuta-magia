@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import emailjs from '@emailjs/browser';
+import { supabase } from "../../config/supabase";
 import styles from './OrderForm.module.scss';
 
 export function OrderForm() {
@@ -16,42 +17,12 @@ export function OrderForm() {
 
     const [parcelDetails, setParcelDetails] = useState(null);
     const [orderStatus, setOrderStatus] = useState('form'); // form, processing, success
-    //const [showParcelPopup, setShowParcelPopup] = useState(false);
+    const [orderId, setOrderId] = useState(null); // Przechowujemy ID zamówienia
 
     // Inicjalizacja EmailJS
     useEffect(() => {
-        // WKLEJ TUTAJ SWÓJ PUBLIC KEY Z EMAILJS
         emailjs.init("WTc0uBQgaiID5YGr-");
     }, []);
-
-    /*
-    useEffect(() => {
-        // Listener dla wyboru paczkomatu z HTML
-        const handlePointSelection = (event) => {
-            const point = event.detail;
-            console.log('Wybrany paczkomat:', point);
-
-            setFormData(prev => ({
-                ...prev,
-                parcelLocker: `${point.name} (${point.address.line1})`
-            }));
-
-            setParcelDetails({
-                name: point.name,
-                location_description: point.address.line1,
-                address: point.address
-            });
-
-            setShowParcelPopup(false);
-        };
-
-        window.addEventListener('inpostPointSelected', handlePointSelection);
-
-        return () => {
-            window.removeEventListener('inpostPointSelected', handlePointSelection);
-        };
-    }, []);
-    */
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -61,42 +32,88 @@ export function OrderForm() {
         }));
     };
 
-    //const handleChooseParcelLocker = () => {
-    //    setShowParcelPopup(true);
-    //};
+    // Funkcja zapisywania zamówienia do Supabase
+    const saveOrderToDatabase = async (orderData) => {
+        try {
+            const { data, error } = await supabase
+                .from('orders') // Zmień nazwę tabeli jeśli potrzeba
+                .insert([
+                    {
+                        name: orderData.name,
+                        email: orderData.email,
+                        phone: orderData.phone,
+                        street: orderData.street,
+                        zip: orderData.zip,
+                        city: orderData.city,
+                        parcel_locker: orderData.parcelLocker,
+                        status: 'new'
+                    }
+                ])
+                .select();
+
+            if (error) {
+                console.error('Błąd zapisu do bazy:', error);
+                throw error;
+            }
+
+            console.log('Zamówienie zapisane do bazy:', data);
+            return data[0]; // Zwracamy zapisane zamówienie z ID
+        } catch (error) {
+            console.error('Błąd podczas zapisu do bazy:', error);
+            throw error;
+        }
+    };
 
     // Funkcja wysyłania emaili
-    const sendEmails = async (orderData) => {
+    const sendEmails = async (orderData, orderId = null) => {
         try {
-            await emailjs.send(
-                'service_2hs9kpo',
-                'template_ale1jbf',
-                {
-                    name: orderData.name,
-                    email: orderData.email,
-                    phone: orderData.phone,
-                    street: orderData.street,
-                    zip: orderData.zip,
-                    city: orderData.city,
-                    parcelLocker: orderData.parcelLocker,
-                },
-                'XUgiwt0PDa7phqZpC'
-            ).then(
-                (result) => {
-                    console.log('SUCCESS!', result.text);
-                    // Tu możesz dodać przekierowanie albo info o sukcesie
-                },
-                (error) => {
-                    console.log('FAILED...', error.text);
-                }
-            );
+            const serviceID = 'service_m7597lc';
+            const templateIDClient = 'template_aie1jbf';
+            const templateIDAdmin = 'template_q18c56b';
+            const publicKey = 'WTc0uBQgaiID5YGr-';
 
-            console.log('Oba emaile wysłane pomyślnie!');
+            const templateParams = {
+                name: orderData.name,                    // ← zmienione z fullName
+                email: orderData.email,
+                phone: orderData.phone,
+                street: orderData.street,
+                zip: orderData.zip,
+                city: orderData.city,
+                parcel_locker: orderData.parcelLocker,   // ← zmienione z parcelLocker
+                order_id: orderId || 'N/A'
+            };
+
+            // Wyślij do klienta
+            await emailjs.send(serviceID, templateIDClient, templateParams, publicKey);
+            console.log('Email do klienta wysłany');
+
+            // Wyślij do siebie (admina)
+            await emailjs.send(serviceID, templateIDAdmin, templateParams, publicKey);
+            console.log('Email do admina wysłany');
+
             return true;
-
         } catch (error) {
             console.error('Błąd wysyłania emaili:', error);
             throw error;
+        }
+    };
+
+    // Funkcja aktualizacji statusu zamówienia
+    const updateOrderStatus = async (orderId, newStatus) => {
+        try {
+            const { error } = await supabase
+                .from('orders')
+                .update({ status: newStatus })
+                .eq('id', orderId);
+
+            if (error) {
+                console.error('Błąd aktualizacji statusu:', error);
+                throw error;
+            }
+
+            console.log(`Status zamówienia ${orderId} zmieniony na: ${newStatus}`);
+        } catch (error) {
+            console.error('Błąd podczas aktualizacji statusu:', error);
         }
     };
 
@@ -115,51 +132,36 @@ export function OrderForm() {
         setOrderStatus('processing');
 
         try {
-            // Wysyłanie emaili
-            await sendEmails(formData);
+            // 1. Zapisz zamówienie do bazy danych
+            console.log('Zapisywanie zamówienia do bazy...');
+            const savedOrder = await saveOrderToDatabase(formData);
+            setOrderId(savedOrder.id);
 
-            const serviceID = 'service_m7597lc';
-            const templateIDClient = 'template_aie1jbf';
-            const templateIDAdmin = 'template_q18c56b';
-            const publicKey = 'WTc0uBQgaiID5YGr-';
+            // 2. Wyślij emaile
+            console.log('Wysyłanie emaili...');
+            await sendEmails(formData, savedOrder.id);
 
-            const templateParams = {
-                fullName: formData.name,
-                email: formData.email,
-                phone: formData.phone,
-                street: formData.street,
-                zip: formData.zip,
-                city: formData.city,
-                parcelLocker: formData.parcelLocker
-            };
+            // 3. Aktualizuj status na "email_sent"
+            await updateOrderStatus(savedOrder.id, 'email_sent');
 
-            // Wyślij do klienta
-            emailjs.send(serviceID, templateIDClient, templateParams, publicKey)
-                .then((result) => {
-                    console.log('Email do klienta wysłany:', result.text);
-                }, (error) => {
-                    console.error('Błąd przy wysyłce do klienta:', error);
-                });
-
-            // Wyślij do siebie (admina)
-            emailjs.send(serviceID, templateIDAdmin, templateParams, publicKey)
-                .then((result) => {
-                    console.log('Email do admina wysłany:', result.text);
-                }, (error) => {
-                    console.error('Błąd przy wysyłce do admina:', error);
-                });
-
-            console.log('Formularz wysłany:', formData);
+            console.log('Formularz przetworzony pomyślnie!');
 
             // Przekierowanie do płatności (na razie symulacja)
             setTimeout(() => {
                 setOrderStatus('success');
-                // W rzeczywistości tutaj będzie przekierowanie do PayPal/tpay
+                // Tutaj możesz zaktualizować status na "awaiting_payment"
+                updateOrderStatus(savedOrder.id, 'awaiting_payment');
             }, 1500);
 
         } catch (error) {
             console.error('Błąd:', error);
-            alert('Wystąpił błąd podczas wysyłania. Spróbuj ponownie.');
+
+            // Jeśli mamy ID zamówienia, oznacz jako błąd
+            if (orderId) {
+                await updateOrderStatus(orderId, 'error');
+            }
+
+            alert('Wystąpił błąd podczas przetwarzania zamówienia. Spróbuj ponownie.');
             setOrderStatus('form');
         }
     };
@@ -175,6 +177,7 @@ export function OrderForm() {
                 <h2>Dziękujemy!</h2>
                 <p>Zamówienie zostało przyjęte. Sprawdź swoją skrzynkę email po więcej informacji.</p>
                 <p><strong>Na Twój email wysłaliśmy potwierdzenie zamówienia.</strong></p>
+                {orderId && <p><small>Numer zamówienia: {orderId}</small></p>}
             </div>
         );
     }
@@ -313,7 +316,7 @@ export function OrderForm() {
                     {orderStatus === 'processing' ? (
                         <>
                             <div className={styles.spinner}></div>
-                            Wysyłanie...
+                            Przetwarzanie...
                         </>
                     ) : (
                         <>
@@ -326,38 +329,6 @@ export function OrderForm() {
                     )}
                 </button>
             </form>
-
-            {/* InPost GeoWidget Popup */}
-            {/* {showParcelPopup && (
-                <div className={styles.parcelPopup}>
-                    <div className={styles.parcelPopupContent}>
-                        <div className={styles.parcelPopupHeader}>
-                            <h3>Wybierz paczkomat InPost</h3>
-                            <button
-                                type="button"
-                                onClick={() => setShowParcelPopup(false)}
-                                className={styles.closeButton}
-                            >
-                                ✕
-                            </button>
-                        </div>
-                        <div className={styles.geowidgetContainer}>
-                            <inpost-geowidget
-                                onpoint="handleInPostSelection"
-                                token="eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJzQlpXVzFNZzVlQnpDYU1XU3JvTlBjRWc4RFhqdTBkZGNuNWItV1RUN2tFIn0.eyJleHAiOjQ4NjgzNzEyMDAsImlhdCI6MTcxNDczMTIwMCwianRpIjoiMzIzMjMwMTQtZDA5Zi00NzQwLTgzNDctYmQzOTBiYzE5MDBkIiwiaXNzIjoiaHR0cHM6Ly9sb2dpbi5pbnBvc3QucGwvYXV0aC9yZWFsbXMvaW5wb3N0IiwiYXVkIjoiaW5wb3N0LWdlb3dpZGdldC1hcGkiLCJzdWIiOiJmODMwNGE2OS0wZTQ1LTQ3NjItOGE1My02YmQxMWYzMjhjMzciLCJ0eXAiOiJCZWFyZXIiLCJhenAiOiJzaGlweCIsImFjciI6IjEiLCJzY29wZSI6Im9wZW5pZCBnZW93aWRnZXQtYXBpOmFwaXBvaW50cyIsIm9yZ2FuaXphdGlvbl9pZCI6MzMsInNlcnZpY2VzIjpbInBhcmNlbF9sb2NrZXIiXSwiZ2VvX3dpZGdldF9jb25maWciOnsiZGlzcGxheV9tYXBfYWZ0ZXJfbG9hZGluZyI6dHJ1ZSwidGhlbWUiOiJkZWZhdWx0In19.uoJoMtWlLKBqGgaoaQhp9P9pjnecjSsL9BIr4M_fxWQ4cMr7qnX-xJ-EauNLtxfEhL5X6B6BClQ5Yo2x0xkTq7CTXG-6D0BKC8mqGUJMN1xAjPVRJGb-GN0y5Ey9Jk4J56B2SsjMhHMrDJ1lINJ8V3ORdA-MqrNfkMOY-k5y_lQJQlMmBF2OBNyC2N5MK-vKQCGqVzBLk5F5MLlcKB3wNgIzBQVkFP3qOF5Qp_NjlLjUkz0LzmJzfSzOjBfCJJJm5EZ5o9CtENOmEXDbVE4OMlLuXBX0wNlJy5EXFM0m5yFjm1OE1NpPL0VKn9oNzUzJz5KzmjMy1RUZ1z1FjGSg"
-                                language="pl"
-                                config="parcelCollect"
-                            />
-                        </div>
-                    </div>
-                </div>
-            )} */}
         </div>
     );
 }
-
-//service_m7597lc
-const serviceID = 'default_service';
-const templateID = 'template_aie1jbf';
-const publicKey = 'xYkXJ7Fcr4K0eZXqB';
-const emailEndpoint = 'https://api.emailjs.com/api/v1.0/email/send';
