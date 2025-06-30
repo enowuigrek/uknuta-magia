@@ -11,15 +11,27 @@ export function OrderForm() {
         street: '',
         zip: '',
         city: '',
+        deliveryMethod: '', // 'pickup', 'parcel', 'courier'
         parcelLocker: '',
         acceptTerms: false
     });
 
-    const [parcelDetails, setParcelDetails] = useState(null);
-    const [orderStatus, setOrderStatus] = useState('form'); // form, processing, success
-    const [orderId, setOrderId] = useState(null); // Przechowujemy ID zamówienia
+    const [orderStatus, setOrderStatus] = useState('form');
+    const [orderId, setOrderId] = useState(null);
 
-    // Inicjalizacja EmailJS
+    // Ceny
+    const bookPrice = 49.99;
+    const deliveryPrices = {
+        pickup: 0,
+        parcel: 16.99,
+        courier: 19.99
+    };
+
+    const getTotalPrice = () => {
+        const deliveryPrice = deliveryPrices[formData.deliveryMethod] || 0;
+        return bookPrice + deliveryPrice;
+    };
+
     useEffect(() => {
         emailjs.init("WTc0uBQgaiID5YGr-");
     }, []);
@@ -32,20 +44,27 @@ export function OrderForm() {
         }));
     };
 
-    // Funkcja zapisywania zamówienia do Supabase
+    const handleGoHome = () => {
+        window.location.href = '/';
+    };
+
     const saveOrderToDatabase = async (orderData) => {
         try {
             const { data, error } = await supabase
-                .from('orders') // Zmień nazwę tabeli jeśli potrzeba
+                .from('orders')
                 .insert([
                     {
                         name: orderData.name,
                         email: orderData.email,
                         phone: orderData.phone,
-                        street: orderData.street,
-                        zip: orderData.zip,
-                        city: orderData.city,
-                        parcel_locker: orderData.parcelLocker,
+                        street: orderData.street || null,
+                        zip: orderData.zip || null,
+                        city: orderData.city || null,
+                        delivery_method: orderData.deliveryMethod,
+                        parcel_locker: orderData.parcelLocker || null,
+                        book_price: bookPrice,
+                        delivery_price: deliveryPrices[orderData.deliveryMethod],
+                        total_price: getTotalPrice(),
                         status: 'new'
                     }
                 ])
@@ -57,14 +76,13 @@ export function OrderForm() {
             }
 
             console.log('Zamówienie zapisane do bazy:', data);
-            return data[0]; // Zwracamy zapisane zamówienie z ID
+            return data[0];
         } catch (error) {
             console.error('Błąd podczas zapisu do bazy:', error);
             throw error;
         }
     };
 
-    // Funkcja wysyłania emaili
     const sendEmails = async (orderData, orderId = null) => {
         try {
             const serviceID = 'service_m7597lc';
@@ -72,22 +90,52 @@ export function OrderForm() {
             const templateIDAdmin = 'template_q18c56b';
             const publicKey = 'WTc0uBQgaiID5YGr-';
 
+            const deliveryMethodNames = {
+                pickup: 'Odbiór osobisty',
+                parcel: 'Paczkomat InPost',
+                courier: 'Wysyłka kurierska'
+            };
+
+            // Przygotuj podstawowe dane
             const templateParams = {
-                name: orderData.name,                    // ← zmienione z fullName
+                name: orderData.name,
                 email: orderData.email,
                 phone: orderData.phone,
-                street: orderData.street,
-                zip: orderData.zip,
-                city: orderData.city,
-                parcel_locker: orderData.parcelLocker,   // ← zmienione z parcelLocker
+                delivery_method: deliveryMethodNames[orderData.deliveryMethod],
+                book_price: bookPrice.toFixed(2),
+                delivery_price: deliveryPrices[orderData.deliveryMethod].toFixed(2),
+                total_price: getTotalPrice().toFixed(2),
                 order_id: orderId || 'N/A'
             };
 
-            // Wyślij do klienta
+            // Dodaj dane w zależności od metody dostawy
+            if (orderData.deliveryMethod === 'courier') {
+                // Dla kuriera - adres dostawy
+                templateParams.street = orderData.street;
+                templateParams.zip = orderData.zip;
+                templateParams.city = orderData.city;
+                templateParams.parcel_locker = '';
+                templateParams.full_address = `${orderData.street}, ${orderData.zip} ${orderData.city}`;
+            } else if (orderData.deliveryMethod === 'parcel') {
+                // Dla paczkomatu - numer paczkomatu
+                templateParams.parcel_locker = orderData.parcelLocker;
+                templateParams.street = '';
+                templateParams.zip = '';
+                templateParams.city = '';
+                templateParams.full_address = '';
+            } else if (orderData.deliveryMethod === 'pickup') {
+                // Dla odbioru osobistego - wszystko puste
+                templateParams.parcel_locker = '';
+                templateParams.street = '';
+                templateParams.zip = '';
+                templateParams.city = '';
+                templateParams.full_address = '';
+            }
+
+            // Wyślij emaile
             await emailjs.send(serviceID, templateIDClient, templateParams, publicKey);
             console.log('Email do klienta wysłany');
 
-            // Wyślij do siebie (admina)
             await emailjs.send(serviceID, templateIDAdmin, templateParams, publicKey);
             console.log('Email do admina wysłany');
 
@@ -98,7 +146,6 @@ export function OrderForm() {
         }
     };
 
-    // Funkcja aktualizacji statusu zamówienia
     const updateOrderStatus = async (orderId, newStatus) => {
         try {
             const { error } = await supabase
@@ -124,39 +171,43 @@ export function OrderForm() {
             return;
         }
 
-        if (!formData.parcelLocker) {
+        if (!formData.deliveryMethod) {
+            alert('Wybierz metodę dostawy.');
+            return;
+        }
+
+        if (formData.deliveryMethod === 'parcel' && !formData.parcelLocker) {
             alert('Wpisz numer paczkomatu.');
+            return;
+        }
+
+        if (formData.deliveryMethod === 'courier' && (!formData.street || !formData.zip || !formData.city)) {
+            alert('Wypełnij adres dostawy.');
             return;
         }
 
         setOrderStatus('processing');
 
         try {
-            // 1. Zapisz zamówienie do bazy danych
             console.log('Zapisywanie zamówienia do bazy...');
             const savedOrder = await saveOrderToDatabase(formData);
             setOrderId(savedOrder.id);
 
-            // 2. Wyślij emaile
             console.log('Wysyłanie emaili...');
             await sendEmails(formData, savedOrder.id);
 
-            // 3. Aktualizuj status na "email_sent"
             await updateOrderStatus(savedOrder.id, 'email_sent');
 
             console.log('Formularz przetworzony pomyślnie!');
 
-            // Przekierowanie do płatności (na razie symulacja)
             setTimeout(() => {
                 setOrderStatus('success');
-                // Tutaj możesz zaktualizować status na "awaiting_payment"
                 updateOrderStatus(savedOrder.id, 'awaiting_payment');
             }, 1500);
 
         } catch (error) {
             console.error('Błąd:', error);
 
-            // Jeśli mamy ID zamówienia, oznacz jako błąd
             if (orderId) {
                 await updateOrderStatus(orderId, 'error');
             }
@@ -174,19 +225,67 @@ export function OrderForm() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                 </div>
-                <h2>Dziękujemy!</h2>
-                <p>Zamówienie zostało przyjęte. Sprawdź swoją skrzynkę email po więcej informacji.</p>
-                <p><strong>Na Twój email wysłaliśmy potwierdzenie zamówienia.</strong></p>
-                {orderId && <p><small>Numer zamówienia: {orderId}</small></p>}
+                <h2>Zamówienie złożone!</h2>
+                <p>Dziękujemy za zakup książki <strong>„Uknuta Magia"</strong></p>
+                {orderId && (
+                    <div className={styles.orderNumber}>
+                        <span>Numer zamówienia: <strong>#{orderId}</strong></span>
+                    </div>
+                )}
+                <div className={styles.nextSteps}>
+                    <p>✉️ <strong>Potwierdzenie wysłane</strong> - sprawdź swoją skrzynkę email</p>
+                    <p>📦 <strong>Przygotowanie wysyłki</strong> - skontaktujemy się w ciągu 24h</p>
+                </div>
+                <div className={styles.successActions}>
+                    <button
+                        onClick={handleGoHome}
+                        className={styles.homeButton}
+                    >
+                        Powrót do strony głównej
+                    </button>
+                </div>
             </div>
         );
     }
 
     return (
         <div className={styles.formContainer}>
-            <h1>Zamów książkę</h1>
+            {/* Przycisk powrotu do strony głównej */}
+            <div className={styles.headerNav}>
+                <button
+                    onClick={handleGoHome}
+                    className={styles.backButton}
+                    type="button"
+                >
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 12H5" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l-7-7 7-7" />
+                    </svg>
+                    Powrót do strony głównej
+                </button>
+            </div>
+
+            {/* Sekcja z okładką i ceną */}
+            <div className={styles.bookPrice}>
+                <img
+                    src="/cover-small.png"
+                    alt="Okładka książki Uknuta Magia"
+                    className={styles.bookCover}
+                />
+                <div className={styles.bookInfo}>
+                    <h2>„Uknuta Magia"</h2>
+                    <div className={styles.price}>
+                        <span className={styles.priceAmount}>{bookPrice.toFixed(2)} zł</span>
+                    </div>
+                </div>
+            </div>
+
+            <h1>Dane do zamówienia</h1>
 
             <form onSubmit={handleSubmit} className={styles.form}>
+                {/* Dane osobowe */}
+                <div className={styles.sectionTitle}>📝 Dane kontaktowe</div>
+
                 <div className={styles.inputGroup}>
                     <label className={styles.label}>
                         Imię i nazwisko *
@@ -232,67 +331,161 @@ export function OrderForm() {
                     </label>
                 </div>
 
-                <div className={styles.inputGroup}>
-                    <label className={styles.label}>
-                        Ulica i numer domu *
+                {/* Metoda dostawy */}
+                <div className={styles.sectionTitle}>🚚 Wybierz metodę dostawy</div>
+
+                <div className={styles.deliveryOptions}>
+                    <label className={styles.deliveryOption}>
                         <input
-                            type="text"
-                            name="street"
-                            value={formData.street}
+                            type="radio"
+                            name="deliveryMethod"
+                            value="pickup"
+                            checked={formData.deliveryMethod === 'pickup'}
                             onChange={handleChange}
-                            className={styles.input}
-                            placeholder="ul. Przykładowa 123"
-                            required
                         />
+                        <div className={styles.deliveryCard}>
+                            <div className={styles.deliveryIcon}>🏠</div>
+                            <div className={styles.deliveryContent}>
+                                <div className={styles.deliveryName}>Odbiór osobisty</div>
+                                <div className={styles.deliveryPrice}>0,00 zł</div>
+                            </div>
+                        </div>
+                    </label>
+
+                    <label className={styles.deliveryOption}>
+                        <input
+                            type="radio"
+                            name="deliveryMethod"
+                            value="parcel"
+                            checked={formData.deliveryMethod === 'parcel'}
+                            onChange={handleChange}
+                        />
+                        <div className={styles.deliveryCard}>
+                            <div className={styles.deliveryIcon}>📦</div>
+                            <div className={styles.deliveryContent}>
+                                <div className={styles.deliveryName}>Paczkomat InPost</div>
+                                <div className={styles.deliveryPrice}>16,99 zł</div>
+                            </div>
+                        </div>
+                    </label>
+
+                    <label className={styles.deliveryOption}>
+                        <input
+                            type="radio"
+                            name="deliveryMethod"
+                            value="courier"
+                            checked={formData.deliveryMethod === 'courier'}
+                            onChange={handleChange}
+                        />
+                        <div className={styles.deliveryCard}>
+                            <div className={styles.deliveryIcon}>🚚</div>
+                            <div className={styles.deliveryContent}>
+                                <div className={styles.deliveryName}>Wysyłka kurierska</div>
+                                <div className={styles.deliveryPrice}>19,99 zł</div>
+                            </div>
+                        </div>
                     </label>
                 </div>
 
-                <div className={styles.inputRow}>
+                {/* Pole paczkomatu */}
+                {formData.deliveryMethod === 'parcel' && (
                     <div className={styles.inputGroup}>
                         <label className={styles.label}>
-                            Kod pocztowy *
+                            Numer paczkomatu InPost *
                             <input
                                 type="text"
-                                name="zip"
-                                value={formData.zip}
+                                name="parcelLocker"
+                                value={formData.parcelLocker}
                                 onChange={handleChange}
                                 className={styles.input}
-                                placeholder="42-200"
+                                placeholder="np. KRA01M"
                                 required
                             />
                         </label>
                     </div>
+                )}
 
-                    <div className={styles.inputGroup}>
-                        <label className={styles.label}>
-                            Miasto *
-                            <input
-                                type="text"
-                                name="city"
-                                value={formData.city}
-                                onChange={handleChange}
-                                className={styles.input}
-                                placeholder="Częstochowa"
-                                required
-                            />
-                        </label>
+                {/* Adres dla wysyłki kurierskiej */}
+                {formData.deliveryMethod === 'courier' && (
+                    <>
+                        <div className={styles.sectionTitle}>📍 Adres dostawy</div>
+
+                        <div className={styles.inputGroup}>
+                            <label className={styles.label}>
+                                Ulica i numer domu *
+                                <input
+                                    type="text"
+                                    name="street"
+                                    value={formData.street}
+                                    onChange={handleChange}
+                                    className={styles.input}
+                                    placeholder="ul. Przykładowa 123"
+                                    required
+                                />
+                            </label>
+                        </div>
+
+                        <div className={styles.inputRow}>
+                            <div className={styles.inputGroup}>
+                                <label className={styles.label}>
+                                    Kod pocztowy *
+                                    <input
+                                        type="text"
+                                        name="zip"
+                                        value={formData.zip}
+                                        onChange={handleChange}
+                                        className={styles.input}
+                                        placeholder="42-200"
+                                        required
+                                    />
+                                </label>
+                            </div>
+
+                            <div className={styles.inputGroup}>
+                                <label className={styles.label}>
+                                    Miasto *
+                                    <input
+                                        type="text"
+                                        name="city"
+                                        value={formData.city}
+                                        onChange={handleChange}
+                                        className={styles.input}
+                                        placeholder="Częstochowa"
+                                        required
+                                    />
+                                </label>
+                            </div>
+                        </div>
+                    </>
+                )}
+
+                {/* Informacja o odbiorze osobistym */}
+                {formData.deliveryMethod === 'pickup' && (
+                    <div className={styles.pickupInfo}>
+                        <div className={styles.pickupHeader}>ℹ️ Informacje o odbiorze</div>
+                        <p>Po potwierdzeniu zamówienia skontaktujemy się z Tobą w celu ustalenia szczegółów odbioru.</p>
+                        <p><strong>Lokalizacja:</strong> Częstochowa</p>
                     </div>
-                </div>
+                )}
 
-                <div className={styles.inputGroup}>
-                    <label className={styles.label}>
-                        Paczkomat InPost *
-                        <input
-                            type="text"
-                            name="parcelLocker"
-                            value={formData.parcelLocker}
-                            onChange={handleChange}
-                            className={styles.input}
-                            placeholder="Wpisz numer paczkomatu"
-                            required
-                        />
-                    </label>
-                </div>
+                {/* Podsumowanie */}
+                {formData.deliveryMethod && (
+                    <div className={styles.orderSummary}>
+                        <div className={styles.summaryTitle}>💰 Podsumowanie zamówienia</div>
+                        <div className={styles.summaryLine}>
+                            <span>Książka „Uknuta Magia"</span>
+                            <span>{bookPrice.toFixed(2)} zł</span>
+                        </div>
+                        <div className={styles.summaryLine}>
+                            <span>Dostawa</span>
+                            <span>{deliveryPrices[formData.deliveryMethod].toFixed(2)} zł</span>
+                        </div>
+                        <div className={styles.summaryTotal}>
+                            <span>RAZEM</span>
+                            <span>{getTotalPrice().toFixed(2)} zł</span>
+                        </div>
+                    </div>
+                )}
 
                 <div className={styles.checkboxGroup}>
                     <label className={styles.checkboxLabel}>
@@ -324,7 +517,10 @@ export function OrderForm() {
                                 <rect x={1} y={4} width={22} height={16} rx={2} ry={2} />
                                 <line x1={1} y1={10} x2={23} y2={10} />
                             </svg>
-                            Przejdź do płatności - 66,98 zł
+                            {formData.deliveryMethod ?
+                                `Przejdź do płatności - ${getTotalPrice().toFixed(2)} zł` :
+                                'Wybierz metodę dostawy'
+                            }
                         </>
                     )}
                 </button>

@@ -1,5 +1,6 @@
+// src/components/AdminPanel/AdminPanel.jsx
 import { useState, useEffect } from 'react';
-import { supabase } from "../../config/supabase";
+import { supabase } from '../../config/supabase';
 import styles from './AdminPanel.module.scss';
 
 export function AdminPanel() {
@@ -70,6 +71,12 @@ export function AdminPanel() {
         'error': 'Błąd'
     };
 
+    const deliveryMethodLabels = {
+        'pickup': '🏠 Odbiór osobisty',
+        'parcel': '📦 Paczkomat',
+        'courier': '🚚 Kurier'
+    };
+
     const getStatusColor = (status) => {
         const colors = {
             'new': '#3b82f6',
@@ -83,6 +90,15 @@ export function AdminPanel() {
         };
         return colors[status] || '#6b7280';
     };
+
+    // Statystyki
+    const totalOrders = orders.length;
+    const totalRevenue = orders
+        .filter(order => ['paid', 'shipped', 'delivered'].includes(order.status))
+        .reduce((sum, order) => sum + (parseFloat(order.total_price) || 0), 0);
+    const pendingOrders = orders.filter(order =>
+        ['new', 'email_sent', 'awaiting_payment'].includes(order.status)
+    ).length;
 
     if (loading) {
         return <div className={styles.loading}>Ładowanie zamówień...</div>;
@@ -115,7 +131,15 @@ export function AdminPanel() {
             <div className={styles.stats}>
                 <div className={styles.stat}>
                     <span>Łącznie zamówień:</span>
-                    <strong>{orders.length}</strong>
+                    <strong>{totalOrders}</strong>
+                </div>
+                <div className={styles.stat}>
+                    <span>Oczekuje realizacji:</span>
+                    <strong>{pendingOrders}</strong>
+                </div>
+                <div className={styles.stat}>
+                    <span>Przychód (zrealizowane):</span>
+                    <strong>{totalRevenue.toFixed(2)} zł</strong>
                 </div>
             </div>
 
@@ -131,8 +155,8 @@ export function AdminPanel() {
                             <th>Klient</th>
                             <th>Email</th>
                             <th>Telefon</th>
-                            <th>Adres</th>
-                            <th>Paczkomat</th>
+                            <th>Dostawa</th>
+                            <th>Ceny</th>
                             <th>Status</th>
                             <th>Akcje</th>
                         </tr>
@@ -150,14 +174,62 @@ export function AdminPanel() {
                                         minute: '2-digit'
                                     })}
                                 </td>
-                                <td>{order.name}</td>
-                                <td>{order.email}</td>
-                                <td>{order.phone}</td>
                                 <td>
-                                    {order.street}<br/>
-                                    {order.zip} {order.city}
+                                    <strong>{order.name}</strong>
                                 </td>
-                                <td>{order.parcel_locker}</td>
+                                <td>
+                                    <a href={`mailto:${order.email}`} className={styles.emailPhone}>
+                                        {order.email}
+                                    </a>
+                                </td>
+                                <td>
+                                    <a href={`tel:${order.phone}`} className={styles.emailPhone}>
+                                        {order.phone}
+                                    </a>
+                                </td>
+                                <td>
+                                    <div style={{ fontSize: '0.875rem' }}>
+                                        <div style={{ fontWeight: '600', marginBottom: '4px' }}>
+                                            {deliveryMethodLabels[order.delivery_method] || order.delivery_method || 'Nie określono'}
+                                        </div>
+
+                                        {order.delivery_method === 'parcel' && order.parcel_locker && (
+                                            <div style={{ color: '#6b7280' }}>
+                                                Paczkomat: <strong>{order.parcel_locker}</strong>
+                                            </div>
+                                        )}
+
+                                        {order.delivery_method === 'courier' && (
+                                            <div style={{ color: '#6b7280' }}>
+                                                {order.street}<br/>
+                                                {order.zip} {order.city}
+                                            </div>
+                                        )}
+
+                                        {order.delivery_method === 'pickup' && (
+                                            <div style={{ color: '#6b7280' }}>
+                                                Częstochowa
+                                            </div>
+                                        )}
+                                    </div>
+                                </td>
+                                <td>
+                                    <div style={{ fontSize: '0.8rem' }}>
+                                        {order.book_price && (
+                                            <div>Książka: <strong>{parseFloat(order.book_price).toFixed(2)} zł</strong></div>
+                                        )}
+                                        {order.delivery_price !== null && order.delivery_price !== undefined && (
+                                            <div>Dostawa: <strong>{parseFloat(order.delivery_price).toFixed(2)} zł</strong></div>
+                                        )}
+                                        {order.total_price && (
+                                            <div style={{ marginTop: '4px', paddingTop: '4px', borderTop: '1px solid #e5e7eb' }}>
+                                                Razem: <strong style={{ color: '#059669', fontSize: '0.9rem' }}>
+                                                {parseFloat(order.total_price).toFixed(2)} zł
+                                            </strong>
+                                            </div>
+                                        )}
+                                    </div>
+                                </td>
                                 <td>
                                         <span
                                             className={styles.statusBadge}

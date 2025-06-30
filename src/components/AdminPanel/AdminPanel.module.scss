@@ -1,16 +1,16 @@
 // src/components/AdminPanel/AdminPanel.module.scss
 .adminPanel {
-    max-width: 1400px;
+    max-width: 1300px; // Zwiększone żeby wykorzystać więcej miejsca
     margin: 0 auto;
-    padding: 24px;
+    padding: 20px; // Zmniejszone z 24px
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     background: #f8fafc;
     min-height: calc(100vh - 60px);
 
     h1 {
         color: #1e293b;
-        margin-bottom: 32px;
-        font-size: 2.25rem;
+        margin-bottom: 24px; // Zmniejszone z 32px
+        font-size: 2rem; // Zmniejszone z 2.25rem
         font-weight: 700;
         letter-spacing: -0.025em;
     }
@@ -42,10 +42,10 @@
 
 .filters {
     display: flex;
-    gap: 24px;
+    gap: 20px; // Zmniejszone z 24px
     align-items: center;
-    margin-bottom: 32px;
-    padding: 24px;
+    margin-bottom: 24px; // Zmniejszone z 32px
+    padding: 20px; // Zmniejszone z 24px
     background: white;
     border-radius: 12px;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
@@ -54,19 +54,19 @@
     label {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 6px; // Zmniejszone z 8px
         font-weight: 600;
         color: #374151;
         font-size: 0.875rem;
 
         select {
-            padding: 12px 16px;
+            padding: 10px 14px; // Zmniejszone z 12px 16px
             border: 1px solid #d1d5db;
             border-radius: 8px;
             background: white;
             font-size: 14px;
             color: #374151;
-            min-width: 180px;
+            min-width: 160px; // Zmniejszone z 180px
             transition: all 0.2s ease;
 
             &:focus {
@@ -83,7 +83,7 @@
 }
 
 .refreshBtn {
-    padding: 12px 24px;
+    padding: 10px 20px; // Zmniejszone z 12px 24px
     background: #3b82f6;
     color: white;
     border: none;
@@ -106,13 +106,13 @@
 
 .stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    gap: 24px;
-    margin-bottom: 32px;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); // Zmniejszone z 220px
+    gap: 20px; // Zmniejszone z 24px
+    margin-bottom: 24px; // Zmniejszone z 32px
 }
 
 .stat {
-    padding: 24px;
+    padding: 20px; // Zmniejszone z 24px
     background: white;
     border: 1px solid #e2e8f0;
     border-radius: 12px;
@@ -127,15 +127,15 @@
     span {
         display: block;
         color: #64748b;
-        font-size: 0.875rem;
+        font-size: 0.75rem; // Zmniejszone z 0.875rem
         font-weight: 500;
-        margin-bottom: 8px;
+        margin-bottom: 6px; // Zmniejszone z 8px
         text-transform: uppercase;
         letter-spacing: 0.05em;
     }
 
     strong {
-        font-size: 2rem;
+        font-size: 1.75rem; // Zmniejszone z 2rem
         font-weight: 700;
         color: #1e293b;
         line-height: 1;
@@ -148,16 +148,18 @@
     overflow: hidden;
     box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
     border: 1px solid #e2e8f0;
+    overflow-x: auto; // Dodano przewijanie poziome
 
     table {
         width: 100%;
         border-collapse: collapse;
+        min-width: 1100px; // Zwiększone żeby lepiej się rozłożyło
 
         th, td {
-            padding: 16px;
+            padding: 14px 10px; // Zwiększone z 12px 8px
             text-align: left;
             border-bottom: 1px solid #f1f5f9;
-            font-size: 0.875rem;
+            font-size: 0.8rem; // Zmniejszone z 0.875rem
             vertical-align: top;
         }
 
@@ -167,13 +169,14 @@
             color: #475569;
             text-transform: uppercase;
             letter-spacing: 0.05em;
-            font-size: 0.75rem;
+            font-size: 0.7rem; // Zmniejszone z 0.75rem
             border-bottom: 2px solid #e2e8f0;
+            white-space: nowrap; // Zapobiega zawijaniu nagłówków
         }
 
         td {
             color: #334155;
-            line-height: 1.5;
+            line-height: 1.4; // Zmniejszone z 1.5
         }
 
         tr {
@@ -201,10 +204,10 @@
 .statusBadge {
     display: inline-flex;
     align-items: center;
-    padding: 6px 12px;
-    border-radius: 20px;
+    padding: 4px 8px; // Zmniejszone z 6px 12px
+    border-radius: 16px; // Zmniejszone z 20px
     color: white;
-    font-size: 0.75rem;
+    font-size: 0.7rem; // Zmniejszone z 0.75rem
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.05em;
@@ -213,16 +216,16 @@
 }
 
 .statusSelect {
-    padding: 8px 12px;
+    padding: 6px 10px; // Zmniejszone z 8px 12px
     border: 1px solid #d1d5db;
-    border-radius: 8px;
-    font-size: 0.75rem;
+    border-radius: 6px; // Zmniejszone z 8px
+    font-size: 0.7rem; // Zmniejszone z 0.75rem
     background: white;
     cursor: pointer;
     color: #374151;
     font-weight: 500;
     transition: all 0.2s ease;
-    min-width: 120px;
+    min-width: 100px; // Zmniejszone z 120px
 
     &:focus {
         outline: none;
@@ -236,19 +239,31 @@
     }
 }
 
+// Specjalne style dla kolumn
+.emailPhone {
+    color: #334155 !important; // Zmiana z niebieskiego na ciemny
+    text-decoration: none;
+    font-size: 0.8rem !important; // Taki sam jak reszta tabeli
+
+    &:hover {
+        color: #1e293b !important;
+        text-decoration: underline;
+    }
+}
+
 // Responsywność
 @media (max-width: 1024px) {
     .adminPanel {
-        padding: 20px;
+        padding: 16px; // Zmniejszone z 20px
     }
 
     .filters {
         flex-wrap: wrap;
-        gap: 16px;
+        gap: 12px; // Zmniejszone z 16px
 
         label {
             flex: 1;
-            min-width: 160px;
+            min-width: 140px; // Zmniejszone z 160px
 
             select {
                 min-width: 100%;
@@ -257,25 +272,25 @@
     }
 
     .stats {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-        gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); // Zmniejszone z 180px
+        gap: 16px; // Zmniejszone z 20px
     }
 }
 
 @media (max-width: 768px) {
     .adminPanel {
-        padding: 16px;
+        padding: 12px; // Zmniejszone z 16px
 
         h1 {
-            font-size: 1.875rem;
-            margin-bottom: 24px;
+            font-size: 1.75rem; // Zmniejszone z 1.875rem
+            margin-bottom: 20px; // Zmniejszone z 24px
         }
     }
 
     .filters {
         flex-direction: column;
         align-items: stretch;
-        padding: 20px;
+        padding: 16px; // Zmniejszone z 20px
 
         label {
             flex-direction: row;
@@ -283,51 +298,49 @@
             justify-content: space-between;
 
             select {
-                min-width: 140px;
+                min-width: 120px; // Zmniejszone z 140px
                 flex: none;
             }
         }
     }
 
     .ordersTable {
-        overflow-x: auto;
-
         table {
-            min-width: 900px;
+            min-width: 900px; // Zwiększone żeby lepiej się rozłożyło
 
             th, td {
-                padding: 12px 8px;
-                font-size: 0.8rem;
+                padding: 10px 6px; // Zmniejszone z 12px 8px
+                font-size: 0.75rem; // Zmniejszone z 0.8rem
             }
 
             th {
-                font-size: 0.7rem;
+                font-size: 0.65rem; // Zmniejszone z 0.7rem
             }
         }
     }
 
     .stats {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); // Zmniejszone z 150px
+        gap: 12px; // Zmniejszone z 16px
     }
 
     .stat {
-        padding: 20px;
+        padding: 16px; // Zmniejszone z 20px
 
         strong {
-            font-size: 1.75rem;
+            font-size: 1.5rem; // Zmniejszone z 1.75rem
         }
     }
 }
 
 @media (max-width: 640px) {
     .adminPanel {
-        padding: 12px;
+        padding: 8px; // Zmniejszone z 12px
     }
 
     .filters {
-        padding: 16px;
-        margin-bottom: 24px;
+        padding: 12px; // Zmniejszone z 16px
+        margin-bottom: 20px; // Zmniejszone z 24px
     }
 
     .stats {
@@ -336,11 +349,11 @@
 
     .stat {
         text-align: center;
-        padding: 16px;
+        padding: 12px; // Zmniejszone z 16px
     }
 
     .refreshBtn {
         width: 100%;
-        margin-top: 16px;
+        margin-top: 12px; // Zmniejszone z 16px
     }
 }
