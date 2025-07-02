@@ -10,6 +10,8 @@ import {Footer} from "./components/Footer/Footer.jsx";
 import {OrderForm} from "./components/OrderForm/OrderForm.jsx";
 import {TeaserContent} from "./components/TeaserContent/TeaserContent.jsx";
 import {AdminPanel} from "./components/AdminPanel/AdminPanel.jsx";
+import {Section} from "lucide-react";
+import {SectionHeader} from "@/components/SectionHeader/SectionHeader.jsx";
 // import BookCharacterChat from "@/components/Chat/BookCharacterChat.jsx";
 
 // Komponent strony głównej
@@ -39,6 +41,7 @@ function HomePage() {
                 text={author.description}
                 alt={'zdjęcie autora'}
             />
+            <ContentSection text={author.descriptionContinue}/>
             {/*<BookCharacterChat/>*/}
             {/*<TeaserContent />*/}
             <Footer />

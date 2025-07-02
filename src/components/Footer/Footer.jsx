@@ -14,20 +14,19 @@ export function Footer() {
                     </a>
                 </div>
                 <a href="mailto:uknutamagia@gmail.com">uknutamagia@gmail.com</a>
-                <p>© 2025 Uknuta Magia</p>
+                <p>
+                    Projekt i wykonanie:
+                    <a href="mailto:enowuigrek@gmail.com"> enowuigrek</a>
+                </p>
             </div>
 
             <div className={styles.footerCenter}>
                 <a href="/regulamin">Regulamin</a>
-                <a href="/polityka-prywatnosci">Polityka prywatności</a>
                 <a href="/cookies">Cookies</a>
             </div>
 
             <div className={styles.footerRight}>
-                <p>
-                    Projekt i wykonanie:<br />
-                    <a href="mailto:enowuigrek@gmail.com">enowuigrek</a>
-                </p>
+                <p>© 2025 Uknuta Magia</p>
             </div>
         </footer>
     );
