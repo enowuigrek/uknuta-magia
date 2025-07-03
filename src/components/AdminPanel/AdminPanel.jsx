@@ -9,6 +9,42 @@ export function AdminPanel() {
     const [filter, setFilter] = useState('all');
     const [expandedOrder, setExpandedOrder] = useState(null);
 
+    // === NOWE: Obsługa logowania ===
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [passwordInput, setPasswordInput] = useState('');
+    const [loginError, setLoginError] = useState('');
+
+    // Sprawdź hasło
+    const handleLogin = (e) => {
+        e.preventDefault();
+        const correctPassword = process.env.REACT_APP_ADMIN_PASSWORD;
+
+        if (passwordInput === correctPassword) {
+            setIsAuthenticated(true);
+            setLoginError('');
+            localStorage.setItem('admin_authenticated', 'true');
+        } else {
+            setLoginError('Nieprawidłowe hasło');
+            setPasswordInput('');
+        }
+    };
+
+    // Wyloguj
+    const handleLogout = () => {
+        setIsAuthenticated(false);
+        localStorage.removeItem('admin_authenticated');
+    };
+
+    // Sprawdź czy już zalogowany (przy odświeżeniu strony)
+    useEffect(() => {
+        const isLoggedIn = localStorage.getItem('admin_authenticated');
+        if (isLoggedIn === 'true') {
+            setIsAuthenticated(true);
+        }
+    }, []);
+
+    // === KONIEC: Obsługa logowania ===
+
     // Pobierz zamówienia z bazy
     const fetchOrders = async () => {
         try {
@@ -68,8 +104,10 @@ export function AdminPanel() {
     };
 
     useEffect(() => {
-        fetchOrders();
-    }, [filter]);
+        if (isAuthenticated) {
+            fetchOrders();
+        }
+    }, [filter, isAuthenticated]);
 
     const statusLabels = {
         'awaiting_payment': '⏳ Złożone',
@@ -94,6 +132,42 @@ export function AdminPanel() {
         return colors[status] || '#6b7280';
     };
 
+    // === NOWE: Ekran logowania ===
+    if (!isAuthenticated) {
+        return (
+            <div className={styles.loginContainer}>
+                <div className={styles.loginBox}>
+                    <h2>🔐 Panel Administracyjny</h2>
+                    <p>Wprowadź hasło aby uzyskać dostęp</p>
+
+                    <form onSubmit={handleLogin} className={styles.loginForm}>
+                        <input
+                            type="password"
+                            placeholder="Hasło"
+                            value={passwordInput}
+                            onChange={(e) => setPasswordInput(e.target.value)}
+                            className={styles.passwordInput}
+                            autoFocus
+                        />
+                        <button type="submit" className={styles.loginBtn}>
+                            Zaloguj się
+                        </button>
+                    </form>
+
+                    {loginError && (
+                        <div className={styles.loginError}>
+                            ❌ {loginError}
+                        </div>
+                    )}
+
+                    <button onClick={goToHomePage} className={styles.backBtn}>
+                        ← Powrót do strony głównej
+                    </button>
+                </div>
+            </div>
+        );
+    }
+
     // Statystyki
     const totalOrders = orders.length;
     const paidOrders = orders.filter(order => ['paid', 'shipped', 'delivered'].includes(order.status));
@@ -117,10 +191,16 @@ export function AdminPanel() {
             {/* Header z nawigacją */}
             <div className={styles.header}>
                 <h1>Panel Administracyjny</h1>
-                <button onClick={goToHomePage} className={styles.homeBtn}>
-                    <span>🏠</span>
-                    Strona główna
-                </button>
+                <div className={styles.headerButtons}>
+                    <button onClick={goToHomePage} className={styles.homeBtn}>
+                        <span>🏠</span>
+                        Strona główna
+                    </button>
+                    <button onClick={handleLogout} className={styles.logoutBtn}>
+                        <span>🚪</span>
+                        Wyloguj
+                    </button>
+                </div>
             </div>
 
             {/* Filtry */}
