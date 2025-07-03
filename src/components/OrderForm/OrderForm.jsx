@@ -12,8 +12,7 @@ export function OrderForm() {
         zip: '',
         city: '',
         deliveryMethod: '', // 'pickup', 'parcel', 'courier'
-        parcelLocker: '',
-        acceptTerms: false
+        parcelLocker: ''
     });
 
     const [orderStatus, setOrderStatus] = useState('form');
@@ -65,7 +64,7 @@ export function OrderForm() {
                         book_price: bookPrice,
                         delivery_price: deliveryPrices[orderData.deliveryMethod],
                         total_price: getTotalPrice(),
-                        status: 'new'
+                        status: 'awaiting_payment' // ZMIENIONE: od razu oczekuje płatności
                     }
                 ])
                 .select();
@@ -105,26 +104,31 @@ export function OrderForm() {
                 book_price: bookPrice.toFixed(2),
                 delivery_price: deliveryPrices[orderData.deliveryMethod].toFixed(2),
                 total_price: getTotalPrice().toFixed(2),
-                order_id: orderId || 'N/A'
+                order_id: orderId || 'N/A',
+                payment_status: '⏳ OCZEKUJE PŁATNOŚCI', // ZMIENIONE: status oczekiwania
+                // DODANE: Dane do płatności + opcja gotówki dla odbioru osobistego
+                bank_account: '48 1020 1664 0000 3402 0185 2193',
+                bank_name: 'PKO Bank Polski',
+                payment_title: `Zamówienie #${orderId} - ${orderData.name}`,
+                contact_phone: '883 348 381',
+                contact_email: 'uknutamagia@gmail.com',
+                cash_payment: orderData.deliveryMethod === 'pickup' ? 'Można również zapłacić gotówką przy odbiorze' : ''
             };
 
             // Dodaj dane w zależności od metody dostawy
             if (orderData.deliveryMethod === 'courier') {
-                // Dla kuriera - adres dostawy
                 templateParams.street = orderData.street;
                 templateParams.zip = orderData.zip;
                 templateParams.city = orderData.city;
                 templateParams.parcel_locker = '';
                 templateParams.full_address = `${orderData.street}, ${orderData.zip} ${orderData.city}`;
             } else if (orderData.deliveryMethod === 'parcel') {
-                // Dla paczkomatu - numer paczkomatu
                 templateParams.parcel_locker = orderData.parcelLocker;
                 templateParams.street = '';
                 templateParams.zip = '';
                 templateParams.city = '';
                 templateParams.full_address = '';
             } else if (orderData.deliveryMethod === 'pickup') {
-                // Dla odbioru osobistego - wszystko puste
                 templateParams.parcel_locker = '';
                 templateParams.street = '';
                 templateParams.zip = '';
@@ -164,12 +168,9 @@ export function OrderForm() {
         }
     };
 
+    // ZMIENIONE: handleSubmit - od razu wysyła emaile z danymi do płatności
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!formData.acceptTerms) {
-            alert('Musisz zaakceptować regulamin.');
-            return;
-        }
 
         if (!formData.deliveryMethod) {
             alert('Wybierz metodę dostawy.');
@@ -193,29 +194,183 @@ export function OrderForm() {
             const savedOrder = await saveOrderToDatabase(formData);
             setOrderId(savedOrder.id);
 
-            console.log('Wysyłanie emaili...');
+            console.log('Wysyłanie emaili z danymi do płatności...');
             await sendEmails(formData, savedOrder.id);
-
             await updateOrderStatus(savedOrder.id, 'email_sent');
 
-            console.log('Formularz przetworzony pomyślnie!');
-
+            console.log('Zamówienie złożone - oczekuje na płatność');
             setTimeout(() => {
-                setOrderStatus('success');
-                updateOrderStatus(savedOrder.id, 'awaiting_payment');
+                setOrderStatus('payment_pending');
             }, 1500);
 
         } catch (error) {
             console.error('Błąd:', error);
-
-            if (orderId) {
-                await updateOrderStatus(orderId, 'error');
-            }
-
             alert('Wystąpił błąd podczas przetwarzania zamówienia. Spróbuj ponownie.');
             setOrderStatus('form');
         }
     };
+
+    // DODANE: Ekran oczekiwania na płatność
+    if (orderStatus === 'payment_pending') {
+        return (
+            <div className={styles.formContainer}>
+                <h1>Zamówienie złożone!</h1>
+
+                {orderId && (
+                    <div className={styles.orderNumber}>
+                        <span>Numer zamówienia: <strong>#{orderId}</strong></span>
+                    </div>
+                )}
+
+                {/* Instrukcje płatności */}
+                <div className={styles.orderSummary}>
+                    <div className={styles.summaryTitle}>💳 Jak zapłacić za zamówienie?</div>
+
+                    <div style={{ marginBottom: '20px' }}>
+                        <h3 style={{ marginBottom: '10px', color: '#2196F3' }}>📱 BLIK</h3>
+                        <p style={{ marginBottom: '5px', fontSize: '14px' }}>
+                            Zrób przelew BLIK na numer telefonu:
+                        </p>
+                        <div style={{
+                            backgroundColor: '#e3f2fd',
+                            padding: '10px',
+                            borderRadius: '8px',
+                            textAlign: 'center',
+                            fontSize: '18px',
+                            fontWeight: 'bold',
+                            marginBottom: '10px'
+                        }}>
+                            883 348 381
+                        </div>
+                        <p style={{ fontSize: '14px', color: '#666' }}>
+                            <strong>Tytuł przelewu:</strong> Zamówienie #{orderId} - {formData.name}
+                        </p>
+                    </div>
+
+                    <div style={{ marginBottom: '20px' }}>
+                        <h3 style={{ marginBottom: '10px', color: '#00C851' }}>🏛️ Przelew tradycyjny</h3>
+                        <p style={{ marginBottom: '5px', fontSize: '14px' }}>
+                            <strong>Bank:</strong> PKO Bank Polski
+                        </p>
+                        <p style={{ marginBottom: '5px', fontSize: '14px' }}>
+                            <strong>Numer konta:</strong>
+                        </p>
+                        <div style={{
+                            backgroundColor: '#e8f5e8',
+                            padding: '10px',
+                            borderRadius: '8px',
+                            textAlign: 'center',
+                            fontSize: '16px',
+                            fontWeight: 'bold',
+                            fontFamily: 'monospace',
+                            marginBottom: '10px'
+                        }}>
+                            48 1020 1664 0000 3402 0185 2193
+                        </div>
+                        <p style={{ fontSize: '14px', color: '#666' }}>
+                            <strong>Tytuł przelewu:</strong> Zamówienie #{orderId} - {formData.name}
+                        </p>
+                    </div>
+
+                    {formData.deliveryMethod === 'pickup' && (
+                        <div style={{ marginBottom: '20px' }}>
+                            <h3 style={{ marginBottom: '10px', color: '#FF9800' }}>💵 Gotówka przy odbiorze</h3>
+                            <p style={{ fontSize: '14px', color: '#666' }}>
+                                Możesz również zapłacić gotówką przy osobistym odbiorze książki
+                            </p>
+                        </div>
+                    )}
+
+                    <div style={{
+                        backgroundColor: '#fff3e0',
+                        padding: '15px',
+                        borderRadius: '8px',
+                        textAlign: 'center',
+                        marginTop: '20px'
+                    }}>
+                        <h4 style={{ margin: '0 0 10px 0', color: '#F57C00' }}>
+                            💰 Kwota do zapłaty: {getTotalPrice().toFixed(2)} zł
+                        </h4>
+                        <p style={{ margin: '0', fontSize: '14px', color: '#666' }}>
+                            Po otrzymaniu płatności prześlemy potwierdzenie<br/>
+                            i przygotujemy zamówienie do wysyłki
+                        </p>
+                    </div>
+                </div>
+
+                {/* Podsumowanie zamówienia */}
+                <div className={styles.orderSummary}>
+                    <div className={styles.summaryTitle}>📋 Szczegóły zamówienia</div>
+                    <div className={styles.summaryLine}>
+                        <span>Imię i nazwisko:</span>
+                        <span>{formData.name}</span>
+                    </div>
+                    <div className={styles.summaryLine}>
+                        <span>Email:</span>
+                        <span>{formData.email}</span>
+                    </div>
+                    <div className={styles.summaryLine}>
+                        <span>Telefon:</span>
+                        <span>{formData.phone}</span>
+                    </div>
+                    <div className={styles.summaryLine}>
+                        <span>Dostawa:</span>
+                        <span>
+                            {formData.deliveryMethod === 'pickup' && 'Odbiór osobisty'}
+                            {formData.deliveryMethod === 'parcel' && `Paczkomat ${formData.parcelLocker}`}
+                            {formData.deliveryMethod === 'courier' && `${formData.street}, ${formData.zip} ${formData.city}`}
+                        </span>
+                    </div>
+                </div>
+
+                {/* Okładka książki */}
+                <div className={styles.bookPrice}>
+                    <img
+                        src="/cover-small.png"
+                        alt="Okładka książki Uknuta Magia"
+                        className={styles.bookCover}
+                    />
+                    <div className={styles.bookInfo}>
+                        <h2>„Uknuta Magia"</h2>
+                        <div className={styles.price}>
+                            <span className={styles.priceAmount}>{getTotalPrice().toFixed(2)} zł</span>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Następne kroki */}
+                <div className={styles.orderSummary}>
+                    <div className={styles.summaryTitle}>📧 Co dalej?</div>
+                    <div style={{ padding: '10px 0' }}>
+                        <p style={{ margin: '5px 0', fontSize: '14px', color: '#333' }}>
+                            ✉️ <strong>Email wysłany</strong> - sprawdź swoją skrzynkę
+                        </p>
+                        <p style={{ margin: '5px 0', fontSize: '14px', color: '#333' }}>
+                            💳 <strong>Dokonaj płatności</strong> - BLIK, przelew{formData.deliveryMethod === 'pickup' ? ' lub gotówka przy odbiorze' : ''}
+                        </p>
+                        <p style={{ margin: '5px 0', fontSize: '14px', color: '#333' }}>
+                            📦 <strong>Przygotowanie wysyłki</strong> - po otrzymaniu płatności
+                        </p>
+                        <p style={{ margin: '5px 0', fontSize: '14px', color: '#333' }}>
+                            📞 <strong>Kontakt</strong> - 883 348 381
+                        </p>
+                        <p style={{ margin: '5px 0', fontSize: '14px', color: '#333' }}>
+                            📧 <strong>Email</strong> - uknutamagia@gmail.com
+                        </p>
+                    </div>
+                </div>
+
+                <div className={styles.successActions}>
+                    <button
+                        onClick={handleGoHome}
+                        className={styles.homeButton}
+                    >
+                        Powrót do strony głównej
+                    </button>
+                </div>
+            </div>
+        );
+    }
 
     if (orderStatus === 'success') {
         return (
@@ -225,7 +380,7 @@ export function OrderForm() {
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                     </svg>
                 </div>
-                <h2>Zamówienie złożone!</h2>
+                <h2>Zamówienie opłacone!</h2>
                 <p>Dziękujemy za zakup książki <strong>„Uknuta Magia"</strong></p>
                 {orderId && (
                     <div className={styles.orderNumber}>
@@ -233,8 +388,9 @@ export function OrderForm() {
                     </div>
                 )}
                 <div className={styles.nextSteps}>
+                    <p>✅ <strong>Płatność otrzymana</strong> - zamówienie opłacone</p>
                     <p>✉️ <strong>Potwierdzenie wysłane</strong> - sprawdź swoją skrzynkę email</p>
-                    <p>📦 <strong>Przygotowanie wysyłki</strong> - skontaktujemy się w ciągu 24h</p>
+                    <p>📦 <strong>Przygotowanie wysyłki</strong> - skontaktujemy się wkrótce</p>
                 </div>
                 <div className={styles.successActions}>
                     <button
@@ -250,21 +406,6 @@ export function OrderForm() {
 
     return (
         <div className={styles.formContainer}>
-            {/* Przycisk powrotu do strony głównej */}
-            <div className={styles.headerNav}>
-                <button
-                    onClick={handleGoHome}
-                    className={styles.backButton}
-                    type="button"
-                >
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 12H5" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l-7-7 7-7" />
-                    </svg>
-                    Powrót do strony głównej
-                </button>
-            </div>
-
             {/* Sekcja z okładką i ceną */}
             <div className={styles.bookPrice}>
                 <img
@@ -275,7 +416,7 @@ export function OrderForm() {
                 <div className={styles.bookInfo}>
                     <h2>„Uknuta Magia"</h2>
                     <div className={styles.price}>
-                        <span className={styles.priceAmount}>{bookPrice.toFixed(2)} zł</span>
+                        <span className={styles.priceAmount} style={{ fontFamily: 'inherit' }}>{bookPrice.toFixed(2)} zł</span>
                     </div>
                 </div>
             </div>
@@ -487,20 +628,6 @@ export function OrderForm() {
                     </div>
                 )}
 
-                <div className={styles.checkboxGroup}>
-                    <label className={styles.checkboxLabel}>
-                        <input
-                            type="checkbox"
-                            name="acceptTerms"
-                            checked={formData.acceptTerms}
-                            onChange={handleChange}
-                            className={styles.checkbox}
-                        />
-                        <span className={styles.checkboxCustom}></span>
-                        Akceptuję regulamin i politykę prywatności *
-                    </label>
-                </div>
-
                 <button
                     type="submit"
                     className={styles.submitButton}
@@ -518,13 +645,23 @@ export function OrderForm() {
                                 <line x1={1} y1={10} x2={23} y2={10} />
                             </svg>
                             {formData.deliveryMethod ?
-                                `Przejdź do płatności - ${getTotalPrice().toFixed(2)} zł` :
+                                `Złóż zamówienie - ${getTotalPrice().toFixed(2)} zł` :
                                 'Wybierz metodę dostawy'
                             }
                         </>
                     )}
                 </button>
             </form>
+
+            {/* Przycisk powrotu na dole */}
+            <div className={styles.successActions}>
+                <button
+                    onClick={handleGoHome}
+                    className={styles.homeButton}
+                >
+                    Powrót do strony głównej
+                </button>
+            </div>
         </div>
     );
 }

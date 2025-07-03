@@ -21,8 +21,7 @@ export function Footer() {
             </div>
 
             <div className={styles.footerCenter}>
-                <a href="/regulamin">Regulamin</a>
-                <a href="/cookies">Cookies</a>
+                <p>Sprzedaż okazjonalna zgodna z obowiązującymi przepisami prawa.</p>
             </div>
 
             <div className={styles.footerRight}>
