@@ -18,7 +18,8 @@ export function AdminPanel() {
     const handleLogin = (e) => {
         e.preventDefault();
 
-        const correctPassword = process.env.REACT_APP_ADMIN_PASSWORD;
+        const correctPassword = process.env.NETLIFY_ADMIN_PASSWORD || process.env.REACT_APP_ADMIN_PASSWORD;
+
 
         if (passwordInput === correctPassword) {
             setIsAuthenticated(true);
