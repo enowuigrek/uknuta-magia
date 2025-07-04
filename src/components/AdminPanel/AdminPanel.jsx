@@ -9,19 +9,16 @@ export function AdminPanel() {
     const [filter, setFilter] = useState('all');
     const [expandedOrder, setExpandedOrder] = useState(null);
 
-    // === POPRAWIONE: Obsługa logowania ===
+    // === Obsługa logowania ===
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [passwordInput, setPasswordInput] = useState('');
     const [loginError, setLoginError] = useState('');
 
-    // Sprawdź hasło - POPRAWIONE!
+    // Sprawdź hasło - BEZPIECZNE z zmienną środowiskową
     const handleLogin = (e) => {
         e.preventDefault();
-        // POPRAWKA: Używamy window zamiast process
-        const correctPassword = 'UknutaMagia2025!';
 
-        console.log('Sprawdzam hasło:', passwordInput);
-        console.log('Oczekiwane hasło:', correctPassword);
+        const correctPassword = process.env.REACT_APP_ADMIN_PASSWORD;
 
         if (passwordInput === correctPassword) {
             setIsAuthenticated(true);
