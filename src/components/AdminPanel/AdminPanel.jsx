@@ -18,8 +18,7 @@ export function AdminPanel() {
     const handleLogin = (e) => {
         e.preventDefault();
 
-        const correctPassword = process.env.NETLIFY_ADMIN_PASSWORD || process.env.REACT_APP_ADMIN_PASSWORD;
-
+        const correctPassword = 'UknutaMagia2025!';
 
         if (passwordInput === correctPassword) {
             setIsAuthenticated(true);
