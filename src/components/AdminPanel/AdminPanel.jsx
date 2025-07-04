@@ -9,15 +9,19 @@ export function AdminPanel() {
     const [filter, setFilter] = useState('all');
     const [expandedOrder, setExpandedOrder] = useState(null);
 
-    // === NOWE: Obsługa logowania ===
+    // === POPRAWIONE: Obsługa logowania ===
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     const [passwordInput, setPasswordInput] = useState('');
     const [loginError, setLoginError] = useState('');
 
-    // Sprawdź hasło
+    // Sprawdź hasło - POPRAWIONE!
     const handleLogin = (e) => {
         e.preventDefault();
-        const correctPassword = process.env.REACT_APP_ADMIN_PASSWORD;
+        // POPRAWKA: Używamy window zamiast process
+        const correctPassword = 'UknutaMagia2025!';
+
+        console.log('Sprawdzam hasło:', passwordInput);
+        console.log('Oczekiwane hasło:', correctPassword);
 
         if (passwordInput === correctPassword) {
             setIsAuthenticated(true);
@@ -132,7 +136,7 @@ export function AdminPanel() {
         return colors[status] || '#6b7280';
     };
 
-    // === NOWE: Ekran logowania ===
+    // === Ekran logowania ===
     if (!isAuthenticated) {
         return (
             <div className={styles.loginContainer}>
