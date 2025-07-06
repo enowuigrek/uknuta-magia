@@ -64,7 +64,7 @@ export function OrderForm() {
                         book_price: bookPrice,
                         delivery_price: deliveryPrices[orderData.deliveryMethod],
                         total_price: getTotalPrice(),
-                        status: 'awaiting_payment' // ZMIENIONE: od razu oczekuje płatności
+                        status: 'awaiting_payment'
                     }
                 ])
                 .select();
@@ -105,8 +105,7 @@ export function OrderForm() {
                 delivery_price: deliveryPrices[orderData.deliveryMethod].toFixed(2),
                 total_price: getTotalPrice().toFixed(2),
                 order_id: orderId || 'N/A',
-                payment_status: '⏳ OCZEKUJE PŁATNOŚCI', // ZMIENIONE: status oczekiwania
-                // DODANE: Dane do płatności + opcja gotówki dla odbioru osobistego
+                payment_status: '⏳ OCZEKUJE PŁATNOŚCI',
                 bank_account: '48 1020 1664 0000 3402 0185 2193',
                 bank_name: 'PKO Bank Polski',
                 payment_title: `Zamówienie #${orderId} - ${orderData.name}`,
@@ -168,7 +167,6 @@ export function OrderForm() {
         }
     };
 
-    // ZMIENIONE: handleSubmit - od razu wysyła emaile z danymi do płatności
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -210,7 +208,6 @@ export function OrderForm() {
         }
     };
 
-    // DODANE: Ekran oczekiwania na płatność
     if (orderStatus === 'payment_pending') {
         return (
             <div className={styles.formContainer}>
@@ -227,7 +224,7 @@ export function OrderForm() {
                     <div className={styles.summaryTitle}>💳 Jak zapłacić za zamówienie?</div>
 
                     <div style={{ marginBottom: '20px' }}>
-                        <h3 style={{ marginBottom: '10px', color: '#2196F3' }}>📱 BLIK</h3>
+                        <h3 style={{ marginBottom: '10px', color: '#2196F3' }}>📱 BLIK - przelew na telefon</h3>
                         <p style={{ marginBottom: '5px', fontSize: '14px' }}>
                             Zrób przelew BLIK na numer telefonu:
                         </p>
@@ -350,12 +347,6 @@ export function OrderForm() {
                         </p>
                         <p style={{ margin: '5px 0', fontSize: '14px', color: '#333' }}>
                             📦 <strong>Przygotowanie wysyłki</strong> - po otrzymaniu płatności
-                        </p>
-                        <p style={{ margin: '5px 0', fontSize: '14px', color: '#333' }}>
-                            📞 <strong>Kontakt</strong> - 883 348 381
-                        </p>
-                        <p style={{ margin: '5px 0', fontSize: '14px', color: '#333' }}>
-                            📧 <strong>Email</strong> - uknutamagia@gmail.com
                         </p>
                     </div>
                 </div>
@@ -608,6 +599,13 @@ export function OrderForm() {
                         <p><strong>Lokalizacja:</strong> Częstochowa</p>
                     </div>
                 )}
+
+                {/* DODANA: Krótka informacja RODO */}
+                <div className={styles.rodoBanner}>
+                    <p>
+                        ℹ️ <strong>Dane osobowe:</strong> Podane dane będą przetwarzane wyłącznie w celu realizacji sprzedaży i kontaktu.
+                    </p>
+                </div>
 
                 {/* Podsumowanie */}
                 {formData.deliveryMethod && (
