@@ -605,6 +605,7 @@ export function OrderForm() {
                     <p>
                         ℹ️ <strong>Dane osobowe:</strong> Podane dane będą przetwarzane wyłącznie w celu realizacji sprzedaży i kontaktu.
                     </p>
+                    <p>Sprzedaż okazjonalna zgodna z obowiązującymi przepisami prawa.</p>
                 </div>
 
                 {/* Podsumowanie */}
