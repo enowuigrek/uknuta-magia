@@ -31,6 +31,11 @@ export function OrderForm() {
         return bookPrice + deliveryPrice;
     };
 
+    // Scroll do góry przy załadowaniu komponentu
+    useEffect(() => {
+        window.scrollTo(0, 0);
+    }, []);
+
     useEffect(() => {
         emailjs.init("WTc0uBQgaiID5YGr-");
     }, []);
@@ -64,7 +69,7 @@ export function OrderForm() {
                         book_price: bookPrice,
                         delivery_price: deliveryPrices[orderData.deliveryMethod],
                         total_price: getTotalPrice(),
-                        status: 'awaiting_payment'
+                        status: 'awaiting_payment' // POPRAWKA: Explicit status ustawienie
                     }
                 ])
                 .select();
@@ -194,7 +199,7 @@ export function OrderForm() {
 
             console.log('Wysyłanie emaili z danymi do płatności...');
             await sendEmails(formData, savedOrder.id);
-            await updateOrderStatus(savedOrder.id, 'email_sent');
+            // USUNIĘTO: updateOrderStatus dla 'email_sent' - zostawiamy 'awaiting_payment'
 
             console.log('Zamówienie złożone - oczekuje na płatność');
             setTimeout(() => {

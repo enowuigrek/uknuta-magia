@@ -114,7 +114,8 @@ export function AdminPanel() {
         'awaiting_payment': '⏳ Złożone',
         'paid': '💰 Opłacone',
         'shipped': '📦 Wysłane',
-        'delivered': '✅ Dostarczone'
+        'delivered': '✅ Dostarczone',
+        'cancelled': '❌ Anulowane'
     };
 
     const deliveryMethodLabels = {
@@ -128,7 +129,8 @@ export function AdminPanel() {
             'awaiting_payment': '#f59e0b',
             'paid': '#10b981',
             'shipped': '#06b6d4',
-            'delivered': '#059669'
+            'delivered': '#059669',
+            'cancelled': '#ef4444'
         };
         return colors[status] || '#6b7280';
     };
@@ -169,18 +171,19 @@ export function AdminPanel() {
         );
     }
 
-    // Statystyki
+    // Statystyki - wykluczamy anulowane zamówienia z obliczeń przychodów
     const totalOrders = orders.length;
     const paidOrders = orders.filter(order => ['paid', 'shipped', 'delivered'].includes(order.status));
     const pendingOrders = orders.filter(order => order.status === 'awaiting_payment').length;
+    const cancelledOrders = orders.filter(order => order.status === 'cancelled').length;
 
-    // Przychody z książek (bez kosztów dostawy)
+    // Przychody z książek (bez kosztów dostawy) - tylko z opłaconych zamówień
     const bookRevenue = paidOrders.reduce((sum, order) => sum + (parseFloat(order.book_price) || 0), 0);
 
-    // Koszty dostawy (które trzeba pokryć)
+    // Koszty dostawy (które trzeba pokryć) - tylko z opłaconych zamówień
     const deliveryCosts = paidOrders.reduce((sum, order) => sum + (parseFloat(order.delivery_price) || 0), 0);
 
-    // Liczba sprzedanych książek
+    // Liczba sprzedanych książek - tylko opłacone
     const booksSold = paidOrders.length;
 
     if (loading) {
@@ -214,6 +217,7 @@ export function AdminPanel() {
                         <option value="paid">Opłacone</option>
                         <option value="shipped">Wysłane</option>
                         <option value="delivered">Dostarczone</option>
+                        <option value="cancelled">Anulowane</option>
                     </select>
                 </label>
                 <button onClick={fetchOrders} className={styles.refreshBtn}>
@@ -230,6 +234,10 @@ export function AdminPanel() {
                 <div className={styles.stat}>
                     <span>⏳ Oczekuje płatności</span>
                     <strong>{pendingOrders}</strong>
+                </div>
+                <div className={styles.stat}>
+                    <span>❌ Anulowane</span>
+                    <strong>{cancelledOrders}</strong>
                 </div>
                 <div className={styles.stat}>
                     <span>💰 Przychód z książek</span>
@@ -344,6 +352,7 @@ export function AdminPanel() {
                                                 <option value="paid">Opłacone</option>
                                                 <option value="shipped">Wysłane</option>
                                                 <option value="delivered">Dostarczone</option>
+                                                <option value="cancelled">Anulowane</option>
                                             </select>
                                         </td>
                                     </tr>
@@ -451,6 +460,7 @@ export function AdminPanel() {
                                                     <option value="paid">Opłacone</option>
                                                     <option value="shipped">Wysłane</option>
                                                     <option value="delivered">Dostarczone</option>
+                                                    <option value="cancelled">Anulowane</option>
                                                 </select>
                                             </div>
                                         </div>

@@ -244,20 +244,22 @@
 
     label {
         display: flex;
-        flex-direction: column;
-        gap: 6px;
+        align-items: center;
+        gap: 12px;
         font-weight: 600;
         color: #374151;
         font-size: 0.875rem;
+        white-space: nowrap;
 
         select {
-            padding: 10px 14px;
+            padding: 8px 12px;
             border: 1px solid #d1d5db;
             border-radius: 8px;
             background: white;
             font-size: 14px;
             color: #374151;
-            min-width: 160px;
+            min-width: 140px;
+            height: 36px;
             transition: all 0.2s ease;
             font-family: inherit;
 
@@ -275,7 +277,7 @@
 }
 
 .refreshBtn {
-    padding: 10px 20px;
+    padding: 8px 20px;
     background: #3b82f6;
     color: white;
     border: none;
@@ -283,8 +285,12 @@
     cursor: pointer;
     font-weight: 600;
     font-size: 0.875rem;
+    height: 36px;
     transition: all 0.2s ease;
     font-family: inherit;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 
     &:hover {
         background: #2563eb;
@@ -295,7 +301,7 @@
 
 .stats {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
     gap: 20px;
     margin-bottom: 24px;
 }
@@ -476,7 +482,7 @@
 }
 
 .statusSelect {
-    padding: 6px 10px;
+    padding: 4px 8px;
     border: 1px solid #d1d5db;
     border-radius: 6px;
     font-size: 0.7rem;
@@ -485,7 +491,8 @@
     color: #374151;
     font-weight: 500;
     transition: all 0.2s ease;
-    min-width: 100px;
+    min-width: 90px;
+    height: 28px;
     font-family: inherit;
 
     &:focus {
@@ -656,7 +663,7 @@
     }
 
     .stats {
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
         gap: 16px;
     }
 
@@ -701,9 +708,10 @@
             flex-direction: row;
             align-items: center;
             justify-content: space-between;
+            gap: 8px;
 
             select {
-                min-width: 140px;
+                min-width: 120px;
                 flex: none;
             }
         }
@@ -761,7 +769,7 @@
     }
 
     .stats {
-        grid-template-columns: 1fr;
+        grid-template-columns: repeat(2, 1fr);
         gap: 10px;
     }
 
@@ -837,5 +845,12 @@
     .passwordInput {
         padding: 14px 16px;
         font-size: 16px; // Prevent zoom on iOS
+    }
+}
+
+@media (max-width: 480px) {
+    .stats {
+        grid-template-columns: 1fr;
+        gap: 8px;
     }
 }
