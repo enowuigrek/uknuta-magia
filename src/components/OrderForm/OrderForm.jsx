@@ -12,7 +12,8 @@ export function OrderForm() {
         zip: '',
         city: '',
         deliveryMethod: '', // 'pickup', 'parcel', 'courier'
-        parcelLocker: ''
+        parcelLocker: '',
+        pickupLocation: '' // NOWE: lokalizacja odbioru osobistego
     });
 
     const [orderStatus, setOrderStatus] = useState('form');
@@ -24,6 +25,12 @@ export function OrderForm() {
         pickup: 0,
         parcel: 16.99,
         courier: 19.99
+    };
+
+    // NOWE: Opcje miejsc odbioru
+    const pickupLocations = {
+        czestochowa: 'Częstochowa',
+        raciszyn: 'Raciszyn/Działoszyna'
     };
 
     const getTotalPrice = () => {
@@ -66,10 +73,11 @@ export function OrderForm() {
                         city: orderData.city || null,
                         delivery_method: orderData.deliveryMethod,
                         parcel_locker: orderData.parcelLocker || null,
+                        pickup_location: orderData.pickupLocation || null, // NOWE: zapis miejsca odbioru
                         book_price: bookPrice,
                         delivery_price: deliveryPrices[orderData.deliveryMethod],
                         total_price: getTotalPrice(),
-                        status: 'awaiting_payment' // POPRAWKA: Explicit status ustawienie
+                        status: 'awaiting_payment'
                     }
                 ])
                 .select();
@@ -125,18 +133,21 @@ export function OrderForm() {
                 templateParams.zip = orderData.zip;
                 templateParams.city = orderData.city;
                 templateParams.parcel_locker = '';
+                templateParams.pickup_location = '';
                 templateParams.full_address = `${orderData.street}, ${orderData.zip} ${orderData.city}`;
             } else if (orderData.deliveryMethod === 'parcel') {
                 templateParams.parcel_locker = orderData.parcelLocker;
                 templateParams.street = '';
                 templateParams.zip = '';
                 templateParams.city = '';
+                templateParams.pickup_location = '';
                 templateParams.full_address = '';
             } else if (orderData.deliveryMethod === 'pickup') {
                 templateParams.parcel_locker = '';
                 templateParams.street = '';
                 templateParams.zip = '';
                 templateParams.city = '';
+                templateParams.pickup_location = pickupLocations[orderData.pickupLocation] || ''; // NOWE: lokalizacja odbioru
                 templateParams.full_address = '';
             }
 
@@ -190,6 +201,12 @@ export function OrderForm() {
             return;
         }
 
+        // NOWE: Walidacja miejsca odbioru
+        if (formData.deliveryMethod === 'pickup' && !formData.pickupLocation) {
+            alert('Wybierz miejsce odbioru.');
+            return;
+        }
+
         setOrderStatus('processing');
 
         try {
@@ -199,7 +216,6 @@ export function OrderForm() {
 
             console.log('Wysyłanie emaili z danymi do płatności...');
             await sendEmails(formData, savedOrder.id);
-            // USUNIĘTO: updateOrderStatus dla 'email_sent' - zostawiamy 'awaiting_payment'
 
             console.log('Zamówienie złożone - oczekuje na płatność');
             setTimeout(() => {
@@ -318,7 +334,7 @@ export function OrderForm() {
                     <div className={styles.summaryLine}>
                         <span>Dostawa:</span>
                         <span>
-                            {formData.deliveryMethod === 'pickup' && 'Odbiór osobisty'}
+                            {formData.deliveryMethod === 'pickup' && `Odbiór osobisty - ${pickupLocations[formData.pickupLocation]}`}
                             {formData.deliveryMethod === 'parcel' && `Paczkomat ${formData.parcelLocker}`}
                             {formData.deliveryMethod === 'courier' && `${formData.street}, ${formData.zip} ${formData.city}`}
                         </span>
@@ -524,6 +540,26 @@ export function OrderForm() {
                     </label>
                 </div>
 
+                {/* NOWE: Wybór miejsca odbioru dla pickup */}
+                {formData.deliveryMethod === 'pickup' && (
+                    <div className={styles.inputGroup}>
+                        <label className={styles.label}>
+                            Miejsce odbioru *
+                            <select
+                                name="pickupLocation"
+                                value={formData.pickupLocation}
+                                onChange={handleChange}
+                                className={styles.input}
+                                required
+                            >
+                                <option value="">Wybierz miejsce odbioru</option>
+                                <option value="czestochowa">Częstochowa</option>
+                                <option value="raciszyn">Raciszyn/Działoszyna</option>
+                            </select>
+                        </label>
+                    </div>
+                )}
+
                 {/* Pole paczkomatu */}
                 {formData.deliveryMethod === 'parcel' && (
                     <div className={styles.inputGroup}>
@@ -597,11 +633,11 @@ export function OrderForm() {
                 )}
 
                 {/* Informacja o odbiorze osobistym */}
-                {formData.deliveryMethod === 'pickup' && (
+                {formData.deliveryMethod === 'pickup' && formData.pickupLocation && (
                     <div className={styles.pickupInfo}>
                         <div className={styles.pickupHeader}>ℹ️ Informacje o odbiorze</div>
                         <p>Po potwierdzeniu zamówienia skontaktujemy się z Tobą w celu ustalenia szczegółów odbioru.</p>
-                        <p><strong>Lokalizacja:</strong> Częstochowa</p>
+                        <p><strong>Lokalizacja:</strong> {pickupLocations[formData.pickupLocation]}</p>
                     </div>
                 )}
 
