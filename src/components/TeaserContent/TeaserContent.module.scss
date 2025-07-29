@@ -1,0 +1,24 @@
+.teaserContent {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background-color: $bg-dark-hover;
+
+    p,
+    a {
+        margin: 0;
+        font-size: $font-size-xl; // 64px – możesz zmienić na $font-size-lg jeśli to za duże
+    }
+
+    a {
+        padding: 0;
+    }
+
+    @media (width <= $breakpoint-lg) {
+        max-width: 100vw;
+        height: 100vh;
+        padding: 0 $spacing-md;
+    }
+}

@@ -1,0 +1,70 @@
+.sectionHeader {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 50%;
+    margin: 2rem;
+    box-sizing: border-box;
+    max-width: 100%;
+
+    h1 {
+        position: relative;
+        font-size: 48px;
+        font-family: $font-main;
+        color: $gold;
+        margin-bottom: 1rem;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            width: 80%;
+            height: 1px;
+            background-color: $gold;
+            border-radius: 2px;
+            transition: width 0.6s ease-in-out;
+            animation: underlineGrow 2s;
+            animation-timeline: view();
+        }
+    }
+
+    @keyframes underlineGrow {
+        0% {
+            width: 0;
+        }
+        100% {
+            width: 80%;
+        }
+    }
+
+    p {
+        margin-top: 1rem;
+        font-size: 28px;
+        color: $text-light;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        line-height: 1.4;
+    }
+
+    @media (width <= $breakpoint-md) {
+        width: 100%;
+        margin: 0;
+        padding-bottom: 20px;
+        box-sizing: border-box;
+
+        h1 {
+            font-size: 21px;
+            margin-bottom: 15px;
+            line-height: 1.2;
+        }
+
+        p {
+            font-size: 21px;
+            margin: 0;
+            line-height: 1.5;
+        }
+    }
+}

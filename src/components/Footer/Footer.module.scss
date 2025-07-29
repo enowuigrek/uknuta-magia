@@ -1,0 +1,99 @@
+.footer {
+    position: sticky;
+    bottom: -270px;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    padding: $spacing-md;
+    background-color: $text-dark;
+    p {
+        margin: 0;
+    }
+
+    a {
+        margin: 0;
+        text-decoration: none;
+    }
+
+    .footerLeft,
+    .footerCenter,
+    .footerRight {
+        display: flex;
+        flex-direction: column;
+        justify-content: end;
+        gap: 0.25rem;
+        margin: 0;
+    }
+
+    .footerCenter {
+        flex-direction: row;
+        align-items: end;
+
+        a {
+            padding: 0 $spacing-sm;
+            text-decoration: none;
+            border-left: 1px solid $gold;
+
+            &:first-child {
+                padding-left: 0;
+                border-left: none;
+            }
+
+            &:last-child {
+                padding-right: 0;
+            }
+        }
+    }
+
+    .socialIcons {
+        display: flex;
+        gap: $spacing-sm;
+        margin-bottom: 0.25rem;
+
+        a {
+            color: $text-light;
+            font-size: 1.5rem;
+            transition: transform 0.2s ease;
+
+            &:hover {
+                transform: scale(1.1);
+            }
+        }
+    }
+}
+
+@media (width <= $breakpoint-md) {
+    .footer {
+        flex-direction: column;
+        align-items: start;
+        gap: 1.5rem;
+        font-size: 16px; // Zmienione z 0.3rem na 14px
+
+    }
+
+    .footerCenter {
+        flex-direction: column;
+        align-items: center;
+
+        p {
+            font-size: 16px;
+        }
+    }
+
+    // Dodatkowe style dla footerLeft i footerRight
+    .footerLeft,
+    .footerRight {
+        p {
+            font-size: 16px;
+        }
+        a {
+            font-size: 16px;
+        }
+    }
+
+    .socialIcons {
+        a {
+            font-size: 1.5rem;
+        }
+    }
+}

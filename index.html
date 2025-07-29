@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://geowidget.inpost.pl/inpost-geowidget.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#000000" />
+    <title>Uknuta Magia</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+    <script src='https://geowidget.inpost.pl/inpost-geowidget.js' defer></script>
+    <script>
+      function handleInPostSelection(event) {
+        // Ta funkcja zostanie wywołana gdy użytkownik wybierze paczkomat
+        const selectedPoint = event.detail;
+
+        // Wywołujemy event dla React
+        window.dispatchEvent(new CustomEvent('inpostPointSelected', {
+          detail: selectedPoint
+        }));
+      }
+
+      // Listener dla eventów z InPost
+      document.addEventListener('onpointselect', handleInPostSelection);
+    </script>
+  </body>
+</html>
