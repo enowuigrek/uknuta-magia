@@ -12,6 +12,7 @@ import {TeaserContent} from "./components/TeaserContent/TeaserContent.jsx";
 import {AdminPanel} from "./components/AdminPanel/AdminPanel.jsx";
 import {Section} from "lucide-react";
 import {SectionHeader} from "@/components/SectionHeader/SectionHeader.jsx";
+import {CookieBanner} from "./components/CookieBanner/CookieBanner.jsx";
 // import BookCharacterChat from "@/components/Chat/BookCharacterChat.jsx";
 
 // Komponent strony głównej
@@ -77,6 +78,7 @@ function App() {
                 {/* Przekierowanie dla nieznanych ścieżek */}
                 <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
+            <CookieBanner />
         </Router>
     );
 }
