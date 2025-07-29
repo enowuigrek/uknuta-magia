@@ -60,6 +60,11 @@ src/
 │   ├── SectionHeader/ (SectionHeader.jsx, SectionHeader.module.scss)
 │   ├── CursorGlow/ (CursorGlow.jsx, CursorGlow.module.scss)
 │   └── TeaserContent/ (TeaserContent.jsx, TeaserContent.module.scss)
+├── assets/
+│   ├── book-cover.svg (okładka książki)
+│   ├── author-photo.jpg (zdjęcie autora)
+│   └── screenshots/ ✅ NOWE
+│       └── homepage-screenshot.png (screenshot strony)
 ├── hooks/ ✅ GOTOWE
 │   ├── useAuth.js (admin authentication)
 │   ├── useFormValidation.js (real-time validation)

@@ -1,6 +1,45 @@
+<div align="center">
+  <img src="./src/assets/book-cover.svg" alt="Uknuta Magia Book Cover" width="200"/>
+  <h1>Uknuta Magia - Book Landing Page</h1>
+  <p>Professional book landing page and order management system for children's book "Uknuta Magia" by Adrian Knut</p>
+
+[![Live Website](https://img.shields.io/badge/Live-uknutamagia.pl-success?style=for-the-badge)](https://uknutamagia.pl)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=white)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![Supabase](https://img.shields.io/badge/Supabase-3ECF8E?style=for-the-badge&logo=supabase&logoColor=white)](https://supabase.com/)
+[![Netlify](https://img.shields.io/badge/Netlify-00C7B7?style=for-the-badge&logo=netlify&logoColor=white)](https://netlify.com/)
+</div>
+
+---
+
 # Uknuta Magia - Book Landing Page
 
-A professional book landing page and order management system for children's book "Uknuta Magia" by Adrian Knut. Built with modern React architecture featuring complete order management, admin panel, and real-time chat functionality.
+## 📱 Project Preview
+
+<div align="center">
+  <table>
+    <tr>
+      <td align="center" width="50%">
+        <img src="./src/assets/book-cover.svg" alt="Uknuta Magia Book Cover" width="200"/>
+        <br/>
+        <strong>📚 Children's Book</strong>
+        <br/>
+        <em>"Uknuta Magia" by Adrian Knut</em>
+      </td>
+      <td align="center" width="50%">
+        <img src="./src/assets/screenshots/homepage-screenshot.png" alt="Website Homepage" width="300"/>
+        <br/>
+        <strong>🌐 Live Website</strong>
+        <br/>
+        <a href="https://uknutamagia.pl">uknutamagia.pl</a>
+      </td>
+    </tr>
+  </table>
+
+**🛒 Complete E-commerce System** | **👨‍💼 Admin Panel** | **📧 Automated Emails** | **💳 Real Payments**
+</div>
+
+---
 
 ## 🚀 Tech Stack
 
@@ -67,6 +106,11 @@ src/
 │   ├── OrderForm/           # Complete order processing system
 │   ├── SectionHeader/       # Styled section headers
 │   └── TeaserContent/       # Marketing content display
+├── assets/
+│   ├── book-cover.svg       # Book cover image
+│   ├── author-photo.jpg     # Author photograph
+│   └── screenshots/         # Project screenshots
+│       └── homepage-screenshot.png
 ├── hooks/
 │   ├── useAuth.js           # Admin authentication logic
 │   ├── useFormValidation.js # Real-time form validation
@@ -149,9 +193,9 @@ npm run lint       # Run ESLint
 ### **Order Management**
 - **Dynamic pricing** - Book (49.99 zł) + delivery costs
 - **Three delivery options:**
-    - Personal pickup (0.00 zł) - Częstochowa/Raciszyn
-    - InPost parcel locker (16.99 zł)
-    - Courier delivery (19.99 zł)
+  - Personal pickup (0.00 zł) - Częstochowa/Raciszyn
+  - InPost parcel locker (16.99 zł)
+  - Courier delivery (19.99 zł)
 
 ### **Payment Processing**
 - **BLIK integration** - Phone number transfers
@@ -244,11 +288,14 @@ Ready for deployment on other platforms:
 
 ## 🏆 Technical Achievements
 
-✅ **Production E-commerce System**  
-✅ **Real-time Order Management**  
-✅ **Modern React Architecture**  
-✅ **Comprehensive Admin Dashboard**  
-🚀 **Scalable and Maintainable**
+✅ **Live E-commerce Platform** - [uknutamagia.pl](https://uknutamagia.pl)  
+✅ **Real Business Operations** - Processing actual book sales  
+✅ **Custom Domain Integration** - Professional business presence  
+✅ **Payment System Integration** - BLIK + traditional transfers  
+✅ **Real-time Order Management** - Live admin dashboard  
+✅ **Modern React Architecture** - Utils & hooks foundation  
+✅ **Production-grade Deployment** - Netlify with SSL  
+🚀 **Scalable and Maintainable** - Ready for growth
 
 ---
 
