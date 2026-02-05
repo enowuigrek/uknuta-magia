@@ -1,0 +1,35 @@
+<svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Gradient background matching website theme -->
+    <defs>
+        <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" style="stop-color:#13192E;stop-opacity:1" />
+            <stop offset="100%" style="stop-color:#152869;stop-opacity:1" />
+        </linearGradient>
+    </defs>
+
+    <!-- Background with rounded corners -->
+    <rect width="32" height="32" rx="6" fill="url(#bgGradient)"/>
+
+    <!-- Golden "U" letter -->
+    <text x="16" y="24"
+          font-family="Instrument Serif, serif"
+          font-size="20"
+          font-weight="600"
+          text-anchor="middle"
+          fill="#E2C275">U</text>
+
+    <!-- Subtle glow effect -->
+    <text x="16" y="24"
+          font-family="Instrument Serif, serif"
+          font-size="20"
+          font-weight="600"
+          text-anchor="middle"
+          fill="#E2C275"
+          opacity="0.4"
+          stroke="#F5E6A8"
+          stroke-width="0.5">U</text>
+
+    <!-- Small magical sparkle -->
+    <circle cx="23" cy="9" r="0.8" fill="#E2C275"/>
+    <path d="M23 7.5L23 10.5M21.5 9L24.5 9" stroke="#E2C275" stroke-width="0.3"/>
+</svg>
