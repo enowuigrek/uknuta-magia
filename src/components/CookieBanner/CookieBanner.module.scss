@@ -1,0 +1,160 @@
+// src/components/CookieBanner/CookieBanner.module.scss
+
+.cookieBanner {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: linear-gradient(90deg, $dark-blue 0%, $blue 100%);
+    border-top: 1px solid $border-light;
+    box-shadow: $shadow-dark;
+    backdrop-filter: blur(10px);
+    animation: slideUp 0.4s ease-out;
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.cookieContent {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+
+    @media (max-width: $breakpoint-md) {
+        flex-direction: column;
+        gap: 1.5rem;
+        padding: 1.25rem 1.5rem;
+        text-align: center;
+    }
+}
+
+.cookieText {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex: 1;
+
+    @media (max-width: $breakpoint-md) {
+        flex-direction: column;
+        gap: 0.75rem;
+        text-align: center;
+    }
+}
+
+.cookieIcon {
+    font-size: 2rem;
+    flex-shrink: 0;
+
+    @media (max-width: $breakpoint-md) {
+        font-size: 1.75rem;
+    }
+}
+
+.cookieMessage {
+    h4 {
+        margin: 0 0 0.5rem 0;
+        color: $gold;
+        font-size: 1.1rem;
+        font-weight: 600;
+        font-family: $font-main;
+
+        @media (max-width: $breakpoint-md) {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+    }
+
+    p {
+        margin: 0;
+        color: $text-light;
+        font-size: 0.9rem;
+        line-height: 1.4;
+        opacity: 0.9;
+
+        @media (max-width: $breakpoint-md) {
+            font-size: 0.85rem;
+            line-height: 1.3;
+        }
+    }
+}
+
+.privacyLink {
+    color: $gold;
+    text-decoration: underline;
+    transition: opacity 0.2s ease;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.cookieActions {
+    display: flex;
+    gap: 0.75rem;
+    flex-shrink: 0;
+
+    @media (max-width: $breakpoint-md) {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+.acceptButton {
+    padding: 0.75rem 2rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: $font-main;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+    background: $gold;
+    color: $text-dark;
+
+    &:hover {
+        background: transparent;
+        color: $gold;
+        border: 1px solid $gold;
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: $breakpoint-md) {
+        padding: 0.8rem 2.5rem;
+        font-size: 0.9rem;
+    }
+
+    @media (max-width: 480px) {
+        width: 100%;
+        padding: 0.9rem 1rem;
+    }
+}
+
+// Animacja znikania
+.cookieBanner.hiding {
+    animation: slideDown 0.3s ease-in forwards;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+}

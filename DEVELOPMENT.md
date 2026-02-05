@@ -13,6 +13,9 @@ Profesjonalna strona sprzedażowa dla książki dziecięcej **"Uknuta Magia"** a
 - **System płatności:** BLIK + przelewy tradycyjne ✅
 - **Panel administracyjny:** Zarządzanie zamówieniami na żywo ✅
 - **Email notifications:** Automatyczne powiadomienia działają ✅
+- **SEO optimization:** Comprehensive meta tags, JSON-LD ✅
+- **Custom favicon:** Złote "U" w kolorach marki ✅
+- **RODO compliance:** Cookie banner z localStorage consent ✅
 ### 🔧 **TECHNICZNE PODSTAWY:**
 - **Setup techniczny:** Vite + React + SCSS Modules ✅
 - **Hosting:** Netlify z własną domeną ✅
@@ -60,6 +63,9 @@ src/
 │   ├── SectionHeader/ (SectionHeader.jsx, SectionHeader.module.scss)
 │   ├── CursorGlow/ (CursorGlow.jsx, CursorGlow.module.scss)
 │   └── TeaserContent/ (TeaserContent.jsx, TeaserContent.module.scss)
+│   ├── CookieBanner/ ✅ NOWE
+│   │   ├── CookieBanner.jsx (RODO compliance)
+│   │   └── CookieBanner.module.scss
 ├── assets/
 │   ├── book-cover.svg (okładka książki)
 │   ├── author-photo.jpg (zdjęcie autora)
@@ -109,9 +115,9 @@ src/
 
 ### 2. **System Zamówień** ⭐
 - **3 opcje dostawy:**
-    - Odbiór osobisty (0 zł) - Częstochowa/Raciszyn
-    - Paczkomat InPost (16.99 zł)
-    - Wysyłka kurierska (19.99 zł)
+  - Odbiór osobisty (0 zł) - Częstochowa/Raciszyn
+  - Paczkomat InPost (16.99 zł)
+  - Wysyłka kurierska (19.99 zł)
 - **Dynamiczne ceny** - książka 49.99 zł + dostawa
 - **Walidacja formularza** - real-time validation
 - **Email powiadomienia** - klient + admin
@@ -162,76 +168,131 @@ npm run preview    # Preview production build
 
 ---
 
-## 🚀 **TODO - PLAN REFAKTORYZACJI**
+## 🚀 **TODO - PLAN REFAKTORYZACJI - SZCZEGÓŁY DLA NOWEGO DEWELOPERA**
 
-### **🎯 ETAP 2: AdminPanel Refactoring (W TOKU)**
+### **🎯 PROBLEM DO ROZWIĄZANIA:**
+Projekt ma 3 bardzo duże komponenty które są trudne w utrzymaniu:
+- **AdminPanel.jsx** - 500+ linii kodu
+- **OrderForm.jsx** - 400+ linii kodu
+- **BookCharacterChat.jsx** - 300+ linii kodu (opcjonalnie)
+
+**CEL:** Podzielić każdy na 6-8 mniejszych komponentów (50-80 linii każdy)
+
+### **📋 DOSTĘPNE NARZĘDZIA:**
+Stworzono już **fundament** w postaci:
+- **src/utils/** - 6 plików z logiką biznesową
+- **src/hooks/** - 5 custom hooks React
+- **Commit:** `e625733` - "feat: add utils and hooks infrastructure"
+
+**Te narzędzia można wykorzystać do refaktoryzacji!**
+
+---
+
+### **🎯 ETAP 2: AdminPanel Refactoring (PRIORYTET 1)**
 **Cel:** Podzielić AdminPanel (500+ linii) na mniejsze komponenty
 
-#### **Nowa struktura AdminPanel:**
+#### **📁 Docelowa struktura:**
 ```
 src/components/AdminPanel/
 ├── AdminPanel.jsx (główny kontener - ~50 linii)
 ├── AdminPanel.module.scss
 ├── components/
-│   ├── LoginForm/ ✅ ROZPOCZĘTY
-│   │   ├── LoginForm.jsx
+│   ├── LoginForm/ ✅ ROZPOCZĘTY (ale nie dokończony)
+│   │   ├── LoginForm.jsx (ekran logowania)
 │   │   └── LoginForm.module.scss
 │   ├── AdminHeader/
-│   │   ├── AdminHeader.jsx (header z nawigacją)
+│   │   ├── AdminHeader.jsx (header z nawigacją i wylogowaniem)
 │   │   └── AdminHeader.module.scss
 │   ├── OrderFilters/
-│   │   ├── OrderFilters.jsx (filtrowanie zamówień)
+│   │   ├── OrderFilters.jsx (filtry: status, refresh button)
 │   │   └── OrderFilters.module.scss
 │   ├── StatsCards/
-│   │   ├── StatsCards.jsx (karty statystyk)
+│   │   ├── StatsCards.jsx (4 karty statystyk)
 │   │   └── StatsCards.module.scss
 │   ├── OrdersTable/
-│   │   ├── OrdersTable.jsx (desktop table)
+│   │   ├── OrdersTable.jsx (desktop table view)
 │   │   └── OrdersTable.module.scss
 │   └── OrdersMobile/
-│       ├── OrdersMobile.jsx (mobile cards)
+│       ├── OrdersMobile.jsx (mobile cards view)
 │       └── OrdersMobile.module.scss
-└── hooks/
-    ├── useAuth.js ✅ GOTOWE
-    ├── useOrders.js ✅ GOTOWE
-    └── useOrderStats.js ✅ GOTOWE (w useOrders)
 ```
 
-**Szacowany czas:** 2-3 dni  
-**Korzyści:** 500+ linii → 6 komponentów po ~50-80 linii każdy
+#### **🔧 Wykorzystaj gotowe hooks:**
+- `useAuth()` - uwierzytelnianie admina
+- `useOrders()` - pobieranie i zarządzanie zamówieniami
+- `useOrderStats()` - obliczanie statystyk
+- Funkcje z `utils/formatters.js` - formatowanie danych
 
-### **🎯 ETAP 3: OrderForm Refactoring**
+#### **📝 Kroki do wykonania:**
+1. **Dokończ LoginForm** - jest rozpoczęty ale nie zintegrowany
+2. **AdminHeader** - wydziel header z przyciskami (home, logout)
+3. **OrderFilters** - wydziel sekcję filtrów
+4. **StatsCards** - wydziel karty statystyk
+5. **OrdersTable + OrdersMobile** - podziel wyświetlanie zamówień
+6. **Zintegruj w AdminPanel.jsx** - główny kontener
+
+**Szacowany czas:** 2-3 dni  
+**Rezultat:** 500+ linii → 6 komponentów po ~50-80 linii każdy
+
+---
+
+### **🎯 ETAP 3: OrderForm Refactoring (PRIORYTET 2)**
 **Cel:** Podzielić OrderForm (400+ linii) na komponenty funkcjonalne
 
-#### **Nowa struktura OrderForm:**
+#### **📁 Docelowa struktura:**
 ```
 src/components/OrderForm/
-├── OrderForm.jsx (główny kontener)
+├── OrderForm.jsx (główny kontener + routing statusów)
 ├── components/
-│   ├── BookInfo/ (okładka + cena)
-│   ├── ContactForm/ (dane kontaktowe)
-│   ├── DeliveryOptions/ (wybór dostawy)
-│   ├── AddressForm/ (adres dla kuriera)
-│   ├── OrderSummary/ (podsumowanie)
-│   ├── PaymentInstructions/ (instrukcje płatności)
-│   └── SuccessScreen/ (potwierdzenie)
-├── hooks/
-│   ├── useOrderForm.js ✅ GOTOWE
-│   ├── useEmailSender.js (w utils/email.js ✅)
-│   └── useSupabaseOrders.js (w utils/api.js ✅)
-└── utils/
-    ├── orderValidation.js ✅ GOTOWE (validation.js)
-    ├── priceCalculations.js ✅ GOTOWE
-    └── emailTemplates.js ✅ GOTOWE (email.js)
+│   ├── BookInfo/
+│   │   ├── BookInfo.jsx (okładka + cena książki)
+│   │   └── BookInfo.module.scss
+│   ├── ContactForm/
+│   │   ├── ContactForm.jsx (imię, email, telefon)
+│   │   └── ContactForm.module.scss
+│   ├── DeliveryOptions/
+│   │   ├── DeliveryOptions.jsx (3 opcje dostawy)
+│   │   └── DeliveryOptions.module.scss
+│   ├── AddressForm/
+│   │   ├── AddressForm.jsx (adres dla kuriera)
+│   │   └── AddressForm.module.scss
+│   ├── OrderSummary/
+│   │   ├── OrderSummary.jsx (podsumowanie cen)
+│   │   └── OrderSummary.module.scss
+│   ├── PaymentInstructions/
+│   │   ├── PaymentInstructions.jsx (ekran po złożeniu)
+│   │   └── PaymentInstructions.module.scss
+│   └── SuccessScreen/
+│       ├── SuccessScreen.jsx (potwierdzenie płatności)
+│       └── SuccessScreen.module.scss
 ```
 
+#### **🔧 Wykorzystuj gotowe narzędzia:**
+- `useOrderForm()` - główna logika formularza
+- `useFormValidation()` - walidacja w czasie rzeczywistym
+- Funkcje z `utils/validation.js` - reguły walidacji
+- Funkcje z `utils/priceCalculations.js` - obliczenia cen
+- Funkcje z `utils/email.js` - wysyłanie emaili
+
+#### **📝 Kroki do wykonania:**
+1. **BookInfo** - wydziel sekcję z okładką i ceną
+2. **ContactForm** - pola: imię, email, telefon
+3. **DeliveryOptions** - 3 radio buttons z opcjami
+4. **AddressForm** - conditional render dla kuriera
+5. **OrderSummary** - podsumowanie z cenami
+6. **PaymentInstructions** - ekran z instrukcjami płatności
+7. **SuccessScreen** - ekran po opłaceniu
+8. **Zintegruj z useOrderForm** - zarządzanie stanem
+
 **Szacowany czas:** 2-3 dni  
-**Korzyści:** 400+ linii → 7 komponentów po ~40-60 linii każdy
+**Rezultat:** 400+ linii → 7 komponentów po ~40-60 linii każdy
+
+---
 
 ### **🎯 ETAP 4: BookCharacterChat Refactoring (OPCJONALNIE)**
-**Cel:** Podzielić chat (300+ linii) jeśli będzie używany
+**Status:** MOŻE BYĆ POMINIĘTY jeśli chat nie jest używany
 
-#### **Nowa struktura Chat:**
+#### **📁 Docelowa struktura:**
 ```
 src/components/Chat/
 ├── BookCharacterChat.jsx (kontener)
@@ -241,70 +302,101 @@ src/components/Chat/
 │   ├── Message/ (pojedyncza wiadomość)
 │   ├── TypingIndicator/ (wskaźnik pisania)
 │   └── ChatInput/ (input + wysyłanie)
-├── data/characters.js ✅ GOTOWE (constants.js)
+├── data/characters.js (gotowe w constants.js)
 ├── hooks/useChat.js
 └── utils/responseGenerator.js
 ```
 
-**Szacowany czas:** 1-2 dni  
-**Status:** Opcjonalny - tylko jeśli chat będzie aktywny
+**Szacowany czas:** 1-2 dni (jeśli potrzebny)
 
-### **🎯 ETAP 5: Styles & Performance Optimization**
+---
+
+### **🎯 ETAP 5: Styles & Performance Optimization (FINALIZACJA)**
 **Cel:** Reorganizacja stylów i optymalizacja
 
-#### **Tasks:**
+#### **📝 Tasks:**
 - **Mixins SCSS** - wspólne style komponentów
 - **Variables update** - nowe komponenty
 - **Bundle optimization** - lazy loading
-- **Image optimization** - WebP, kompresja
-- **SEO improvements** - meta tags, structured data
+- **Performance audit** - Core Web Vitals
+- **SEO final check** - meta tags, structured data
 
-**Szacowany czas:** 1 dzień  
-**Korzyści:** Szybsze ładowanie, lepsze SEO
+**Szacowany czas:** 1 dzień
 
 ---
 
-## 💡 **Harmonogram Refaktoryzacji**
+## 💡 **HARMONOGRAM ROZWOJU**
 
-### **Tydzień 1: AdminPanel**
-- [x] **Dzień 1:** Etap 1 - Fundamenty (utils + hooks) ✅
-- [ ] **Dzień 2-3:** LoginForm, AdminHeader, OrderFilters
-- [ ] **Dzień 4:** StatsCards, OrdersTable, OrdersMobile
-- [ ] **Dzień 5:** Integracja i testy AdminPanel
+### **Tydzień 1: AdminPanel (Status: DO ROZPOCZĘCIA)**
+- **Dzień 1:** ✅ Etap 1 - Fundamenty (utils + hooks) **GOTOWE**
+- **Dzień 2-3:** LoginForm, AdminHeader, OrderFilters
+- **Dzień 4:** StatsCards, OrdersTable, OrdersMobile
+- **Dzień 5:** Integracja i testy AdminPanel
 
 ### **Tydzień 2: OrderForm**
-- [ ] **Dzień 1-2:** BookInfo, ContactForm, DeliveryOptions
-- [ ] **Dzień 3:** AddressForm, OrderSummary
-- [ ] **Dzień 4:** PaymentInstructions, SuccessScreen
-- [ ] **Dzień 5:** Integracja i testy OrderForm
+- **Dzień 1-2:** BookInfo, ContactForm, DeliveryOptions
+- **Dzień 3:** AddressForm, OrderSummary
+- **Dzień 4:** PaymentInstructions, SuccessScreen
+- **Dzień 5:** Integracja i testy OrderForm
 
 ### **Tydzień 3: Finalizacja**
-- [ ] **Dzień 1:** BookCharacterChat (jeśli potrzebny)
-- [ ] **Dzień 2:** Styles optimization
-- [ ] **Dzień 3:** Performance & SEO
-- [ ] **Dzień 4-5:** Testing, deployment, dokumentacja
+- **Dzień 1:** BookCharacterChat (jeśli potrzebny)
+- **Dzień 2:** Styles optimization
+- **Dzień 3:** Performance & SEO
+- **Dzień 4-5:** Testing, deployment, dokumentacja
 
 ---
 
-## 🎯 **Oczekiwane Rezultaty**
+## 🎯 **OCZEKIWANE REZULTATY**
 
-### **Code Quality:**
-- **AdminPanel:** 500+ linii → 6 komponentów (~50-80 linii każdy)
-- **OrderForm:** 400+ linii → 7 komponentów (~40-60 linii każdy)
-- **BookCharacterChat:** 300+ linii → 6 komponentów (~30-50 linii każdy)
-- **Total reduction:** ~75% mniej kodu na komponent
+### **Code Quality Improvement:**
+- **AdminPanel:** 500+ linii → 6 komponentów (~50-80 linii każdy) = **75% redukcja**
+- **OrderForm:** 400+ linii → 7 komponentów (~40-60 linii każdy) = **78% redukcja**
+- **BookCharacterChat:** 300+ linii → 6 komponentów (~30-50 linii każdy) = **80% redukcja**
 
-### **Maintainability:**
+### **Maintainability Benefits:**
 - **Single responsibility** - każdy komponent ma jedną funkcję
 - **Reusable components** - możliwość ponownego wykorzystania
 - **Easy testing** - komponenty łatwe do testowania
 - **Better performance** - lazy loading, optymalizacja re-renderów
+- **Team collaboration** - różne osoby mogą pracować nad różnymi komponentami
 
 ### **Developer Experience:**
 - **Faster development** - łatwiejsze dodawanie nowych funkcji
 - **Better debugging** - błędy łatwiejsze do zlokalizowania
-- **Team collaboration** - różne osoby mogą pracować nad różnymi komponentami
-- **Documentation** - każdy komponent dobrze udokumentowany
+- **Clear structure** - nowi developerzy szybko się orientują
+- **Modern React patterns** - custom hooks, utils separation
+
+---
+
+## 📋 **INSTRUKCJE DLA NOWEGO DEWELOPERA**
+
+### **🚀 Jak rozpocząć:**
+1. **Sklonuj repo i uruchom:** `npm install && npm run dev`
+2. **Zapoznaj się z utils/hooks:** sprawdź pliki w `src/utils/` i `src/hooks/`
+3. **Przeanalizuj obecne komponenty:** `AdminPanel.jsx`, `OrderForm.jsx`
+4. **Rozpocznij od Etapu 2:** AdminPanel refactoring
+
+### **🔧 Gotowe narzędzia do wykorzystania:**
+- **useAuth()** - logowanie admina
+- **useOrders()** - zarządzanie zamówieniami
+- **useFormValidation()** - walidacja formularzy
+- **formatters.js** - formatowanie danych
+- **validation.js** - reguły walidacji
+- **constants.js** - wszystkie stałe projektu
+
+### **📝 Reguły kodowania:**
+- **Single responsibility** - jeden komponent = jedna funkcja
+- **SCSS Modules** - style w osobnych plikach .module.scss
+- **Custom hooks** - logika biznesowa w hooks
+- **Utils functions** - funkcje pomocnicze w utils/
+- **Commit messages** - format: "feat/fix/refactor: description"
+
+### **⚠️ Ważne informacje:**
+- **Nie używaj localStorage/sessionStorage** - nie działają w artifacts Claude
+- **Wykorzystuj istniejące hooks** - nie przepisuj logiki od nowa
+- **Zachowuj obecną funkcjonalność** - to live e-commerce system!
+- **Testuj na uknutamagia.pl** - sprawdzaj czy wszystko działa
 
 ---
 
