@@ -1,0 +1,273 @@
+.header {
+    position: sticky;
+    top: 0;
+    right: 0;
+    left: 0;
+    z-index: $z-header;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2em 4em;
+    transition: all 0.3s ease-in-out;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100vw;
+
+    //h1 {
+    //    margin: 0;
+    //    padding: 0;
+    //    transition: color 0.3s ease;
+    //    word-wrap: break-word;
+    //    //overflow-wrap: break-word;
+    //    //display: flex;
+    //    //align-items: center;
+    //    //line-height: 1;
+    //}
+
+    @media (max-width: $breakpoint-lg) {
+        padding: 25px 30px;
+
+        h1 {
+            padding: 0;
+            margin: 0;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            line-height: 1;
+        }
+    }
+
+    // Bardzo małe ekrany
+    //@media (max-width: 480px) {
+    //    padding: 20px 30px; // POPRAWIONE - było 1em 0.75rem
+    //
+    //    h1 {
+    //        font-size: 20px;
+    //        display: flex;
+    //        align-items: center;
+    //        line-height: 1;
+    //    }
+    //}
+}
+
+.transparent {
+    background: transparent;
+    box-shadow: none;
+}
+
+.scrolled {
+    padding: 1.5em 4em;
+    background: $bg-dark;
+    box-shadow: $shadow-dark;
+
+    @media (max-width: $breakpoint-lg) {
+        padding: 20px;
+    }
+
+    @media (max-width: 480px) {
+        padding: 20px;
+    }
+}
+
+button,
+a {
+    position: relative;
+    text-decoration: none;
+    color: $gold;
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    &:hover {
+        opacity: 0.8;
+    }
+}
+
+.desktopNav {
+    z-index: $z-header;
+    display: flex;
+    justify-content: space-between;
+    gap: 2rem;
+
+    a {
+        position: relative;
+        text-decoration: none;
+        color: $gold;
+        background: none;
+        border: none;
+        cursor: pointer;
+
+        &::after {
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: currentcolor;
+            transition: width 0.3s ease;
+            content: '';
+        }
+
+        &:hover::after {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: $breakpoint-lg) {
+        display: none;
+    }
+}
+
+.orderButton {
+    padding: 0.8em 1.5em;
+    font-weight: 600;
+    color: $gold;
+    background: rgb(255 255 255 / 10%);
+    border: 1px solid $border-lighter;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap; // Zapobiega łamaniu tekstu w przycisku
+
+    &:hover {
+        background: rgb(255 255 255 / 20%);
+        transform: translateY(-1px);
+    }
+
+    @media (max-width: $breakpoint-lg) {
+        display: none;
+
+    }
+}
+
+.hamburger {
+    z-index: $z-header + 1;
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 24px;
+    height: 18px;
+    padding: 0;
+    background: none;
+    border: none;
+    cursor: pointer;
+    flex-shrink: 0; // Zapobiega kurczeniu się hamburgera
+
+    span {
+        display: block;
+        width: 100%;
+        height: 2px;
+        background-color: $text-light;
+        transition: all 0.3s ease;
+        transform-origin: center;
+    }
+
+    @media (max-width: $breakpoint-lg) {
+        display: flex;
+    }
+}
+
+.hamburgerOpen {
+    span:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    span:nth-child(2) {
+        opacity: 0;
+    }
+
+    span:nth-child(3) {
+        transform: rotate(-45deg) translate(7px, -6px);
+    }
+}
+
+.mobileMenu {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    left: 0;
+    z-index: $z-header;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem;
+    background: $bg-dark;
+    opacity: 0;
+    transition: all 0.3s ease;
+    transform: translateY(-100%);
+    visibility: hidden;
+    border-top: 1px solid $border-light;
+    box-sizing: border-box;
+    max-width: 100vw;
+
+    button,
+    a {
+        padding: 1rem 0;
+        font-family: inherit;
+        font-size: inherit;
+        font-weight: 500;
+        text-align: left;
+        color: $text-light;
+        background: none;
+        border: none;
+        cursor: pointer;
+        border-bottom: 1px solid $border-light;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+
+        &:last-child {
+            border-bottom: none;
+        }
+
+        &:hover {
+            padding-left: 0.5rem;
+            opacity: 0.8;
+        }
+    }
+
+    @media (min-width: $breakpoint-lg + 1) {
+        display: none;
+    }
+}
+
+.mobileMenuOpen {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
+}
+
+.floatingOrderButton {
+    position: fixed;
+    right: 1rem; // Zmienione z 2px na 1rem dla lepszego spacing
+    bottom: 2rem; // Zmienione z 36px na 2rem
+    z-index: $z-floating;
+    padding: 1rem 1.5rem; // Zmniejszony padding na mobile
+    color: $gold;
+    background: rgb(255 255 255 / 20%);
+    border: 1px solid $border-light;
+    font-size: 21px;
+    text-decoration: none;
+    background: $bg-dark;
+    border-radius: 6px;
+    box-shadow: $shadow-button;
+    transition: all 0.3s ease;
+    max-width: calc(100vw - 2rem); // Zapobiega overflow
+    box-sizing: border-box;
+    word-wrap: break-word;
+
+    &:hover {
+        background: $bg-dark-hover;
+        box-shadow: $shadow-button-hover;
+        transform: translateY(-2px);
+    }
+
+    @media (min-width: $breakpoint-lg + 1) {
+        display: none;
+    }
+
+    //@media (max-width: 480px) {
+    //    right: 0.5rem;
+    //    bottom: 1.5rem;
+    //    padding: 0.75rem 1rem;
+    //    font-size: 0.9em;
+    //}
+}

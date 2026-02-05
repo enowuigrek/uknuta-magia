@@ -1,0 +1,67 @@
+/* === GLOBAL STYLES === */
+html {
+  height: 100%;
+}
+
+body {
+  display: flex;
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  font-family: $font-main;
+  font-weight: 400;
+  background: linear-gradient(90deg, $dark-blue 0%, $blue 100%);
+  font-style: normal;
+  overscroll-behavior: none;
+  place-items: center;
+}
+
+h1 {
+  margin: 0;
+  font-size: $font-size-xl;
+  color: $gold;
+}
+
+p {
+  margin: 0;
+  font-size: $font-size-lg;
+  color: $text-light;
+}
+
+a {
+  margin: 0 2.25rem; // 36px
+  font-size: $font-size-lg;
+  font-weight: 500;
+  text-decoration: none;
+  color: $gold;
+  transition: text-decoration 0.2s ease;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+button {
+  z-index: 1;
+  font-family: inherit;
+  font-size: $font-size-lg;
+  font-weight: 500;
+  color: $text-dark;
+  background-color: $gold;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  text-wrap: nowrap;
+}
+
+button:hover {
+  color: $gold;
+  background-color: transparent;
+  border-color: $gold;
+}
+
+#root {
+  max-width: 80rem; // czyli 1280px
+  margin: 0 auto;
+}

@@ -1,0 +1,643 @@
+.formContainer {
+    width: 550px;
+    margin: 0 auto;
+    background: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    h1 {
+        font-size: 1.75rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin-bottom: 1.5rem;
+        text-align: center;
+    }
+
+    @media (max-width: 640px) {
+        width: calc(100vw - 3rem);
+        max-width: 450px;
+        margin: 1.5rem auto;
+        padding: 1.25rem;
+    }
+
+    @media (max-width: 480px) {
+        width: calc(100vw - 2rem);
+        max-width: 400px;
+        margin: 1rem auto;
+        padding: 1rem;
+    }
+}
+
+// Sekcja z okładką i ceną
+.bookPrice {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+    padding: 1.5rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+
+    @media (max-width: 640px) {
+        flex-direction: column;
+        gap: 1rem;
+        text-align: center;
+    }
+}
+
+.bookCover {
+    width: 80px;
+    height: 120px;
+    border-radius: 6px;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+    flex-shrink: 0;
+
+    @media (max-width: 640px) {
+        width: 100px;
+        height: 150px;
+    }
+}
+
+.bookInfo {
+    flex: 1;
+
+    h2 {
+        margin: 0 0 0.5rem 0;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #1f2937;
+        line-height: 1.2;
+    }
+}
+
+.price {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+
+    @media (max-width: 640px) {
+        align-items: center;
+    }
+}
+
+.priceAmount {
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #1f2937;
+    line-height: 1;
+
+    @media (max-width: 640px) {
+        font-size: 2rem;
+    }
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+// Tytuły sekcji
+.sectionTitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #374151;
+    margin: 2rem 0 1rem 0;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid #e5e7eb;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.inputGroup {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputRow {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 1rem;
+
+    @media (max-width: 480px) {
+        grid-template-columns: 1fr;
+    }
+}
+
+.label {
+    display: block;
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: #374151;
+    margin-bottom: 0.25rem;
+}
+
+.input {
+    width: 100%;
+    padding: 0.75rem;
+    margin: 0;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: border-color 0.2s ease;
+    background-color: white;
+    color: #1f2937;
+    box-sizing: border-box;
+    font-family: inherit;
+
+    &:focus {
+        outline: none;
+        border-color: #3b82f6;
+        box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.1);
+    }
+
+    &::placeholder {
+        color: #9ca3af;
+    }
+
+    @media (max-width: 640px) {
+        font-size: 16px;
+        padding: 0.875rem;
+    }
+}
+
+// Opcje dostawy
+.deliveryOptions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+.deliveryOption {
+    position: relative;
+    display: block;
+    cursor: pointer;
+
+    input {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+
+        &:checked + .deliveryCard {
+            background: #f8fafc;
+            border-color: #3b82f6;
+
+            .deliveryPrice {
+                color: #3b82f6;
+                font-weight: 700;
+            }
+        }
+    }
+}
+
+.deliveryCard {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    background: white;
+    transition: all 0.2s ease;
+    min-height: 60px;
+    box-sizing: border-box;
+
+    &:hover {
+        border-color: #3b82f6;
+        background: #f8fafc;
+    }
+}
+
+.deliveryIcon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.deliveryContent {
+    flex: 1;
+    min-width: 0;
+}
+
+.deliveryName {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #1f2937;
+    margin-bottom: 0.25rem;
+
+    @media (max-width: 640px) {
+        font-size: 0.95rem;
+    }
+}
+
+.deliveryPrice {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #059669;
+    transition: color 0.2s ease;
+
+    @media (max-width: 640px) {
+        font-size: 1rem;
+    }
+}
+
+// Informacja o odbiorze osobistym
+.pickupInfo {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+
+    .pickupHeader {
+        font-weight: 600;
+        color: #0c4a6e;
+        margin-bottom: 0.5rem;
+        font-size: 0.95rem;
+    }
+
+    p {
+        margin: 0.5rem 0;
+        color: #075985;
+        font-size: 0.85rem;
+        line-height: 1.5;
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+    }
+}
+
+// DODANA: Banner RODO - krótka informacja
+.rodoBanner {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 1rem;
+    margin: 1.5rem 0;
+
+    p {
+        margin: 0;
+        color: #4b5563;
+        font-size: 0.9rem;
+        line-height: 1.5;
+
+        strong {
+            color: #374151;
+        }
+    }
+
+    @media (max-width: 640px) {
+        padding: 0.875rem;
+        margin: 1.25rem 0;
+
+        p {
+            font-size: 0.85rem;
+        }
+    }
+}
+
+// Podsumowanie zamówienia
+.orderSummary {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+}
+
+.summaryTitle {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #1e293b;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.summaryLine {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0;
+    border-bottom: 1px solid #e2e8f0;
+    color: #4b5563;
+    font-size: 0.95rem;
+
+    &:last-of-type {
+        border-bottom: none;
+        margin-bottom: 1rem;
+    }
+}
+
+.summaryTotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0 0 0;
+    border-top: 1px solid #d1d5db;
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+// Submit button
+.submitButton {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 1rem;
+    background-color: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    margin-top: 0.5rem;
+    font-family: inherit;
+
+    &:hover:not(:disabled) {
+        background-color: #2563eb;
+    }
+
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
+
+    @media (max-width: 640px) {
+        font-size: 1.05rem;
+        padding: 1.1rem;
+    }
+}
+
+.creditCardIcon {
+    width: 1rem;
+    height: 1rem;
+}
+
+.spinner {
+    width: 1rem;
+    height: 1rem;
+    border: 2px solid transparent;
+    border-top: 2px solid white;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+// Success state
+.successContainer {
+    max-width: 500px;
+    margin: 2rem auto;
+    background: white;
+    padding: 2.5rem 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    font-family: inherit;
+
+    h2 {
+        font-size: 1.8rem;
+        font-weight: 600;
+        color: #1f2937;
+        margin: 1rem 0 1rem 0;
+    }
+
+    > p {
+        color: #4b5563;
+        line-height: 1.6;
+        font-size: 1.05rem;
+        margin-bottom: 2rem;
+
+        strong {
+            color: #1f2937;
+        }
+    }
+
+    @media (max-width: 640px) {
+        margin: 1rem;
+        padding: 2rem 1.5rem;
+
+        h2 {
+            font-size: 1.6rem;
+        }
+
+        > p {
+            font-size: 1rem;
+        }
+    }
+}
+
+.successIcon {
+    width: 4rem;
+    height: 4rem;
+    background: #22c55e;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 1rem;
+
+    @media (max-width: 640px) {
+        width: 3.5rem;
+        height: 3.5rem;
+    }
+}
+
+.checkmark {
+    width: 2rem;
+    height: 2rem;
+    color: white;
+    stroke-width: 3;
+
+    @media (max-width: 640px) {
+        width: 1.75rem;
+        height: 1.75rem;
+    }
+}
+
+.orderNumber {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 6px;
+    padding: 1rem 1.5rem;
+    margin: 1.5rem 0;
+    display: inline-block;
+
+    span {
+        color: #0369a1;
+        font-size: 0.95rem;
+        font-weight: 500;
+
+        strong {
+            color: #0c4a6e;
+            font-size: 1.05rem;
+        }
+    }
+}
+
+.nextSteps {
+    background: #f8fafc;
+    border-radius: 6px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+    text-align: left;
+
+    p {
+        margin: 0.75rem 0;
+        color: #475569;
+        font-size: 0.9rem;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+        line-height: 1.5;
+
+        &:first-child {
+            margin-top: 0;
+        }
+
+        &:last-child {
+            margin-bottom: 0;
+        }
+
+        strong {
+            color: #1e293b;
+        }
+    }
+
+    @media (max-width: 640px) {
+        padding: 1.25rem;
+        text-align: center;
+
+        p {
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            text-align: center;
+        }
+    }
+}
+
+.successActions {
+    margin-top: 2rem;
+}
+
+.homeButton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+    min-width: 200px;
+    font-family: inherit;
+
+    &:hover {
+        background: #2563eb;
+    }
+
+    @media (max-width: 640px) {
+        width: 100%;
+        padding: 1.1rem 1.5rem;
+        font-size: 1.05rem;
+    }
+}
+
+// Responsive design
+@media (max-width: 640px) {
+    .sectionTitle {
+        font-size: 1rem;
+        margin: 1.25rem 0 0.75rem 0;
+    }
+
+    .orderSummary {
+        padding: 1rem;
+        margin: 1.25rem 0;
+    }
+
+    .summaryTotal {
+        font-size: 1.1rem;
+    }
+
+    .deliveryCard {
+        padding: 0.875rem;
+        min-height: 55px;
+    }
+
+    .deliveryIcon {
+        font-size: 1.25rem;
+    }
+
+    .bookPrice {
+        margin-bottom: 1.5rem;
+        padding: 1.25rem;
+    }
+
+    h1 {
+        font-size: 1.5rem !important;
+        margin-bottom: 1.25rem !important;
+    }
+}
+
+@media (max-width: 480px) {
+    .deliveryCard {
+        padding: 0.75rem;
+        gap: 0.75rem;
+    }
+
+    .deliveryIcon {
+        font-size: 1.2rem;
+    }
+
+    .inputRow {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .input {
+        padding: 0.75rem;
+    }
+
+    .bookPrice {
+        padding: 1rem;
+        gap: 1rem;
+    }
+
+    .bookCover {
+        width: 70px;
+        height: 105px;
+    }
+
+    .bookInfo h2 {
+        font-size: 1.2rem;
+    }
+
+    .priceAmount {
+        font-size: 1.8rem !important;
+    }
+}
