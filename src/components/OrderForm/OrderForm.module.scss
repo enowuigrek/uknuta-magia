@@ -535,6 +535,98 @@
     }
 }
 
+// Sekcja płatności (PaymentPendingView)
+.paymentSection {
+    margin-bottom: 20px;
+}
+
+.paymentMethodTitle {
+    margin-bottom: 10px;
+    color: #2196f3;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.paymentMethodTitleBank {
+    margin-bottom: 10px;
+    color: #00c851;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.paymentMethodTitleCash {
+    margin-bottom: 10px;
+    color: #ff9800;
+    font-size: 1rem;
+    font-weight: 600;
+}
+
+.paymentDescription {
+    margin-bottom: 5px;
+    font-size: 0.875rem;
+    color: #4b5563;
+}
+
+.paymentHighlight {
+    background-color: #e3f2fd;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.paymentHighlightBank {
+    background-color: #e8f5e8;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1rem;
+    font-weight: 700;
+    font-family: monospace;
+    margin-bottom: 10px;
+}
+
+.paymentNote {
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+.paymentTotal {
+    background-color: #fff3e0;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 20px;
+
+    h4 {
+        margin: 0 0 10px 0;
+        color: #f57c00;
+    }
+
+    p {
+        margin: 0;
+        font-size: 0.875rem;
+        color: #6b7280;
+    }
+}
+
+// Następne kroki (wersja inline w PaymentPendingView)
+.nextStepsInline {
+    padding: 10px 0;
+
+    p {
+        margin: 5px 0;
+        font-size: 0.875rem;
+        color: #1f2937;
+
+        strong {
+            color: #1e293b;
+        }
+    }
+}
+
 .successActions {
     margin-top: 2rem;
 }

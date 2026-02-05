@@ -1,192 +1,162 @@
-// src/components/AdminPanel/AdminPanel.jsx
-import { useState, useEffect } from 'react';
-import { supabase } from '../../config/supabase';
+import { useState } from 'react';
+import { useAuth } from '../../hooks/useAuth.js';
+import { useOrders, useOrderStats } from '../../hooks/useOrders.js';
+import { ORDER_STATUSES, DELIVERY_METHOD_LABELS, PICKUP_LOCATIONS } from '../../utils/constants.js';
+import { formatDateTime, getStatusColor, getStatusLabel, formatDeliveryMethod } from '../../utils/formatters.js';
 import styles from './AdminPanel.module.scss';
 
+function LoginScreen({ onLogin, passwordInput, onPasswordChange, loginError, onGoHome }) {
+    return (
+        <div className={styles.loginContainer}>
+            <div className={styles.loginBox}>
+                <h2>Panel Administracyjny</h2>
+                <p>Wprowadź hasło aby uzyskać dostęp</p>
+
+                <form onSubmit={onLogin} className={styles.loginForm}>
+                    <input
+                        type="password"
+                        placeholder="Hasło"
+                        value={passwordInput}
+                        onChange={(e) => onPasswordChange(e.target.value)}
+                        className={styles.passwordInput}
+                        autoFocus
+                    />
+                    <button type="submit" className={styles.loginBtn}>
+                        Zaloguj się
+                    </button>
+                </form>
+
+                {loginError && (
+                    <div className={styles.loginError}>
+                        {loginError}
+                    </div>
+                )}
+
+                <button onClick={onGoHome} className={styles.backBtn}>
+                    ← Powrót do strony głównej
+                </button>
+            </div>
+        </div>
+    );
+}
+
+function OrderStatusSelect({ value, onChange }) {
+    return (
+        <select value={value} onChange={onChange} className={styles.statusSelect}>
+            {Object.entries(ORDER_STATUSES).map(([key, status]) => (
+                <option key={key} value={key}>{status.label.replace(/^[^\w]*\s/, '')}</option>
+            ))}
+        </select>
+    );
+}
+
+function DeliveryInfo({ order }) {
+    return (
+        <div className={styles.delivery}>
+            <div className={styles.deliveryMethod}>
+                {DELIVERY_METHOD_LABELS[order.delivery_method]}
+            </div>
+            {order.delivery_method === 'parcel' && order.parcel_locker && (
+                <div className={styles.deliveryDetails}>
+                    {order.parcel_locker}
+                </div>
+            )}
+            {order.delivery_method === 'courier' && (
+                <div className={styles.deliveryDetails}>
+                    {order.street}, {order.zip} {order.city}
+                </div>
+            )}
+            {order.delivery_method === 'pickup' && (
+                <div className={styles.deliveryDetails}>
+                    {PICKUP_LOCATIONS[order.pickup_location] || 'Odbiór osobisty'}
+                </div>
+            )}
+        </div>
+    );
+}
+
+function PriceInfo({ order }) {
+    return (
+        <div className={styles.prices}>
+            <div className={styles.bookPrice}>
+                {parseFloat(order.book_price || 0).toFixed(2)} zł
+            </div>
+            <div className={styles.deliveryPrice}>
+                {parseFloat(order.delivery_price || 0).toFixed(2)} zł
+            </div>
+            <div className={styles.totalPrice}>
+                {parseFloat(order.total_price || 0).toFixed(2)} zł
+            </div>
+        </div>
+    );
+}
+
+function StatusBadge({ status }) {
+    return (
+        <span
+            className={styles.statusBadge}
+            style={{ backgroundColor: getStatusColor(status) }}
+        >
+            {getStatusLabel(status)}
+        </span>
+    );
+}
+
 export function AdminPanel() {
-    const [orders, setOrders] = useState([]);
-    const [loading, setLoading] = useState(true);
-    const [filter, setFilter] = useState('all');
+    const {
+        isAuthenticated,
+        isLoading: authLoading,
+        passwordInput,
+        loginError,
+        handleLogin,
+        handleLogout,
+        updatePassword
+    } = useAuth();
+
+    const {
+        orders,
+        loading: ordersLoading,
+        filter,
+        changeFilter,
+        refreshOrders,
+        updateOrderStatus
+    } = useOrders();
+
+    const stats = useOrderStats(orders);
     const [expandedOrder, setExpandedOrder] = useState(null);
 
-    // === Obsługa logowania ===
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [passwordInput, setPasswordInput] = useState('');
-    const [loginError, setLoginError] = useState('');
-
-    // Sprawdź hasło - BEZPIECZNE z zmienną środowiskową
-    const handleLogin = (e) => {
-        e.preventDefault();
-
-        const correctPassword = 'UknutaMagia2025!';
-
-        if (passwordInput === correctPassword) {
-            setIsAuthenticated(true);
-            setLoginError('');
-            localStorage.setItem('admin_authenticated', 'true');
-        } else {
-            setLoginError('Nieprawidłowe hasło');
-            setPasswordInput('');
-        }
-    };
-
-    // Wyloguj
-    const handleLogout = () => {
-        setIsAuthenticated(false);
-        localStorage.removeItem('admin_authenticated');
-    };
-
-    // Sprawdź czy już zalogowany (przy odświeżeniu strony)
-    useEffect(() => {
-        const isLoggedIn = localStorage.getItem('admin_authenticated');
-        if (isLoggedIn === 'true') {
-            setIsAuthenticated(true);
-        }
-    }, []);
-
-    // === KONIEC: Obsługa logowania ===
-
-    // Pobierz zamówienia z bazy
-    const fetchOrders = async () => {
-        try {
-            let query = supabase
-                .from('orders')
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (filter !== 'all') {
-                query = query.eq('status', filter);
-            }
-
-            const { data, error } = await query;
-
-            if (error) {
-                console.error('Błąd pobierania zamówień:', error);
-                return;
-            }
-
-            setOrders(data || []);
-        } catch (error) {
-            console.error('Błąd:', error);
-        } finally {
-            setLoading(false);
-        }
-    };
-
-    // Aktualizuj status zamówienia
-    const updateOrderStatus = async (orderId, newStatus) => {
-        try {
-            const { error } = await supabase
-                .from('orders')
-                .update({ status: newStatus })
-                .eq('id', orderId);
-
-            if (error) {
-                console.error('Błąd aktualizacji:', error);
-                alert('Błąd aktualizacji statusu');
-                return;
-            }
-
-            // Odśwież listę zamówień
-            fetchOrders();
-        } catch (error) {
-            console.error('Błąd:', error);
-        }
-    };
-
-    // Przełącz rozwijanie zamówienia
-    const toggleExpanded = (orderId) => {
-        setExpandedOrder(expandedOrder === orderId ? null : orderId);
-    };
-
-    // Nawigacja
     const goToHomePage = () => {
         window.location.href = '/';
     };
 
-    useEffect(() => {
-        if (isAuthenticated) {
-            fetchOrders();
+    const toggleExpanded = (orderId) => {
+        setExpandedOrder(expandedOrder === orderId ? null : orderId);
+    };
+
+    const handleStatusChange = async (orderId, newStatus) => {
+        const success = await updateOrderStatus(orderId, newStatus);
+        if (!success) {
+            alert('Błąd aktualizacji statusu');
         }
-    }, [filter, isAuthenticated]);
-
-    const statusLabels = {
-        'awaiting_payment': '⏳ Złożone',
-        'paid': '💰 Opłacone',
-        'shipped': '📦 Wysłane',
-        'delivered': '✅ Dostarczone',
-        'cancelled': '❌ Anulowane'
     };
 
-    const deliveryMethodLabels = {
-        'pickup': '🏠 Odbiór osobisty',
-        'parcel': '📦 Paczkomat',
-        'courier': '🚚 Kurier'
-    };
+    if (authLoading) {
+        return <div className={styles.loading}>Ładowanie...</div>;
+    }
 
-    const getStatusColor = (status) => {
-        const colors = {
-            'awaiting_payment': '#f59e0b',
-            'paid': '#10b981',
-            'shipped': '#06b6d4',
-            'delivered': '#059669',
-            'cancelled': '#ef4444'
-        };
-        return colors[status] || '#6b7280';
-    };
-
-    // === Ekran logowania ===
     if (!isAuthenticated) {
         return (
-            <div className={styles.loginContainer}>
-                <div className={styles.loginBox}>
-                    <h2>🔐 Panel Administracyjny</h2>
-                    <p>Wprowadź hasło aby uzyskać dostęp</p>
-
-                    <form onSubmit={handleLogin} className={styles.loginForm}>
-                        <input
-                            type="password"
-                            placeholder="Hasło"
-                            value={passwordInput}
-                            onChange={(e) => setPasswordInput(e.target.value)}
-                            className={styles.passwordInput}
-                            autoFocus
-                        />
-                        <button type="submit" className={styles.loginBtn}>
-                            Zaloguj się
-                        </button>
-                    </form>
-
-                    {loginError && (
-                        <div className={styles.loginError}>
-                            ❌ {loginError}
-                        </div>
-                    )}
-
-                    <button onClick={goToHomePage} className={styles.backBtn}>
-                        ← Powrót do strony głównej
-                    </button>
-                </div>
-            </div>
+            <LoginScreen
+                onLogin={handleLogin}
+                passwordInput={passwordInput}
+                onPasswordChange={updatePassword}
+                loginError={loginError}
+                onGoHome={goToHomePage}
+            />
         );
     }
 
-    // Statystyki - wykluczamy anulowane zamówienia z obliczeń przychodów
-    const totalOrders = orders.length;
-    const paidOrders = orders.filter(order => ['paid', 'shipped', 'delivered'].includes(order.status));
-    const pendingOrders = orders.filter(order => order.status === 'awaiting_payment').length;
-    const cancelledOrders = orders.filter(order => order.status === 'cancelled').length;
-
-    // Przychody z książek (bez kosztów dostawy) - tylko z opłaconych zamówień
-    const bookRevenue = paidOrders.reduce((sum, order) => sum + (parseFloat(order.book_price) || 0), 0);
-
-    // Koszty dostawy (które trzeba pokryć) - tylko z opłaconych zamówień
-    const deliveryCosts = paidOrders.reduce((sum, order) => sum + (parseFloat(order.delivery_price) || 0), 0);
-
-    // Liczba sprzedanych książek - tylko opłacone
-    const booksSold = paidOrders.length;
-
-    if (loading) {
+    if (ordersLoading) {
         return <div className={styles.loading}>Ładowanie zamówień...</div>;
     }
 
@@ -211,45 +181,45 @@ export function AdminPanel() {
             <div className={styles.filters}>
                 <label>
                     Filtruj po statusie:
-                    <select value={filter} onChange={(e) => setFilter(e.target.value)}>
+                    <select value={filter} onChange={(e) => changeFilter(e.target.value)}>
                         <option value="all">Wszystkie</option>
-                        <option value="awaiting_payment">Złożone</option>
-                        <option value="paid">Opłacone</option>
-                        <option value="shipped">Wysłane</option>
-                        <option value="delivered">Dostarczone</option>
-                        <option value="cancelled">Anulowane</option>
+                        {Object.entries(ORDER_STATUSES).map(([key, status]) => (
+                            <option key={key} value={key}>
+                                {status.label.replace(/^[^\w]*\s/, '')}
+                            </option>
+                        ))}
                     </select>
                 </label>
-                <button onClick={fetchOrders} className={styles.refreshBtn}>
-                    🔄 Odśwież
+                <button onClick={refreshOrders} className={styles.refreshBtn}>
+                    Odśwież
                 </button>
             </div>
 
             {/* Statystyki */}
             <div className={styles.stats}>
                 <div className={styles.stat}>
-                    <span>📚 Książek sprzedanych</span>
-                    <strong>{booksSold}</strong>
+                    <span>Książek sprzedanych</span>
+                    <strong>{stats.booksSold}</strong>
                 </div>
                 <div className={styles.stat}>
-                    <span>⏳ Oczekuje płatności</span>
-                    <strong>{pendingOrders}</strong>
+                    <span>Oczekuje płatności</span>
+                    <strong>{stats.pendingOrders}</strong>
                 </div>
                 <div className={styles.stat}>
-                    <span>❌ Anulowane</span>
-                    <strong>{cancelledOrders}</strong>
+                    <span>Anulowane</span>
+                    <strong>{stats.cancelledOrders}</strong>
                 </div>
                 <div className={styles.stat}>
-                    <span>💰 Przychód z książek</span>
-                    <strong>{bookRevenue.toFixed(2)} zł</strong>
+                    <span>Przychód z książek</span>
+                    <strong>{stats.bookRevenue.toFixed(2)} zł</strong>
                 </div>
                 <div className={styles.stat}>
-                    <span>🚚 Koszty dostaw</span>
-                    <strong>{deliveryCosts.toFixed(2)} zł</strong>
+                    <span>Koszty dostaw</span>
+                    <strong>{stats.deliveryCosts.toFixed(2)} zł</strong>
                 </div>
             </div>
 
-            {/* Lista zamówień - Desktop: tabela, Mobile: karty */}
+            {/* Lista zamówień */}
             <div className={styles.ordersSection}>
                 {orders.length === 0 ? (
                     <div className={styles.emptyState}>
@@ -277,83 +247,26 @@ export function AdminPanel() {
                                 {orders.map((order) => (
                                     <tr key={order.id}>
                                         <td>#{order.id}</td>
-                                        <td>
-                                            {new Date(order.created_at).toLocaleDateString('pl-PL', {
-                                                year: 'numeric',
-                                                month: '2-digit',
-                                                day: '2-digit',
-                                                hour: '2-digit',
-                                                minute: '2-digit'
-                                            })}
-                                        </td>
-                                        <td>
-                                            <strong>{order.name}</strong>
-                                        </td>
+                                        <td>{formatDateTime(order.created_at)}</td>
+                                        <td><strong>{order.name}</strong></td>
                                         <td>
                                             <div className={styles.contact}>
                                                 <a href={`mailto:${order.email}`} className={styles.contactLink}>
-                                                    📧 {order.email}
+                                                    {order.email}
                                                 </a>
                                                 <a href={`tel:${order.phone}`} className={styles.contactLink}>
-                                                    📞 {order.phone}
+                                                    {order.phone}
                                                 </a>
                                             </div>
                                         </td>
+                                        <td><DeliveryInfo order={order} /></td>
+                                        <td><PriceInfo order={order} /></td>
+                                        <td><StatusBadge status={order.status} /></td>
                                         <td>
-                                            <div className={styles.delivery}>
-                                                <div className={styles.deliveryMethod}>
-                                                    {deliveryMethodLabels[order.delivery_method]}
-                                                </div>
-                                                {order.delivery_method === 'parcel' && order.parcel_locker && (
-                                                    <div className={styles.deliveryDetails}>
-                                                        {order.parcel_locker}
-                                                    </div>
-                                                )}
-                                                {order.delivery_method === 'courier' && (
-                                                    <div className={styles.deliveryDetails}>
-                                                        {order.street}, {order.zip} {order.city}
-                                                    </div>
-                                                )}
-                                                {order.delivery_method === 'pickup' && (
-                                                    <div className={styles.deliveryDetails}>
-                                                        Częstochowa
-                                                    </div>
-                                                )}
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <div className={styles.prices}>
-                                                <div className={styles.bookPrice}>
-                                                    📚 {parseFloat(order.book_price || 0).toFixed(2)} zł
-                                                </div>
-                                                <div className={styles.deliveryPrice}>
-                                                    🚚 {parseFloat(order.delivery_price || 0).toFixed(2)} zł
-                                                </div>
-                                                <div className={styles.totalPrice}>
-                                                    💰 {parseFloat(order.total_price || 0).toFixed(2)} zł
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span
-                                                className={styles.statusBadge}
-                                                style={{ backgroundColor: getStatusColor(order.status) }}
-                                            >
-                                                {statusLabels[order.status] || order.status}
-                                            </span>
-                                        </td>
-                                        <td>
-                                            <select
+                                            <OrderStatusSelect
                                                 value={order.status}
-                                                onChange={(e) => updateOrderStatus(order.id, e.target.value)}
-                                                className={styles.statusSelect}
-                                            >
-                                                <option value="awaiting_payment">Złożone</option>
-                                                <option value="paid">Opłacone</option>
-                                                <option value="shipped">Wysłane</option>
-                                                <option value="delivered">Dostarczone</option>
-                                                <option value="cancelled">Anulowane</option>
-                                            </select>
+                                                onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                                            />
                                         </td>
                                     </tr>
                                 ))}
@@ -372,15 +285,12 @@ export function AdminPanel() {
                                         <div className={styles.cardMain}>
                                             <div className={styles.cardId}>#{order.id}</div>
                                             <div className={styles.cardCustomer}>{order.name}</div>
-                                            <div className={styles.cardPrice}>{parseFloat(order.total_price || 0).toFixed(2)} zł</div>
+                                            <div className={styles.cardPrice}>
+                                                {parseFloat(order.total_price || 0).toFixed(2)} zł
+                                            </div>
                                         </div>
                                         <div className={styles.cardMeta}>
-                                            <span
-                                                className={styles.statusBadge}
-                                                style={{ backgroundColor: getStatusColor(order.status) }}
-                                            >
-                                                {statusLabels[order.status]}
-                                            </span>
+                                            <StatusBadge status={order.status} />
                                             <button className={styles.expandBtn}>
                                                 {expandedOrder === order.id ? '▲' : '▼'}
                                             </button>
@@ -390,78 +300,41 @@ export function AdminPanel() {
                                     {expandedOrder === order.id && (
                                         <div className={styles.cardDetails}>
                                             <div className={styles.detailRow}>
-                                                <span>📅 Data:</span>
-                                                <span>
-                                                    {new Date(order.created_at).toLocaleDateString('pl-PL', {
-                                                        year: 'numeric',
-                                                        month: '2-digit',
-                                                        day: '2-digit',
-                                                        hour: '2-digit',
-                                                        minute: '2-digit'
-                                                    })}
-                                                </span>
+                                                <span>Data:</span>
+                                                <span>{formatDateTime(order.created_at)}</span>
                                             </div>
-
                                             <div className={styles.detailRow}>
-                                                <span>📧 Email:</span>
+                                                <span>Email:</span>
                                                 <a href={`mailto:${order.email}`} className={styles.contactLink}>
                                                     {order.email}
                                                 </a>
                                             </div>
-
                                             <div className={styles.detailRow}>
-                                                <span>📞 Telefon:</span>
+                                                <span>Telefon:</span>
                                                 <a href={`tel:${order.phone}`} className={styles.contactLink}>
                                                     {order.phone}
                                                 </a>
                                             </div>
-
                                             <div className={styles.detailRow}>
-                                                <span>🚚 Dostawa:</span>
-                                                <div>
-                                                    <div>{deliveryMethodLabels[order.delivery_method]}</div>
-                                                    {order.delivery_method === 'parcel' && order.parcel_locker && (
-                                                        <div className={styles.deliveryDetails}>
-                                                            Paczkomat: {order.parcel_locker}
-                                                        </div>
-                                                    )}
-                                                    {order.delivery_method === 'courier' && (
-                                                        <div className={styles.deliveryDetails}>
-                                                            {order.street}, {order.zip} {order.city}
-                                                        </div>
-                                                    )}
-                                                    {order.delivery_method === 'pickup' && (
-                                                        <div className={styles.deliveryDetails}>
-                                                            Częstochowa
-                                                        </div>
-                                                    )}
-                                                </div>
+                                                <span>Dostawa:</span>
+                                                <DeliveryInfo order={order} />
                                             </div>
-
                                             <div className={styles.detailRow}>
-                                                <span>💰 Ceny:</span>
+                                                <span>Ceny:</span>
                                                 <div className={styles.priceBreakdown}>
-                                                    <div>📚 Książka: {parseFloat(order.book_price || 0).toFixed(2)} zł</div>
-                                                    <div>🚚 Dostawa: {parseFloat(order.delivery_price || 0).toFixed(2)} zł</div>
+                                                    <div>Książka: {parseFloat(order.book_price || 0).toFixed(2)} zł</div>
+                                                    <div>Dostawa: {parseFloat(order.delivery_price || 0).toFixed(2)} zł</div>
                                                     <div className={styles.totalMobile}>
                                                         <strong>Razem: {parseFloat(order.total_price || 0).toFixed(2)} zł</strong>
                                                     </div>
                                                 </div>
                                             </div>
-
                                             <div className={styles.detailRow}>
-                                                <span>🔄 Zmień status:</span>
-                                                <select
+                                                <span>Zmień status:</span>
+                                                <OrderStatusSelect
                                                     value={order.status}
-                                                    onChange={(e) => updateOrderStatus(order.id, e.target.value)}
-                                                    className={styles.statusSelect}
-                                                >
-                                                    <option value="awaiting_payment">Złożone</option>
-                                                    <option value="paid">Opłacone</option>
-                                                    <option value="shipped">Wysłane</option>
-                                                    <option value="delivered">Dostarczone</option>
-                                                    <option value="cancelled">Anulowane</option>
-                                                </select>
+                                                    onChange={(e) => handleStatusChange(order.id, e.target.value)}
+                                                />
                                             </div>
                                         </div>
                                     )}

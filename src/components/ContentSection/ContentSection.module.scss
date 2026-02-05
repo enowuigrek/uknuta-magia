@@ -8,8 +8,9 @@
     margin-bottom: $spacing-lg;
     box-sizing: border-box;
     width: 100%;
-    max-width: 100vw; // Maksymalna szerokość to viewport
-    overflow-x: hidden; // Zapobiega overflow na boki
+    max-width: 100vw;
+    // overflow-x: hidden usunięte - łamie position: sticky na dzieciach
+    overflow: visible;
 }
 
 .sectionImage {
@@ -19,14 +20,37 @@
     height: auto;
     padding: $spacing-md;
     box-sizing: border-box;
-    object-fit: cover;
+    object-fit: contain;
     max-width: 100%;
+    max-height: calc(100vh - 100px);
+}
+
+// Sekcja ze sticky image - zdjęcie przyklejone podczas scrollowania tekstu
+.stickySection {
+    align-items: flex-start;
+}
+
+.stickyImage {
+    position: sticky;
+    top: 20px;
+    align-self: flex-start;
+    max-height: calc(100vh - 40px);
+    object-fit: contain;
+    object-position: top center;
+    border-radius: 8px;
+}
+
+// Sticky tekst - gdy tekst jest krótszy niż obraz (np. sekcja O książce)
+.stickyText {
+    position: sticky;
+    top: 80px;
+    align-self: flex-start;
 }
 
 @media (width <= $breakpoint-md) {
     .contentSection {
         flex-direction: column;
-        padding: 0 30px 0 30px; // Zwiększone padding żeby pasowało do SectionHeader
+        padding: 0 30px 0 30px;
         margin-bottom: 40px;
     }
 
@@ -34,5 +58,12 @@
         width: 100%;
         padding: 0;
         margin-bottom: 20px;
+    }
+
+    // Na mobile sticky nie działa dobrze z column layout
+    .stickyImage,
+    .stickyText {
+        position: relative;
+        top: auto;
     }
 }

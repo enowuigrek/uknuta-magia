@@ -9,12 +9,13 @@
 
     h1 {
         position: relative;
-        font-size: 48px;
+        font-size: 36px;
         font-family: $font-main;
         color: $gold;
-        margin-bottom: 1rem;
+        margin-bottom: 1.25rem;
         word-wrap: break-word;
         overflow-wrap: break-word;
+        letter-spacing: 0.02em;
 
         &::before {
             content: '';
@@ -42,11 +43,12 @@
 
     p {
         margin-top: 1rem;
-        font-size: 28px;
+        font-size: 22px;
         color: $text-light;
         word-wrap: break-word;
         overflow-wrap: break-word;
-        line-height: 1.4;
+        line-height: 1.7;
+        letter-spacing: 0.01em;
     }
 
     @media (width <= $breakpoint-md) {
@@ -62,9 +64,9 @@
         }
 
         p {
-            font-size: 21px;
+            font-size: 17px;
             margin: 0;
-            line-height: 1.5;
+            line-height: 1.65;
         }
     }
 }

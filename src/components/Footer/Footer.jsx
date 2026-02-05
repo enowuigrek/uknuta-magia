@@ -14,10 +14,6 @@ export function Footer() {
                     </a>
                 </div>
                 <a href="mailto:uknutamagia@gmail.com">uknutamagia@gmail.com</a>
-                <p>
-                    Projekt i wykonanie:
-                    <a href="mailto:enowuigrek@gmail.com"> enowuigrek</a>
-                </p>
             </div>
 
             <div className={styles.footerCenter}>
@@ -26,6 +22,9 @@ export function Footer() {
 
             <div className={styles.footerRight}>
                 <p>© 2025 Uknuta Magia</p>
+                <p className={styles.credits}>
+                    <a href="https://lukasznowak.dev" target="_blank" rel="noopener noreferrer">lukasznowak.dev</a>
+                </p>
             </div>
         </footer>
     );

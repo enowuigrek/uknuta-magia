@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import {author, bookDescription} from "./content/book.js";
 import bookCover from './assets/book-cover.svg';
@@ -8,10 +7,7 @@ import {Header} from './components/Header/Header.jsx'
 import {ContentSection} from "./components/ContentSection/ContentSection.jsx";
 import {Footer} from "./components/Footer/Footer.jsx";
 import {OrderForm} from "./components/OrderForm/OrderForm.jsx";
-import {TeaserContent} from "./components/TeaserContent/TeaserContent.jsx";
 import {AdminPanel} from "./components/AdminPanel/AdminPanel.jsx";
-import {Section} from "lucide-react";
-import {SectionHeader} from "@/components/SectionHeader/SectionHeader.jsx";
 import {CookieBanner} from "./components/CookieBanner/CookieBanner.jsx";
 // import BookCharacterChat from "@/components/Chat/BookCharacterChat.jsx";
 
@@ -30,6 +26,7 @@ function HomePage() {
             <ContentSection
                 id="book"
                 isPhotoLeft
+                stickyText
                 img={bookCover}
                 header={bookDescription.title}
                 text={bookDescription.description}
@@ -37,14 +34,12 @@ function HomePage() {
             />
             <ContentSection
                 id="author"
+                stickyImage
                 img={authorPhoto}
                 header={author.title}
                 text={author.description}
                 alt={'zdjęcie autora'}
             />
-            <ContentSection text={author.descriptionContinue}/>
-            {/*<BookCharacterChat/>*/}
-            {/*<TeaserContent />*/}
             <Footer />
         </>
     );
