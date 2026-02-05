@@ -1,133 +1,119 @@
 <!doctype html>
 <html lang="pl">
-<head>
-  <meta charset="UTF-8" />
+  <head>
+    <meta charset="UTF-8" />
 
-  <!-- Podstawowe Meta Tags -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="theme-color" content="#13192E" />
-  <meta name="description" content="Kup książkę dziecięcą 'Uknuta Magia' Adriana Knuta. Magiczna opowieść o wróżkach i przygodach. Dostawa w całej Polsce - odbiór osobisty, paczkomat, kurier." />
-  <meta name="keywords" content="książka dziecięca, Uknuta Magia, Adrian Knut, książki dla dzieci, literatura dziecięca, bajki, opowiadania, sklep książkowy, Częstochowa" />
-  <meta name="author" content="Adrian Knut" />
-  <meta name="robots" content="index, follow" />
-  <meta name="language" content="pl" />
+    <!-- Podstawowe Meta Tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#13192E" />
+    <meta name="description"
+          content="Kup książkę dla dzieci 'Uknuta Magia' Adriana Knuta. Magiczna opowieść o wróżkach i przygodach. Dostawa w całej Polsce - odbiór osobisty, paczkomat, kurier." />
+    <meta name="keywords"
+          content="książka dla młodych, Uknuta Magia, Adrian Knut, książki dla dzieci, literatura dziecięca, bajki, opowiadania, sklep książkowy, Częstochowa" />
+    <meta name="author" content="Adrian Knut" />
+    <meta name="robots" content="index, follow" />
+    <meta name="language" content="pl" />
 
-  <!-- Open Graph / Facebook -->
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://uknutamagia.pl" />
-  <meta property="og:title" content="Uknuta Magia - Książka dziecięca Adriana Knuta" />
-  <meta property="og:description" content="Magiczna opowieść o wróżkach i przygodach. Kup książkę 'Uknuta Magia' z dostawą w całej Polsce." />
-  <meta property="og:image" content="https://uknutamagia.pl/cover-small.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:locale" content="pl_PL" />
-  <meta property="og:site_name" content="Uknuta Magia" />
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://uknutamagia.pl" />
+    <meta property="og:title" content="Uknuta Magia - Książka dla dzieci i nie tylko Adrian Knut" />
+    <meta property="og:description" content="Magiczna opowieść o wróżkach i przygodach. Kup książkę 'Uknuta Magia' z dostawą w całej Polsce." />
+    <meta property="og:image" content="https://uknutamagia.pl/cover-small.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="pl_PL" />
+    <meta property="og:site_name" content="Uknuta Magia" />
 
-  <!-- Twitter Card -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:url" content="https://uknutamagia.pl" />
-  <meta name="twitter:title" content="Uknuta Magia - Książka dziecięca Adriana Knuta" />
-  <meta name="twitter:description" content="Magiczna opowieść o wróżkach i przygodach. Kup książkę 'Uknuta Magia' z dostawą w całej Polsce." />
-  <meta name="twitter:image" content="https://uknutamagia.pl/cover-small.png" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://uknutamagia.pl" />
+    <meta name="twitter:title" content="Uknuta Magia - Książka dla dzieci Adrian Knut" />
+    <meta name="twitter:description" content="Magiczna opowieść o wróżkach i przygodach. Kup książkę 'Uknuta Magia' z dostawą w całej Polsce." />
+    <meta name="twitter:image" content="https://uknutamagia.pl/cover-small.png" />
 
-  <!-- Canonical URL -->
-  <link rel="canonical" href="https://uknutamagia.pl" />
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://uknutamagia.pl" />
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="apple-touch-icon" href="/favicon.svg" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
 
-  <!-- Preconnect dla wydajności -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preconnect" href="https://fksjhpfgxodrdawjfyzt.supabase.co">
+    <!-- Preconnect dla wydajności -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://fksjhpfgxodrdawjfyzt.supabase.co">
 
-  <!-- Fonty -->
-  <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+    <!-- Fonty -->
+    <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 
-  <!-- InPost Styles -->
-  <link rel="stylesheet" href="https://geowidget.inpost.pl/inpost-geowidget.css"/>
+    <!-- InPost Styles -->
+    <link rel="stylesheet" href="https://geowidget.inpost.pl/inpost-geowidget.css"/>
 
-  <!-- JSON-LD Structured Data -->
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "Book",
-      "name": "Uknuta Magia",
-      "author": {
-        "@type": "Person",
-        "name": "Adrian Knut"
-      },
-      "genre": "Literatura dziecięca",
-      "inLanguage": "pl",
-      "publisher": {
-        "@type": "Organization",
-        "name": "Uknuta Magia"
-      },
-      "description": "Magiczna opowieść o wróżkach i przygodach dla dzieci. W magicznym Czarogrodzie Wróżka Zębuszka staje przed trudnym wyborem przekazania swojej roli ludzkiej dziewczynce.",
-      "image": "https://uknutamagia.pl/cover-small.png",
-      "offers": {
-        "@type": "Offer",
-        "price": "49.99",
-        "priceCurrency": "PLN",
-        "availability": "https://schema.org/InStock",
-        "seller": {
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "Book",
+        "name": "Uknuta Magia",
+        "author": {
+          "@type": "Person",
+          "name": "Adrian Knut"
+        },
+        "genre": "Literatura dziecięca",
+        "inLanguage": "pl",
+        "publisher": {
           "@type": "Organization",
           "name": "Uknuta Magia"
+        },
+        "description": "Magiczna opowieść o wróżkach i przygodach dla dzieci. W magicznym Czarogrodzie Wróżka Zębuszka staje przed trudnym wyborem przekazania swojej roli ludzkiej dziewczynce.",
+        "image": "https://uknutamagia.pl/cover-small.png",
+        "offers": {
+          "@type": "Offer",
+          "price": "49.99",
+          "priceCurrency": "PLN",
+          "availability": "https://schema.org/InStock",
+          "seller": {
+            "@type": "Organization",
+            "name": "Uknuta Magia"
+          }
         }
       }
-    }
-  </script>
+    </script>
 
-  <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Uknuta Magia",
-      "url": "https://uknutamagia.pl",
-      "description": "Sklep z książką dziecięcą 'Uknuta Magia' Adriana Knuta",
-      "publisher": {
-        "@type": "Organization",
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
         "name": "Uknuta Magia",
         "url": "https://uknutamagia.pl",
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "telephone": "+48-883-348-381",
-          "contactType": "customer service",
-          "availableLanguage": "Polish"
-        },
-        "address": {
-          "@type": "PostalAddress",
-          "addressLocality": "Częstochowa",
-          "addressCountry": "PL"
-        },
-        "sameAs": [
-          "https://www.instagram.com/uknuta_magia/",
-          "https://www.facebook.com/profile.php?id=61575505817796"
-        ]
+        "description": "Sklep z książką dla dzieci 'Uknuta Magia' Adriana Knuta",
+        "publisher": {
+          "@type": "Organization",
+          "name": "Uknuta Magia",
+          "url": "https://uknutamagia.pl",
+          "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+48-883-348-381",
+            "contactType": "customer service",
+            "availableLanguage": "Polish"
+          },
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "Częstochowa",
+            "addressCountry": "PL"
+          },
+          "sameAs": [
+            "https://www.instagram.com/uknuta_magia/",
+            "https://www.facebook.com/profile.php?id=61575505817796"
+          ]
+        }
       }
-    }
-  </script>
-
-  <title>Uknuta Magia - Książka dziecięca Adriana Knuta | Sklep online</title>
-</head>
-<body>
-<div id="root"></div>
-<script type="module" src="/src/main.jsx"></script>
-<script src='https://geowidget.inpost.pl/inpost-geowidget.js' defer></script>
-<script>
-  function handleInPostSelection(event) {
-    // Ta funkcja zostanie wywołana gdy użytkownik wybierze paczkomat
-    const selectedPoint = event.detail;
-
-    // Wywołujemy event dla React
-    window.dispatchEvent(new CustomEvent('inpostPointSelected', {
-      detail: selectedPoint
-    }));
-  }
-
-  // Listener dla eventów z InPost
-  document.addEventListener('onpointselect', handleInPostSelection);
-</script>
-</body>
+    </script>
+    <title>Uknuta Magia - Książka dla dzieci | Adrian Knut | Sklep online</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
