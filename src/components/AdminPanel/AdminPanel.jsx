@@ -239,6 +239,7 @@ export function AdminPanel() {
                                     <th>Data</th>
                                     <th>Klient</th>
                                     <th>Kontakt</th>
+                                    <th>Ilość</th>
                                     <th>Dostawa</th>
                                     <th>Ceny</th>
                                     <th>Status</th>
@@ -261,6 +262,7 @@ export function AdminPanel() {
                                                 </a>
                                             </div>
                                         </td>
+                                        <td className={styles.quantityCell}>{order.quantity || 1}</td>
                                         <td><DeliveryInfo order={order} /></td>
                                         <td><PriceInfo order={order} /></td>
                                         <td><StatusBadge status={order.status} /></td>
@@ -304,6 +306,10 @@ export function AdminPanel() {
                                             <div className={styles.detailRow}>
                                                 <span>Data:</span>
                                                 <span>{formatDateTime(order.created_at)}</span>
+                                            </div>
+                                            <div className={styles.detailRow}>
+                                                <span>Ilość książek:</span>
+                                                <span className={styles.quantityValue}>{order.quantity || 1}</span>
                                             </div>
                                             <div className={styles.detailRow}>
                                                 <span>Email:</span>
