@@ -5,7 +5,8 @@ import { prepareOrderPrices } from './priceCalculations.js';
 
 export const saveOrderToDatabase = async (orderData) => {
     try {
-        const prices = prepareOrderPrices(orderData.deliveryMethod);
+        const quantity = orderData.quantity || 1;
+        const prices = prepareOrderPrices(orderData.deliveryMethod, quantity);
 
         const orderRecord = {
             name: orderData.name,

@@ -6,9 +6,14 @@ export const calculateDeliveryPrice = (deliveryMethod) => {
     return DELIVERY_PRICES[deliveryMethod] || 0;
 };
 
-export const calculateTotalPrice = (deliveryMethod) => {
+export const calculateBooksPrice = (quantity = 1) => {
+    return BOOK_PRICE * quantity;
+};
+
+export const calculateTotalPrice = (deliveryMethod, quantity = 1) => {
     const deliveryPrice = calculateDeliveryPrice(deliveryMethod);
-    return BOOK_PRICE + deliveryPrice;
+    const booksPrice = calculateBooksPrice(quantity);
+    return booksPrice + deliveryPrice;
 };
 
 export const formatPrice = (price) => {
@@ -34,17 +39,22 @@ export const calculateOrderStats = (orders) => {
     ).length;
 
     // Przychody z książek (bez kosztów dostawy) - tylko z opłaconych zamówień
-    const bookRevenue = paidOrders.reduce((sum, order) =>
-        sum + (parseFloat(order.book_price) || 0), 0
-    );
+    // Używamy books_total_price jeśli dostępne, w przeciwnym razie book_price * quantity
+    const bookRevenue = paidOrders.reduce((sum, order) => {
+        const booksTotal = parseFloat(order.books_total_price) ||
+                          (parseFloat(order.book_price) || 0) * (parseInt(order.quantity) || 1);
+        return sum + booksTotal;
+    }, 0);
 
     // Koszty dostawy (które trzeba pokryć) - tylko z opłaconych zamówień
     const deliveryCosts = paidOrders.reduce((sum, order) =>
         sum + (parseFloat(order.delivery_price) || 0), 0
     );
 
-    // Liczba sprzedanych książek - tylko opłacone
-    const booksSold = paidOrders.length;
+    // Liczba sprzedanych książek - tylko opłacone (uwzględnia ilość w zamówieniu)
+    const booksSold = paidOrders.reduce((sum, order) =>
+        sum + (parseInt(order.quantity) || 1), 0
+    );
 
     // Całkowity przychód
     const totalRevenue = paidOrders.reduce((sum, order) =>
@@ -66,14 +76,19 @@ export const calculateOrderStats = (orders) => {
 // === PODSUMOWANIE ZAMÓWIENIA ===
 
 export const createOrderSummary = (formData) => {
+    const quantity = formData.quantity || 1;
+    const booksPrice = calculateBooksPrice(quantity);
     const deliveryPrice = calculateDeliveryPrice(formData.deliveryMethod);
-    const totalPrice = calculateTotalPrice(formData.deliveryMethod);
+    const totalPrice = calculateTotalPrice(formData.deliveryMethod, quantity);
 
     return {
+        quantity,
         bookPrice: BOOK_PRICE,
+        booksPrice,
         deliveryPrice,
         totalPrice,
         formattedBookPrice: formatPrice(BOOK_PRICE),
+        formattedBooksPrice: formatPrice(booksPrice),
         formattedDeliveryPrice: formatPrice(deliveryPrice),
         formattedTotalPrice: formatPrice(totalPrice)
     };
@@ -81,11 +96,13 @@ export const createOrderSummary = (formData) => {
 
 // === KONWERSJA CEN DO BAZY DANYCH ===
 
-export const prepareOrderPrices = (deliveryMethod) => {
+export const prepareOrderPrices = (deliveryMethod, quantity = 1) => {
     return {
+        quantity,
         book_price: BOOK_PRICE,
+        books_total_price: calculateBooksPrice(quantity),
         delivery_price: calculateDeliveryPrice(deliveryMethod),
-        total_price: calculateTotalPrice(deliveryMethod)
+        total_price: calculateTotalPrice(deliveryMethod, quantity)
     };
 };
 

@@ -76,10 +76,12 @@ function DeliveryInfo({ order }) {
 }
 
 function PriceInfo({ order }) {
+    const quantity = order.quantity || 1;
     return (
         <div className={styles.prices}>
             <div className={styles.bookPrice}>
-                {parseFloat(order.book_price || 0).toFixed(2)} zł
+                {quantity > 1 && <span className={styles.quantityBadge}>×{quantity}</span>}
+                {parseFloat(order.books_total_price || order.book_price || 0).toFixed(2)} zł
             </div>
             <div className={styles.deliveryPrice}>
                 {parseFloat(order.delivery_price || 0).toFixed(2)} zł
@@ -322,7 +324,9 @@ export function AdminPanel() {
                                             <div className={styles.detailRow}>
                                                 <span>Ceny:</span>
                                                 <div className={styles.priceBreakdown}>
-                                                    <div>Książka: {parseFloat(order.book_price || 0).toFixed(2)} zł</div>
+                                                    <div>
+                                                        Książki{(order.quantity || 1) > 1 && ` (×${order.quantity})`}: {parseFloat(order.books_total_price || order.book_price || 0).toFixed(2)} zł
+                                                    </div>
                                                     <div>Dostawa: {parseFloat(order.delivery_price || 0).toFixed(2)} zł</div>
                                                     <div className={styles.totalMobile}>
                                                         <strong>Razem: {parseFloat(order.total_price || 0).toFixed(2)} zł</strong>

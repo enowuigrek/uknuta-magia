@@ -3,6 +3,8 @@ import {author, bookDescription} from "./content/book.js";
 import bookCover from './assets/book-cover.svg';
 import authorPhoto from './assets/author-photo.jpg';
 import {CursorGlow} from './components/CursorGlow/CursorGlow.jsx'
+import {MagicMist} from './components/MagicMist/MagicMist.jsx'
+import {MagicParticles} from './components/MagicParticles/MagicParticles.jsx'
 import {Header} from './components/Header/Header.jsx'
 import {ContentSection} from "./components/ContentSection/ContentSection.jsx";
 import {Footer} from "./components/Footer/Footer.jsx";
@@ -21,6 +23,8 @@ function HomePage() {
 
     return (
         <>
+            <MagicMist />
+            <MagicParticles />
             <CursorGlow />
             <Header onOrderClick={handleOrderClick} />
             <ContentSection
@@ -53,7 +57,14 @@ function OrderPage() {
         navigate('/');
     };
 
-    return <OrderForm show={true} onBack={handleBackClick} />;
+    return (
+        <>
+            <MagicMist />
+            <MagicParticles />
+            <CursorGlow />
+            <OrderForm show={true} onBack={handleBackClick} />
+        </>
+    );
 }
 
 // Główny komponent App z routingiem

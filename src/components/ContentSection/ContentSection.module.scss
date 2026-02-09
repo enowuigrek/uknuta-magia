@@ -32,11 +32,13 @@
 
 .stickyImage {
     position: sticky;
-    top: 20px;
+    // Centrowanie w pionie: top obliczony tak, żeby środek obrazu był na środku viewportu
+    // Dla obrazu o max-height: 80vh, top = (100vh - 80vh) / 2 = 10vh
+    top: 10vh;
     align-self: flex-start;
-    max-height: calc(100vh - 40px);
+    max-height: 80vh;
     object-fit: contain;
-    object-position: top center;
+    object-position: center;
     border-radius: 8px;
 }
 

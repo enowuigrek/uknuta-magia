@@ -196,13 +196,40 @@ function DeliveryMethodSelector({ formData, handleChange }) {
     );
 }
 
+function QuantitySelector({ quantity, onIncrement, onDecrement }) {
+    return (
+        <div className={styles.quantitySelector}>
+            <span className={styles.quantityLabel}>Ilość:</span>
+            <div className={styles.quantityControls}>
+                <button
+                    type="button"
+                    onClick={onDecrement}
+                    className={styles.quantityButton}
+                    disabled={quantity <= 1}
+                >
+                    −
+                </button>
+                <span className={styles.quantityValue}>{quantity}</span>
+                <button
+                    type="button"
+                    onClick={onIncrement}
+                    className={styles.quantityButton}
+                    disabled={quantity >= 10}
+                >
+                    +
+                </button>
+            </div>
+        </div>
+    );
+}
+
 function OrderSummarySection({ orderSummary }) {
     return (
         <div className={styles.orderSummary}>
             <div className={styles.summaryTitle}>Podsumowanie zamówienia</div>
             <div className={styles.summaryLine}>
-                <span>Książka „Uknuta Magia"</span>
-                <span>{orderSummary.formattedBookPrice}</span>
+                <span>Książka „Uknuta Magia" × {orderSummary.quantity}</span>
+                <span>{orderSummary.formattedBooksPrice}</span>
             </div>
             <div className={styles.summaryLine}>
                 <span>Dostawa</span>
@@ -224,7 +251,9 @@ export function OrderForm() {
         orderSummary,
         handleChange,
         onSubmit,
-        isSubmitting
+        isSubmitting,
+        incrementQuantity,
+        decrementQuantity
     } = useOrderForm();
 
     useEffect(() => {
@@ -263,6 +292,11 @@ export function OrderForm() {
                     <div className={styles.price}>
                         <span className={styles.priceAmount}>{formatPrice(BOOK_PRICE)}</span>
                     </div>
+                    <QuantitySelector
+                        quantity={formData.quantity}
+                        onIncrement={incrementQuantity}
+                        onDecrement={decrementQuantity}
+                    />
                 </div>
             </div>
 

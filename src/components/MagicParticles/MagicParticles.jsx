@@ -1,27 +1,29 @@
 import { useEffect, useRef, useCallback } from 'react';
 import styles from './MagicParticles.module.scss';
 
-const PARTICLE_COUNT = 40;
+const PARTICLE_COUNT = 50;
 const COLORS = [
-    'rgba(226, 194, 117, 0.6)',  // gold
-    'rgba(226, 194, 117, 0.3)',  // gold dim
-    'rgba(50, 151, 196, 0.5)',   // magic glow
-    'rgba(50, 151, 196, 0.25)',  // magic glow dim
-    'rgba(255, 255, 255, 0.4)',  // white sparkle
+    'rgba(226, 194, 117, 0.9)',   // gold bright
+    'rgba(226, 194, 117, 0.6)',   // gold
+    'rgba(255, 255, 255, 0.9)',   // white bright
+    'rgba(255, 255, 255, 0.6)',   // white
+    'rgba(200, 180, 255, 0.7)',   // lavender
+    'rgba(50, 151, 196, 0.6)',    // magic glow
 ];
 
 function createParticle(width, height) {
+    const isLarge = Math.random() > 0.7; // 30% dużych iskier
     return {
         x: Math.random() * width,
         y: Math.random() * height,
-        size: Math.random() * 2.5 + 0.5,
-        speedX: (Math.random() - 0.5) * 0.3,
-        speedY: -Math.random() * 0.4 - 0.1,
-        opacity: Math.random() * 0.7 + 0.1,
-        opacitySpeed: (Math.random() - 0.5) * 0.008,
+        size: isLarge ? Math.random() * 4 + 2 : Math.random() * 2 + 0.5,
+        speedX: (Math.random() - 0.5) * 0.4,
+        speedY: -Math.random() * 0.5 - 0.1,
+        opacity: Math.random() * 0.8 + 0.2,
         color: COLORS[Math.floor(Math.random() * COLORS.length)],
         twinklePhase: Math.random() * Math.PI * 2,
-        twinkleSpeed: Math.random() * 0.03 + 0.01,
+        twinkleSpeed: Math.random() * 0.05 + 0.02,
+        isLarge,
     };
 }
 
@@ -48,7 +50,7 @@ export function MagicParticles() {
 
             // Migotanie
             const twinkle = Math.sin(p.twinklePhase) * 0.5 + 0.5;
-            const currentOpacity = p.opacity * twinkle;
+            const currentOpacity = p.opacity * (0.5 + twinkle * 0.5);
 
             // Delikatne odpychanie od kursora
             const dx = p.x - mouseRef.current.x;
@@ -68,32 +70,42 @@ export function MagicParticles() {
             if (p.x < -10) p.x = width + 10;
             if (p.x > width + 10) p.x = -10;
 
-            // Rysowanie iskierki ze świeceniem
+            // Rysowanie iskierki
             ctx.save();
             ctx.globalAlpha = currentOpacity;
 
-            // Glow
-            ctx.shadowBlur = p.size * 4;
+            // Glow - większy dla dużych iskier
+            ctx.shadowBlur = p.isLarge ? p.size * 8 : p.size * 4;
             ctx.shadowColor = p.color;
 
-            // Kształt gwiazdy (mała)
             ctx.fillStyle = p.color;
             ctx.beginPath();
 
-            if (p.size > 1.5) {
-                // Większe cząsteczki jako 4-ramienne gwiazdki
+            if (p.isLarge) {
+                // Duże iskry jako 4-ramienne gwiazdki
                 const s = p.size;
-                ctx.moveTo(p.x, p.y - s * 1.5);
-                ctx.quadraticCurveTo(p.x + s * 0.3, p.y - s * 0.3, p.x + s * 1.5, p.y);
-                ctx.quadraticCurveTo(p.x + s * 0.3, p.y + s * 0.3, p.x, p.y + s * 1.5);
-                ctx.quadraticCurveTo(p.x - s * 0.3, p.y + s * 0.3, p.x - s * 1.5, p.y);
-                ctx.quadraticCurveTo(p.x - s * 0.3, p.y - s * 0.3, p.x, p.y - s * 1.5);
+                ctx.moveTo(p.x, p.y - s * 2);
+                ctx.quadraticCurveTo(p.x + s * 0.4, p.y - s * 0.4, p.x + s * 2, p.y);
+                ctx.quadraticCurveTo(p.x + s * 0.4, p.y + s * 0.4, p.x, p.y + s * 2);
+                ctx.quadraticCurveTo(p.x - s * 0.4, p.y + s * 0.4, p.x - s * 2, p.y);
+                ctx.quadraticCurveTo(p.x - s * 0.4, p.y - s * 0.4, p.x, p.y - s * 2);
             } else {
                 // Mniejsze jako kółka
                 ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
             }
 
             ctx.fill();
+
+            // Dodatkowy jasny punkt w środku dla dużych iskier
+            if (p.isLarge) {
+                ctx.globalAlpha = currentOpacity * 1.2;
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.size * 0.3, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
             ctx.restore();
         });
 
@@ -106,7 +118,7 @@ export function MagicParticles() {
 
         const resize = () => {
             canvas.width = window.innerWidth;
-            canvas.height = document.documentElement.scrollHeight;
+            canvas.height = window.innerHeight;
         };
 
         resize();
@@ -117,11 +129,11 @@ export function MagicParticles() {
             createParticle(canvas.width, canvas.height)
         );
 
-        // Śledzenie myszy (pozycja na stronie, nie viewport)
+        // Śledzenie myszy
         const handleMouseMove = (e) => {
             mouseRef.current = {
-                x: e.pageX,
-                y: e.pageY,
+                x: e.clientX,
+                y: e.clientY,
             };
         };
         document.addEventListener('mousemove', handleMouseMove);

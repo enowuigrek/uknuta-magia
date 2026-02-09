@@ -15,7 +15,8 @@ const initialFormData = {
     city: '',
     deliveryMethod: '',
     parcelLocker: '',
-    pickupLocation: ''
+    pickupLocation: '',
+    quantity: 1
 };
 
 export const useOrderForm = () => {
@@ -30,8 +31,18 @@ export const useOrderForm = () => {
         handleBlur,
         handleSubmit,
         getFieldError,
-        setIsSubmitting
+        setIsSubmitting,
+        updateField
     } = useFormValidation(initialFormData);
+
+    // Funkcje do zmiany ilości
+    const incrementQuantity = () => {
+        updateField('quantity', Math.min(formData.quantity + 1, 10));
+    };
+
+    const decrementQuantity = () => {
+        updateField('quantity', Math.max(formData.quantity - 1, 1));
+    };
 
     // Inicjalizacja EmailJS przy ładowaniu
     useEffect(() => {
@@ -118,6 +129,8 @@ export const useOrderForm = () => {
         handleBlur,
         onSubmit,
         getFieldError,
+        incrementQuantity,
+        decrementQuantity,
 
         // Walidacja
         canSubmit,
