@@ -16,7 +16,7 @@ export function Header({ onOrderClick }) {
             const footer = document.querySelector('footer');
             if (footer) {
                 const footerTop = footer.getBoundingClientRect().top;
-                setIsNearFooter(footerTop < window.innerHeight + 80);
+                setIsNearFooter(footerTop < window.innerHeight - 100);
             }
         };
 
