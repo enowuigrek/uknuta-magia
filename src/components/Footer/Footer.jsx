@@ -23,7 +23,7 @@ export function Footer() {
             <div className={styles.footerRight}>
                 <p>© {new Date().getFullYear()} Uknuta Magia</p>
                 <p className={styles.credits}>
-                    <a href="https://lukasznowak.dev" target="_blank" rel="noopener noreferrer">lukasznowak.dev</a>
+                    Realizacja: <a href="https://lukasznowak.dev" target="_blank" rel="noopener noreferrer">lukasznowak.dev</a>
                 </p>
             </div>
         </footer>

@@ -73,14 +73,16 @@
     }
 
     .credits {
-        a {
-            font-size: 0.85rem;
-            opacity: 0.6;
-            transition: opacity 0.2s ease;
+        font-size: 1rem;
+        opacity: 0.6;
+        transition: opacity 0.2s ease;
 
-            &:hover {
-                opacity: 1;
-            }
+        &:hover {
+            opacity: 1;
+        }
+
+        a {
+            font-size: 1rem;
         }
     }
 }
@@ -104,7 +106,7 @@
 
     .socialIcons {
         a {
-            font-size: 1.1rem !important;
+            font-size: 1.5rem !important;
         }
     }
 }
