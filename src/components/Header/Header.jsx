@@ -4,15 +4,23 @@ import styles from './Header.module.scss'
 export function Header({ onOrderClick }) {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+    const [isNearFooter, setIsNearFooter] = useState(false);
     const headerRef = useRef(null);
 
     useEffect(() => {
         const handleScroll = () => {
             const scrollTop = window.scrollY;
             setIsScrolled(scrollTop > 0);
+
+            // Ukryj przycisk gdy zbliżamy się do stopki
+            const footer = document.querySelector('footer');
+            if (footer) {
+                const footerTop = footer.getBoundingClientRect().top;
+                setIsNearFooter(footerTop < window.innerHeight + 80);
+            }
         };
 
-        window.addEventListener('scroll', handleScroll);
+        window.addEventListener('scroll', handleScroll, { passive: true });
         return () => {
             window.removeEventListener('scroll', handleScroll);
         };
@@ -83,7 +91,7 @@ export function Header({ onOrderClick }) {
 
             <button
                 onClick={onOrderClick}
-                className={styles.floatingOrderButton}
+                className={`${styles.floatingOrderButton} ${isNearFooter ? styles.floatingHidden : ''}`}
             >
                 Zamów książkę
             </button>

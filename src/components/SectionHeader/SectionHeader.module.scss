@@ -9,10 +9,10 @@
 
     h1 {
         position: relative;
-        font-size: 36px;
+        font-size: 42px;
         font-family: $font-main;
         color: $gold;
-        margin-bottom: 1.25rem;
+        margin-bottom: 1.5rem;
         word-wrap: break-word;
         overflow-wrap: break-word;
         letter-spacing: 0.02em;
@@ -41,15 +41,26 @@
         }
     }
 
-    p {
-        margin-top: 1rem;
-        font-size: 22px;
+    .paragraph {
+        margin-top: 1.25rem;
+        font-size: 20px;
         color: $text-light;
         word-wrap: break-word;
         overflow-wrap: break-word;
-        line-height: 1.75;
-        letter-spacing: 0.04em;
-        word-spacing: 0.06em;
+        line-height: 1.8;
+        letter-spacing: 0.01em;
+        opacity: 0;
+        transform: translateY(18px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+
+        &:first-of-type {
+            margin-top: 1rem;
+        }
+    }
+
+    .paragraphVisible {
+        opacity: 1;
+        transform: translateY(0);
     }
 
     @media (width <= $breakpoint-md) {
@@ -59,15 +70,15 @@
         box-sizing: border-box;
 
         h1 {
-            font-size: 21px;
+            font-size: 24px;
             margin-bottom: 15px;
             line-height: 1.2;
         }
 
-        p {
+        .paragraph {
             font-size: 17px;
-            margin: 0;
-            line-height: 1.65;
+            margin-top: 1rem;
+            line-height: 1.7;
         }
     }
 }

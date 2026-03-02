@@ -38,7 +38,7 @@ function HomePage() {
             />
             <ContentSection
                 id="author"
-                stickyImage
+                floatPhoto
                 img={authorPhoto}
                 header={author.title}
                 text={author.description}

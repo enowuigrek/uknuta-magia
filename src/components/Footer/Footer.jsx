@@ -21,7 +21,7 @@ export function Footer() {
             </div>
 
             <div className={styles.footerRight}>
-                <p>© 2025 Uknuta Magia</p>
+                <p>© {new Date().getFullYear()} Uknuta Magia</p>
                 <p className={styles.credits}>
                     <a href="https://lukasznowak.dev" target="_blank" rel="noopener noreferrer">lukasznowak.dev</a>
                 </p>

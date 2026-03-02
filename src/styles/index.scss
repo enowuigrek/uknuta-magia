@@ -1,6 +1,7 @@
 /* === GLOBAL STYLES === */
 html {
   height: 100%;
+  overflow-x: clip;
 }
 
 body {
@@ -14,6 +15,7 @@ body {
   font-style: normal;
   overscroll-behavior: none;
   place-items: center;
+  overflow-x: clip;
 }
 
 h1 {
@@ -62,6 +64,7 @@ button:hover {
 }
 
 #root {
+  width: 100%;
   max-width: 80rem; // czyli 1280px
   margin: 0 auto;
 }

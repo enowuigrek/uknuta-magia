@@ -16,7 +16,7 @@
 .sectionImage {
     position: relative;
     z-index: 1;
-    width: 50%;
+    width: 42.5%;
     height: auto;
     padding: $spacing-md;
     box-sizing: border-box;
@@ -32,21 +32,75 @@
 
 .stickyImage {
     position: sticky;
-    // Centrowanie w pionie: top obliczony tak, żeby środek obrazu był na środku viewportu
-    // Dla obrazu o max-height: 80vh, top = (100vh - 80vh) / 2 = 10vh
     top: 10vh;
     align-self: flex-start;
     max-height: 80vh;
     object-fit: contain;
     object-position: center;
     border-radius: 8px;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.55),
+        0 0 50px rgba(50, 100, 180, 0.2),
+        inset 0 0 0 1px rgba(226, 194, 117, 0.1);
 }
 
 // Sticky tekst - gdy tekst jest krótszy niż obraz (np. sekcja O książce)
 .stickyText {
     position: sticky;
-    top: 80px;
+    top: 110px;
     align-self: flex-start;
+}
+
+// Float layout: zdjęcie pływa po prawej, tekst opływa je po lewej i po zakończeniu zdjęcia idzie na całą szerokość
+.floatSection {
+    display: block;
+    position: relative;
+    z-index: 1;
+    padding: 0 $spacing-lg;
+    margin-bottom: $spacing-lg;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100vw;
+
+    // clearfix - sekcja obejmuje pływający obraz
+    &::after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}
+
+.floatedImage {
+    float: right;
+    width: 38%;
+    max-width: 400px;
+    height: auto;
+    margin: 0.25rem 0 1.5rem 2.5rem;
+    border-radius: 12px;
+    box-shadow:
+        0 8px 32px rgba(0, 0, 0, 0.55),
+        0 0 40px rgba(50, 100, 180, 0.18),
+        inset 0 0 0 1px rgba(226, 194, 117, 0.12);
+    opacity: 0;
+    transform: translateX(24px) scale(0.97);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+}
+
+.floatedImageVisible {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+}
+
+// SectionHeader w float layout - musi być display:block żeby tekst opływał float
+.floatText {
+    display: block !important;
+    width: 100% !important;
+    margin: 0 !important;
+
+    // h1 jako inline-block: podkreślenie nie wyjeżdża pod zdjęcie
+    h1 {
+        display: inline-block;
+    }
 }
 
 @media (width <= $breakpoint-md) {
@@ -67,5 +121,20 @@
     .stickyText {
         position: relative;
         top: auto;
+    }
+
+    .floatSection {
+        padding: 0 24px;
+    }
+
+    // Na mobile float się wyłącza - zdjęcie idzie na górę, tekst poniżej
+    .floatedImage {
+        float: none;
+        width: 100%;
+        max-width: 100%;
+        margin: 0 0 1.5rem 0;
+        max-height: 360px;
+        object-fit: cover;
+        object-position: top;
     }
 }
