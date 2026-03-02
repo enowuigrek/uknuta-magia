@@ -47,8 +47,9 @@
         color: $text-light;
         word-wrap: break-word;
         overflow-wrap: break-word;
-        line-height: 1.7;
-        letter-spacing: 0.01em;
+        line-height: 1.75;
+        letter-spacing: 0.04em;
+        word-spacing: 0.06em;
     }
 
     @media (width <= $breakpoint-md) {

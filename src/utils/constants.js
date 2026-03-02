@@ -12,19 +12,16 @@ export const DELIVERY_METHODS = {
     pickup: {
         key: 'pickup',
         name: 'Odbiór osobisty',
-        icon: '🏠',
         price: DELIVERY_PRICES.pickup
     },
     parcel: {
         key: 'parcel',
         name: 'Paczkomat InPost',
-        icon: '📦',
         price: DELIVERY_PRICES.parcel
     },
     courier: {
         key: 'courier',
         name: 'Wysyłka kurierska',
-        icon: '🚚',
         price: DELIVERY_PRICES.courier
     }
 };
